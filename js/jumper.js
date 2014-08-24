@@ -17,5 +17,15 @@ function Jumper(world) {
 };
 
 Jumper.prototype.jump = function() {
-	this.body.velocity[1] = 5;
+	if (this.isOnRamp())
+		this.body.velocity[1] = 5;
+};
+
+Jumper.prototype.isOnRamp = function() {
+	for (var i = 0; i < world.narrowphase.contactEquations.length; i++) {
+		var c = world.narrowphase.contactEquations[i];
+		if (c.bodyA === this.body || c.bodyB === this.body)
+			return true;
+	}
+	return false;
 };

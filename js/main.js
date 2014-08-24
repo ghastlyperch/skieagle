@@ -53,10 +53,10 @@ var app = new p2.WebGLRenderer(function(){
 	world.addContactMaterial(frictionContactMaterial);
 }, { lineWidth: 0.1 });
 
+app.frame(0, 0, 100, 80);
+
 function render() {
 	requestAnimationFrame(render);
 	app.centerCamera(jumper.body.position[0], jumper.body.position[1]);
 }
-
-
 render();

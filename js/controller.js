@@ -10,7 +10,7 @@ function Controller(obj) {
 		if (e.keyCode >= 112 && e.keyCode <= 123) // F1-F12
 			return;
 
-		if (e.keyCode == 32) // Space
+		if (e.keyCode == 32 || e.keyCode == 38) // Space / Up
 			obj.jump();
 
 		e.preventDefault();

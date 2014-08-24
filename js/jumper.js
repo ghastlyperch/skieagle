@@ -9,7 +9,7 @@ function Jumper(world) {
 	this.jumperShape.material = new p2.Material();
 	this.body = new p2.Body({
 		mass: 5,
-		position: [0, 1.5],
+		position: [2, 80],
 	});
 	this.body.addShape(this.skisShape);
 	this.body.addShape(this.jumperShape, [0, jumperHeight * 0.5]);

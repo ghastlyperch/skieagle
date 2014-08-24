@@ -22,7 +22,7 @@ var app = new p2.WebGLRenderer(function(){
 
 	// When the materials of the plane and the first circle meet, they should yield
 	// a contact friction specified. We tell p2 this by creating a ContactMaterial.
-	frictionContactMaterial = new p2.ContactMaterial(planeShape.material, jumper.shape.material, {
+	frictionContactMaterial = new p2.ContactMaterial(planeShape.material, jumper.skisShape.material, {
 		friction : 0.1,
 	});
 	world.addContactMaterial(frictionContactMaterial);

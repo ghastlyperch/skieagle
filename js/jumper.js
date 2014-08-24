@@ -12,5 +12,5 @@ function Jumper(world) {
 };
 
 Jumper.prototype.jump = function() {
-	console.log("TODO");
+	this.body.velocity[1] = 5;
 };

@@ -10,9 +10,31 @@ var app = new p2.WebGLRenderer(function(){
 	this.setWorld(world);
 
 	// Create ramp
-	var rampData = [ 80, 70, 60, 50, 40, 35, 30, 25, 20, 15, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 5 ];
+	var rampData = [];
+	var xTmp = -1;
+	var hMultip = 100;
+	for (var i = 0; i < 100; ++i) {
+		if (i < 40)
+		{
+			rampData.push(hMultip*xTmp*xTmp);
+			xTmp += 0.02;
+		}
+		else if (i < 45)
+		{
+			rampData.push(hMultip*xTmp*xTmp);
+		}
+		else if (i < 80)
+		{
+			rampData.push(-hMultip*xTmp*xTmp);
+			xTmp += 0.02
+		}
+		else
+		{
+			rampData.push(-hMultip*xTmp*xTmp);
+		}
+	}
 	var rampShape = new p2.Heightfield(rampData, {
-		elementWidth: 5.0
+		elementWidth: 2.0
 	});
 	rampShape.material = new p2.Material();
 	var ramp = new p2.Body();

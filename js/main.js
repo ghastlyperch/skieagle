@@ -27,4 +27,6 @@ var app = new p2.WebGLRenderer(function(){
 		friction : 0,
 	});
 	world.addContactMaterial(frictionContactMaterial);
-});
+}, { lineWidth: 0.1 });
+
+app.centerCamera(2, 80);

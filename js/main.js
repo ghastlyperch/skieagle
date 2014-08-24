@@ -1,3 +1,5 @@
+var jumper, controller;
+
 var app = new p2.WebGLRenderer(function(){
 
 	// Create a world
@@ -18,8 +20,8 @@ var app = new p2.WebGLRenderer(function(){
 	world.addBody(ramp);
 
 	// Create jumper
-	var jumper = new Jumper(world);
-	var controller = new Controller(jumper);
+	jumper = new Jumper(world);
+	controller = new Controller(jumper);
 
 	// When the materials of the plane and the first circle meet, they should yield
 	// a contact friction specified. We tell p2 this by creating a ContactMaterial.
@@ -29,4 +31,10 @@ var app = new p2.WebGLRenderer(function(){
 	world.addContactMaterial(frictionContactMaterial);
 }, { lineWidth: 0.1 });
 
-app.centerCamera(2, 80);
+function render() {
+	requestAnimationFrame(render);
+	app.centerCamera(jumper.body.position[0], jumper.body.position[1]);
+}
+
+
+render();

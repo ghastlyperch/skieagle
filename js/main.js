@@ -5,19 +5,7 @@ var app = new p2.WebGLRenderer(function(){
 		//doProfiling: true,
 		gravity : [0, -9.81],
 	});
-
 	this.setWorld(world);
-
-	// Create jumper
-	// TODO: Actual jumper with compound shape, skiis only so far
-	var shape = new p2.Rectangle(2, 0.2);
-	shape.material = new p2.Material();
-	var p = new p2.Body({
-		mass: 5,
-		position: [0, 1.5],
-	});
-	p.addShape(shape);
-	world.addBody(p);
 
 	// Create ground
 	var planeShape = new p2.Plane();
@@ -28,9 +16,13 @@ var app = new p2.WebGLRenderer(function(){
 	plane.addShape(planeShape);
 	world.addBody(plane);
 
+	// Create jumper
+	var jumper = new Jumper(world);
+	var controller = new Controller(jumper);
+
 	// When the materials of the plane and the first circle meet, they should yield
-	// a contact friction of 0.3. We tell p2 this by creating a ContactMaterial.
-	frictionContactMaterial = new p2.ContactMaterial(planeShape.material, shape.material, {
+	// a contact friction specified. We tell p2 this by creating a ContactMaterial.
+	frictionContactMaterial = new p2.ContactMaterial(planeShape.material, jumper.shape.material, {
 		friction : 0.1,
 	});
 	world.addContactMaterial(frictionContactMaterial);

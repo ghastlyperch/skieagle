@@ -3,7 +3,7 @@ function Jumper(world) {
 
 	var jumperHeight = 1.7;
 
-	this.skisShape = new p2.Rectangle(2.7, 0.02);
+	this.skisShape = new p2.Capsule(2.7, 0.02);
 	this.skisShape.material = new p2.Material();
 	this.jumperShape = new p2.Rectangle(0.3, jumperHeight);
 	this.jumperShape.material = new p2.Material();

@@ -14,18 +14,14 @@ var app = new p2.WebGLRenderer(function(){
 	var xTmp = -1;
 	var hMultip = 100;
 	for (var i = 0; i < 100; ++i) {
-		if (i < 40)
+		if (i < 50)
 		{
 			rampData.push(hMultip*xTmp*xTmp);
 			xTmp += 0.02;
 		}
-		else if (i < 45)
-		{
-			rampData.push(hMultip*xTmp*xTmp);
-		}
 		else if (i < 80)
 		{
-			rampData.push(-hMultip*xTmp*xTmp);
+			rampData.push(-(hMultip*xTmp*xTmp + 3));
 			xTmp += 0.02
 		}
 		else
@@ -33,6 +29,7 @@ var app = new p2.WebGLRenderer(function(){
 			rampData.push(-hMultip*xTmp*xTmp);
 		}
 	}
+	rampData.push(0);
 	var rampShape = new p2.Heightfield(rampData, {
 		elementWidth: 2.0
 	});

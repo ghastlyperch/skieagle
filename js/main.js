@@ -8,11 +8,12 @@ var app = new p2.WebGLRenderer(function(){
 
 	this.setWorld(world);
 
-	// Create a circle
-	var shape = new p2.Circle(0.5);
+	// Create jumper
+	// TODO: Actual jumper with compound shape, skiis only so far
+	var shape = new p2.Rectangle(2, 0.2);
 	shape.material = new p2.Material();
 	var p = new p2.Body({
-		mass: 1,
+		mass: 5,
 		position: [0, 1.5],
 	});
 	p.addShape(shape);

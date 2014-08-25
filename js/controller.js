@@ -1,4 +1,11 @@
 
+if (!!navigator.getGamepads) console.log("Gamepads are supported");
+else console.log("No gamepad support");
+window.addEventListener("gamepadconnected", function(e) {
+	// This event listener is currently needed for Firefox
+	console.log("Gamepad connected:", e.gamepad);
+});
+
 function Controller(obj) {
 	this.object = obj;
 	var pressed = [];
@@ -25,6 +32,18 @@ function Controller(obj) {
 		obj.jump();
 		e.preventDefault();
 	}
+
+	this.poll = function() {
+		if (!navigator.getGamepads) return;
+
+		var gamepads = navigator.getGamepads();
+		for (var i = 0; i < gamepads.length; ++i) {
+			var gamepad = gamepads[i];
+			if (!gamepad) continue;
+			if (gamepad.buttons[0].pressed)
+				obj.jump();
+		}
+	};
 
 	document.addEventListener('keydown', onKeyDown, true);
 	document.addEventListener('keyup', onKeyUp, true);

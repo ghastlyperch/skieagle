@@ -30,6 +30,7 @@ app.frame(0, 0, 100, 80);
 
 function render() {
 	requestAnimationFrame(render);
+	controller.poll();
 	app.centerCamera(jumper.body.position[0], jumper.body.position[1]);
 }
 render();

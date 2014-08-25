@@ -9,7 +9,7 @@ function Jumper(world) {
 	this.jumperShape.material = new p2.Material();
 	this.body = new p2.Body({
 		mass: 5,
-		position: [5, 101],
+		position: [-75, 45],
 	});
 	this.body.addShape(this.skisShape);
 	this.body.addShape(this.jumperShape, [0, jumperHeight * 0.5]);
@@ -40,7 +40,7 @@ Jumper.prototype.calculateForces = function() {
 	
 	// Square of velocity
 	var vSqr = vX*vX + vY*vY
-	
+		
 	// Air density [kg/m^3]
 	var rho = 1.315
 	
@@ -49,7 +49,7 @@ Jumper.prototype.calculateForces = function() {
 	var gamma = 160; // Hip angle
 	var alpha = 35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
 	
-	// These numbers are valid for constant beta and gamma
+	// These numbers are valid for constant beta and gamma 
 	var L = -0.43903 + 0.060743*alpha - 7.192e-4*alpha*alpha
 	var D = -0.032061 + 0.01232*alpha + 2.283e-4*alpha*alpha
 

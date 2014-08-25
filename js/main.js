@@ -8,6 +8,8 @@ var app = new p2.WebGLRenderer(function(){
 		gravity : [0, -9.81],
 	});
 	this.setWorld(world);
+	world.solver.iterations = 20;
+	world.solver.frictionIterations = 10;
 
 	// Create ramp
 	var slopeBuilder = new SlopeBuilder();
@@ -21,6 +23,7 @@ var app = new p2.WebGLRenderer(function(){
 
 	// When the materials of the plane and the first circle meet, they should yield
 	// a contact friction specified. We tell p2 this by creating a ContactMaterial.
+
 	for (var i = 0; i < ramp.shapes.length; ++i)
 	{	
 		world.addContactMaterial(

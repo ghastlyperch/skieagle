@@ -29,3 +29,30 @@ Jumper.prototype.isOnRamp = function() {
 	}
 	return false;
 };
+
+Jumper.prototype.calculateForces = function() {
+	// Wind not implemented yet, so speed of air wrt jumper is zero
+	var vax = 0, vay = 0;
+	
+	// Jumper airspeed
+	var vX = this.body.velocity[0] - vax;
+	var vY = this.body.velocity[1] - vay;
+	
+	// Square of velocity
+	var vSqr = vX*vX + vY*vY
+		
+	// Air density [kg/m^3]
+	var rho = 1.315
+	
+	// Various angles (in degrees)
+	var beta = 9.5; // Body-to-ski
+	var gamma = 160; // Hip angle
+	var alpha = 35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
+	
+	// These numbers are valid for constant beta and gamma 
+	var L = -0.43903 + 0.060743*alpha − 7.192e-4*alpha*alpha
+	var D = -0.032061 + 0.01232*alpha + 2.283e-4*alpha*alpha
+
+	var liftForce = rho/2*L*vSqr;
+	var dragForce = rho/2*D*vSqr;
+};

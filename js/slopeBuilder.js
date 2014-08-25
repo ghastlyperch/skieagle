@@ -90,7 +90,8 @@ SlopeBuilder.prototype.buildFISSlope = function()
 	slopeProfile.push([E1x-(e1-l)*Math.cos(degToRad*gamma), -10]);
 	slopeProfile.push([0, -10]);
 	slope.fromPolygon(slopeProfile);
-	
-	slope.shapes[0].material = new p2.Material();	
+	slope.shapes[0].material = new p2.Material();
+	for (var i = 1; i < slope.shapes.length; ++i)
+		slope.shapes[i].material = slope.shapes[0].material;
 	return slope;
 };

@@ -5,7 +5,7 @@ var renderer, scene, container;
 function init() {
 	renderer = PIXI.autoDetectRenderer(640, 480);
 	scene = new PIXI.Stage(0xaaaaff);
-	container = new PIXI.DisplayObjectContainer(),
+	container = new PIXI.DisplayObjectContainer();
 	container.scale.x = 1;
 	container.scale.y = -1;
 	container.position.x =  renderer.width/2; // center at origin

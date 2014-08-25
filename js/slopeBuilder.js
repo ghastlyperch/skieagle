@@ -70,7 +70,7 @@ SlopeBuilder.prototype.buildFISSlope = function()
 	slopeProfile.push([0, 0]);
 	slopeProfile.push([E2x, E2y]); // Start of take-off table
 	
-	var xIncr = 1;
+	var xIncr = (Math.abs(E1x)-Math.abs(E2x))/4;
 	var xCur = E2x - xIncr;
 	var i = 1;
 	while (xCur > E1x) 
@@ -84,13 +84,15 @@ SlopeBuilder.prototype.buildFISSlope = function()
 		xCur -= xIncr;
 		i++;
 	}
-		console.log(i);
 	slopeProfile.push([E1x, E1y]); // Start of transition segment
 	slopeProfile.push([E1x-(e1-l)*Math.cos(degToRad*gamma),E1y+(e1-l)*Math.sin(degToRad*gamma)]); // Starting position
 	slopeProfile.push([E1x-(e1-l)*Math.cos(degToRad*gamma), -10]);
 	slopeProfile.push([0, -10]);
 	slope.fromPolygon(slopeProfile);
-	
-	slope.shapes[0].material = new p2.Material();	
+
+	for (var i = 0; i < slope.shapes.length; ++i)
+	{
+		slope.shapes[i].material = new p2.Material();
+	}		
 	return slope;
 };

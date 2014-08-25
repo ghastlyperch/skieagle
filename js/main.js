@@ -1,13 +1,23 @@
+var world;
 var jumper, controller, ramp;
+var renderer, scene, container;
 
-var app = new p2.WebGLRenderer(function(){
+function init() {
+	renderer = PIXI.autoDetectRenderer(640, 480);
+	scene = new PIXI.Stage(0xaaaaff);
+	container = new PIXI.DisplayObjectContainer(),
+	container.scale.x = 1;
+	container.scale.y = -1;
+	container.position.x =  renderer.width/2; // center at origin
+	container.position.y =  renderer.height/2;
+	scene.addChild(container);
+	document.body.appendChild(renderer.view);
 
 	// Create a world
-	var world = new p2.World({
+	world = new p2.World({
 		//doProfiling: true,
 		gravity : [0, -9.81],
 	});
-	this.setWorld(world);
 
 	// Create ramp
 	var slopeBuilder = new SlopeBuilder();
@@ -15,7 +25,7 @@ var app = new p2.WebGLRenderer(function(){
 	world.addBody(ramp);
 
 	// Create jumper
-	jumper = new Jumper(world);
+	jumper = new Jumper(world, container);
 	controller = new Controller(jumper);
 
 	// When the materials of the plane and the first circle meet, they should yield
@@ -24,13 +34,20 @@ var app = new p2.WebGLRenderer(function(){
 		friction : 0,
 	});
 	world.addContactMaterial(frictionContactMaterial);
-}, { lineWidth: 0.1 });
+}
 
-app.frame(0, 0, 100, 80);
+init();
 
 function render() {
 	requestAnimationFrame(render);
+	// Input
 	controller.poll();
-	app.centerCamera(jumper.body.position[0], jumper.body.position[1]);
+	// Physics
+	world.step(1/60);
+	// Graphics
+	jumper.visual.position.x = jumper.body.position[0];
+	jumper.visual.position.y = jumper.body.position[1];
+	jumper.visual.rotation = jumper.body.angle;
+	renderer.render(scene);
 }
 render();

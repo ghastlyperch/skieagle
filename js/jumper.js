@@ -1,6 +1,6 @@
 
-function Jumper(world) {
-
+function Jumper(world, scene) {
+	// Physical body
 	var jumperHeight = 1.7;
 
 	this.skisShape = new p2.Rectangle(2.7, 0.02);
@@ -14,6 +14,13 @@ function Jumper(world) {
 	this.body.addShape(this.skisShape);
 	this.body.addShape(this.jumperShape, [0, jumperHeight * 0.5]);
 	world.addBody(this.body);
+
+	// Visual representation
+	this.visual = PIXI.Sprite.fromImage("assets/jumper.png");
+	this.visual.anchor.x = 0.5;
+	this.visual.anchor.y = 1.0;
+	this.visual.scale.y = -1;
+	scene.addChild(this.visual);
 };
 
 Jumper.prototype.jump = function() {

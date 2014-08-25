@@ -42,6 +42,5 @@ function Slope(world, scene) {
 		else this.visual.lineTo(x, y);
 	}
 	this.visual.endFill();
-	this.visual.scale.y = -1;
 	scene.addChild(this.visual);
 }

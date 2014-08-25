@@ -1,29 +1,29 @@
 var world;
 var jumper, controller, ramp;
-var renderer, scene, container;
+var camera, scene, renderer;
 
 function init() {
-	renderer = PIXI.autoDetectRenderer(640, 480);
-	scene = new PIXI.Stage(0xaaaaff);
-	container = new PIXI.DisplayObjectContainer();
-	container.scale.x = 1;
-	container.scale.y = -1;
-	container.position.x =  renderer.width/2; // center at origin
-	container.position.y =  renderer.height/2;
-	scene.addChild(container);
-	document.body.appendChild(renderer.view);
+	//camera = new THREE.OrthographicCamera(window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000);
+	camera = new THREE.OrthographicCamera(-100, 100, 100, -100, 1, 1000);
+	camera.position.set(0, 0, 100);
+
+	scene = new THREE.Scene();
+
+	renderer = new THREE.WebGLRenderer();
+	renderer.setClearColor(0x9999ff);
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	document.body.appendChild(renderer.domElement);
 
 	// Create a world
 	world = new p2.World({
-		//doProfiling: true,
 		gravity : [0, -9.81],
 	});
 
 	// Create ramp
-	ramp = new Slope(world, container);
+	ramp = new Slope(world, scene);
 
 	// Create jumper
-	jumper = new Jumper(world, container);
+	jumper = new Jumper(world, scene);
 	controller = new Controller(jumper);
 
 	// When the materials of the plane and the first circle meet, they should yield
@@ -44,8 +44,10 @@ function render() {
 	// Graphics
 	jumper.visual.position.x = jumper.body.position[0];
 	jumper.visual.position.y = jumper.body.position[1];
-	jumper.visual.rotation = jumper.body.angle;
-	renderer.render(scene);
+	jumper.visual.rotation.z = jumper.body.angle;
+	camera.position.x = jumper.visual.position.x;
+	camera.position.y = jumper.visual.position.y;
+	renderer.render(scene, camera);
 	requestAnimationFrame(render);
 }
 render();

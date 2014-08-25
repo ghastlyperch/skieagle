@@ -33,14 +33,14 @@ function Slope(world, scene) {
 	world.addBody(this.body);
 
 	// Visual representation
-	this.visual = new PIXI.Graphics();
-	this.visual.beginFill(0xff0000);
+	var visShape = new THREE.Shape();
 	for (var i = 0; i < slopeProfile.length; ++i) {
 		var x = i * this.elementWidth;
 		var y = slopeProfile[i];
-		if (i == 0) this.visual.moveTo(x, y);
-		else this.visual.lineTo(x, y);
+		if (i == 0) visShape.moveTo(x, y);
+		else visShape.lineTo(x, y);
 	}
-	this.visual.endFill();
-	scene.addChild(this.visual);
+	var material = new THREE.MeshBasicMaterial({ color: 0x886622 });
+	this.visual = new THREE.Mesh(new THREE.ShapeGeometry(visShape), material);
+	scene.add(this.visual);
 }

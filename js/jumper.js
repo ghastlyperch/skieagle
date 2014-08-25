@@ -16,11 +16,10 @@ function Jumper(world, scene) {
 	world.addBody(this.body);
 
 	// Visual representation
-	this.visual = PIXI.Sprite.fromImage("assets/jumper.png");
-	this.visual.anchor.x = 0.5;
-	this.visual.anchor.y = 1.0;
-	this.visual.scale.y = -1;
-	scene.addChild(this.visual);
+	var geometry = new THREE.BoxGeometry(2.7, 0.1, 1);
+	var material = new THREE.MeshBasicMaterial({ color: 0x2222ff });
+	this.visual = new THREE.Mesh(geometry, material);
+	scene.add(this.visual);
 };
 
 Jumper.prototype.jump = function() {

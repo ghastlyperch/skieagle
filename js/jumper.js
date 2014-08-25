@@ -2,8 +2,9 @@
 function Jumper(world, scene) {
 	// Physical body
 	var jumperHeight = 1.7;
+	var skiLength = 2.7;
 
-	this.skisShape = new p2.Rectangle(2.7, 0.02);
+	this.skisShape = new p2.Rectangle(skiLength, 0.02);
 	this.skisShape.material = new p2.Material();
 	this.jumperShape = new p2.Rectangle(0.3, jumperHeight);
 	this.jumperShape.material = new p2.Material();
@@ -16,7 +17,7 @@ function Jumper(world, scene) {
 	world.addBody(this.body);
 
 	// Visual representation
-	var geometry = new THREE.BoxGeometry(2.7, 0.1, 1);
+	var geometry = new THREE.BoxGeometry(skiLength, 0.2, 0.5);
 	var material = new THREE.MeshBasicMaterial({ color: 0x2222ff });
 	this.visual = new THREE.Mesh(geometry, material);
 	scene.add(this.visual);

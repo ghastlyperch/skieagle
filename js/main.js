@@ -2,17 +2,22 @@ var world;
 var jumper, controller, ramp;
 var camera, scene, renderer;
 
+var viewportWidth = 100; // meters
+
 function init() {
 	//camera = new THREE.OrthographicCamera(window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000);
-	camera = new THREE.OrthographicCamera(-100, 100, 100, -100, 1, 1000);
+	camera = new THREE.OrthographicCamera(-50, 50, 50, -50, 1, 1000);
 	camera.position.set(0, 0, 100);
 
 	scene = new THREE.Scene();
 
-	renderer = new THREE.WebGLRenderer();
+	renderer = new THREE.WebGLRenderer({ antialias: true });
 	renderer.setClearColor(0x9999ff);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
+
+	window.addEventListener('resize', resize, false);
+	resize();
 
 	// Create a world
 	world = new p2.World({
@@ -32,6 +37,16 @@ function init() {
 		friction : 0,
 	});
 	world.addContactMaterial(frictionContactMaterial);
+}
+
+function resize() {
+	var aspect = window.innerWidth / window.innerHeight;
+	camera.left = viewportWidth / - 2;
+	camera.right = viewportWidth / 2;
+	camera.top = viewportWidth / aspect / 2;
+	camera.bottom = viewportWidth / aspect / - 2;
+	camera.updateProjectionMatrix();
+	renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 init();

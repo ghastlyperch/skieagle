@@ -38,7 +38,7 @@ function Slope(world, scene) {
 		points.push(i * this.elementWidth); // x-coordinate
 		points.push(slopeProfile[i]);
 	}
-	this.visual = new PIXI.Polygon(points);
+	//this.visual = new PIXI.Polygon(points);
 	//this.visual.scale.y = -1;
-	scene.addChild(this.visual);
+	//scene.addChild(this.visual);
 }

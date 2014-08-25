@@ -37,7 +37,6 @@ function init() {
 init();
 
 function render() {
-	requestAnimationFrame(render);
 	// Input
 	controller.poll();
 	// Physics
@@ -47,5 +46,6 @@ function render() {
 	jumper.visual.position.y = jumper.body.position[1];
 	jumper.visual.rotation = jumper.body.angle;
 	renderer.render(scene);
+	requestAnimationFrame(render);
 }
 render();

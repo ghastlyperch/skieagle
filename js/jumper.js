@@ -17,9 +17,16 @@ function Jumper(world, scene) {
 	world.addBody(this.body);
 
 	// Visual representation
-	var geometry = new THREE.BoxGeometry(skiLength, 0.2, 0.5);
+	var skiGeometry = new THREE.PlaneGeometry(this.skisShape.width, 0.2);
+	var jumperGeometry = new THREE.PlaneGeometry(this.jumperShape.width, this.jumperShape.height);
 	var material = new THREE.MeshBasicMaterial({ color: 0x2222ff });
-	this.visual = new THREE.Mesh(geometry, material);
+	this.visual = new THREE.Object3D();
+	var skiMesh = new THREE.Mesh(skiGeometry, material);
+	skiMesh.position.y = 0.1;
+	this.visual.add(skiMesh);
+	var jumperMesh = new THREE.Mesh(jumperGeometry, material);
+	jumperMesh.position.y = this.jumperShape.height * 0.5;
+	this.visual.add(jumperMesh);
 	scene.add(this.visual);
 };
 

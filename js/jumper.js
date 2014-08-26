@@ -43,6 +43,7 @@ Jumper.prototype.reset = function() {
 	this.body.position[0] = -75; // TODO: Get from slope?
 	this.body.position[1] = 45;
 	this.body.angle = 0;
+	document.getElementById("hint").innerHTML = "Click to start"; // TODO: Customize for mobile
 };
 
 Jumper.prototype.action = function() {
@@ -50,6 +51,7 @@ Jumper.prototype.action = function() {
 		case JumperState.WAITING:
 			this.state = JumperState.SLIDING;
 			this.body.wakeUp();
+			document.getElementById("hint").innerHTML = "";
 			break;
 		case JumperState.SLIDING:
 			if (this.isOnRamp() && this.body.position[0] > -20) { // TODO: Right amount of x
@@ -74,8 +76,11 @@ Jumper.prototype.update = function(dt) {
 			break;
 		case JumperState.FLYING:
 			this.flyTime += dt;
-			if (this.flyTime > 1 && this.isOnRamp())
+			if (this.flyTime > 1 && this.isOnRamp()) {
 				this.state = JumperState.LANDED;
+				var d = ((this.body.position[0] * 100)|0)/100;
+				document.getElementById("hint").innerHTML = "Distance: " + d + " m";
+			}
 			break;
 		case JumperState.LANDED:
 			break;

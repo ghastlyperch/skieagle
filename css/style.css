@@ -8,6 +8,16 @@ canvas {
 	height: 100%;
 }
 
+#hint {
+	position: absolute;
+	top: 10%;
+	width: 100%;
+	color: #040;
+	text-align: center;
+	font-size: 40px;
+	font-weight: bold;
+}
+
 #stats {
 	position: absolute;
 	left: 0px;

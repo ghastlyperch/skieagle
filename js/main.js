@@ -1,3 +1,5 @@
+var DEBUG = true;
+
 var world, stats;
 var jumper, controller, ramp;
 var camera, scene, renderer;
@@ -61,6 +63,15 @@ function resize() {
 
 init();
 
+function drawDebug() {
+	var msg = "";
+	msg += "Position: " + (jumper.body.position[0]|0) + ", " + (jumper.body.position[1]|0) + "\n";
+	for (var s in JumperState)
+		if (JumperState[s] == jumper.state)
+			msg += "State: " + s;
+	document.getElementById("debug").innerHTML = msg;
+}
+
 function render() {
 	var dt = 1/60; // TODO: Measure this
 	// Input
@@ -75,7 +86,9 @@ function render() {
 	camera.position.x = jumper.visual.position.x;
 	camera.position.y = jumper.visual.position.y;
 	renderer.render(scene, camera);
+	if (DEBUG) drawDebug();
 	stats.update();
 	requestAnimationFrame(render);
 }
 render();
+

@@ -19,6 +19,15 @@ canvas {
 	font-weight: bold;
 }
 
+#debug {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	white-space: pre;
+	font-size: 12px;
+	font-family: monospace;
+}
+
 #stats {
 	position: absolute;
 	left: 0px;

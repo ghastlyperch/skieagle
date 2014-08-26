@@ -66,7 +66,6 @@ Jumper.prototype.action = function() {
 			break;
 		default:
 			throw "Unkown state " + this.state;
-
 	}
 };
 

@@ -133,9 +133,9 @@ Jumper.prototype.physics = function() {
 	var cD = 0.8;
 	var cL = 0.2;
 
-	// Area projections
-	var aX = 0.5*Math.cos(alpha*Math.PI/180.0);
-	var aY = 0.5*Math.sin(alpha*Math.PI/180.0);
+	// Area projections (0.5 approx width of jumper)
+	var aX = 0.5*Math.cos(alpha*Math.PI/180.0)*this.skiLength;
+	var aY = 0.5*Math.sin(alpha*Math.PI/180.0)*this.skiLength;
 
 	// Drag force x and y components
 	var dX = 0.5*rho*cD*aX*vX*vX;

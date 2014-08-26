@@ -154,10 +154,6 @@ Jumper.prototype.physics = function() {
 	if (vX > 0) dX *= -1;
 	if (vY > 0) dY *= -1;
 	
-	// Apply forces if jumper is in flying state
-	if (this.state == JumperState.FLYING)
-	{
-		this.body.setZeroForce();
-		this.body.applyForce([dX, lY+dY], this.body.position);
-	}
+	this.body.setZeroForce();
+	this.body.applyForce([dX, lY+dY], this.body.position);
 };

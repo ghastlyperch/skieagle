@@ -4,20 +4,22 @@ TODO
 Uncategorized tasks
 -------------------
 
-[ ] Replace renderer
-	- Raw canvas?
-	- Three.js?
-	- PIXI.js?
-[ ] Capsule would be better shape for skis
-	- Implement Heightfield-capsule collision pair for p2.js?
+[ ] Distance measurement on the slope instead of x-coord
+[ ] Wind
+[ ] Scoring based on landing goodness?
+[ ] Finish slope generating code
+[ ] Sliding physics sometimes get stuck
+[ ] Alltime / daily best
 [ ] Jumping physics are barebones
+	- Use force instead of velocity?
+[ ] Decent fallback for non-WebGL devices
 
 Milestone 1
 -----------
 
 [X] Hill from one line, descending to right
 [X] Jumper as a simple object
-[ ] Push to start
+[X] Push to start
 [X] Push to jump
 
 Milestone 2

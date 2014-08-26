@@ -83,7 +83,11 @@ Jumper.prototype.update = function(dt) {
 			if (this.flyTime > 1 && this.isOnRamp()) {
 				this.state = JumperState.LANDED;
 				var d = ((this.body.position[0] * 100)|0)/100;
-				document.getElementById("hint").innerHTML = "Distance: " + d + " m";
+				records.add(d);
+				var msg = "Distance: " + d + " m<br/>";
+				msg += "Daily Best: " + records.records.daily.distance + " m<br/>";
+				msg += "All-Time Best: " + records.records.allTime.distance + " m<br/>";
+				document.getElementById("hint").innerHTML = msg;
 			}
 			break;
 		case JumperState.LANDED:

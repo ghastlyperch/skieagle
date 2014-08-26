@@ -1,12 +1,13 @@
 var DEBUG = true;
 
-var world, stats;
+var world, stats, records;
 var jumper, controller, ramp;
 var camera, scene, renderer;
 
 var viewportWidth = 100; // meters
 
 function init() {
+	records = new Records(0);
 	//camera = new THREE.OrthographicCamera(window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000);
 	camera = new THREE.OrthographicCamera(-50, 50, 50, -50, 1, 1000);
 	camera.position.set(0, 0, 100);

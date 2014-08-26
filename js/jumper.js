@@ -42,6 +42,7 @@ Jumper.prototype.reset = function() {
 	this.body.sleep();
 	this.body.position[0] = -75; // TODO: Get from slope?
 	this.body.position[1] = 45;
+	this.body.angle = 0;
 };
 
 Jumper.prototype.action = function() {
@@ -64,6 +65,23 @@ Jumper.prototype.action = function() {
 			throw "Unkown state " + this.state;
 	}
 };
+
+Jumper.prototype.update = function() {
+	switch (this.state) {
+		case JumperState.WAITING:
+			break;
+		case JumperState.SLIDING:
+			break;
+		case JumperState.FLYING:
+			if (this.isOnRamp()) // TODO: Needs delay
+				this.state = JumperState.LANDED;
+			break;
+		case JumperState.LANDED:
+			break;
+		default:
+			throw "Unkown state " + this.state;
+	}
+}
 
 Jumper.prototype.isOnRamp = function() {
 	for (var i = 0; i < world.narrowphase.contactEquations.length; i++) {

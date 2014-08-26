@@ -75,6 +75,8 @@ Jumper.prototype.update = function(dt) {
 		case JumperState.WAITING:
 			break;
 		case JumperState.SLIDING:
+			if (this.body.position[0] > 0)
+				this.state = JumperState.FLYING;
 			break;
 		case JumperState.FLYING:
 			this.physics();

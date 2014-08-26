@@ -8,6 +8,7 @@ function Jumper(world, scene) {
 	this.skisShape.material = new p2.Material();
 	this.jumperShape = new p2.Rectangle(0.3, jumperHeight);
 	this.jumperShape.material = new p2.Material();
+	this.hasJumped = false;
 	this.body = new p2.Body({
 		mass: 5,
 		position: [-75, 45],
@@ -32,7 +33,10 @@ function Jumper(world, scene) {
 
 Jumper.prototype.jump = function() {
 	if (this.isOnRamp())
+	{
 		this.body.velocity[1] = 5;
+		this.hasJumped = true;
+	}
 };
 
 Jumper.prototype.isOnRamp = function() {
@@ -44,6 +48,10 @@ Jumper.prototype.isOnRamp = function() {
 	return false;
 };
 
+Jumper.prototype.physics = function() {
+	this.calculateForces();
+};
+
 Jumper.prototype.calculateForces = function() {
 	// Wind not implemented yet, so speed of air wrt jumper is zero
 	var vax = 0, vay = 0;
@@ -53,7 +61,7 @@ Jumper.prototype.calculateForces = function() {
 	var vY = this.body.velocity[1] - vay;
 	
 	// Square of velocity
-	var vSqr = vX*vX + vY*vY
+	var vSqr = vX*vX; // + vY*vY TODO: fix
 		
 	// Air density [kg/m^3]
 	var rho = 1.315
@@ -69,4 +77,16 @@ Jumper.prototype.calculateForces = function() {
 
 	var liftForce = rho/2*L*vSqr;
 	var dragForce = rho/2*D*vSqr;
+	
+	if (vX < 0) dragForce *= -1;
+
+	this.applyForces(liftForce, dragForce);
+};
+
+Jumper.prototype.applyForces = function(lift, drag) {
+	if (this.hasJumped)
+	{
+		this.body.setZeroForce();
+		this.body.applyForce([-drag, lift], this.body.position);
+	}
 };

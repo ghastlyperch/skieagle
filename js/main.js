@@ -65,6 +65,7 @@ function render() {
 	// Input
 	controller.poll();
 	// Physics
+	jumper.physics();
 	world.step(1/60);
 	// Graphics
 	jumper.visual.position.x = jumper.body.position[0];

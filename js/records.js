@@ -1,6 +1,22 @@
 
 function Records(profileId) {
 	this.profile = Records.PROFILE_PREFIX + profileId;
+	this.records = {};
+	var loaded = localStorage[this.profile];
+	if (loaded) {
+		this.records = JSON.parse(loaded);
+		var time = Date.now();
+		// TODO: Reset at midnight instead of 24h after last record
+		if (time - this.records.daily.time > 86400000) // One day in ms
+			this.records.daily.distance = 0;
+		console.log("Records loaded");
+	} else {
+		this.reset();
+		console.log("No previous records found");
+	}
+}
+
+Records.prototype.reset = function() {
 	this.records = {
 		daily: {
 			time: 0,
@@ -11,16 +27,7 @@ function Records(profileId) {
 			distance: 0
 		}
 	};
-	var loaded = localStorage[this.profile];
-	if (loaded) {
-		this.records = JSON.parse(loaded);
-		var time = Date.now();
-		// TODO: Reset at midnight instead of 24h after last record
-		if (time - this.records.daily.time > 86400000) // One day in ms
-			this.records.daily.distance = 0;
-		console.log("Records loaded");
-	} else console.log("No previous records found");
-}
+};
 
 Records.prototype.add = function(distance) {
 	var time = Date.now();

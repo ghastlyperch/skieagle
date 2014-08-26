@@ -62,11 +62,12 @@ function resize() {
 init();
 
 function render() {
+	var dt = 1/60; // TODO: Measure this
 	// Input
 	controller.poll();
 	// Physics
-	jumper.physics();
-	world.step(1/60);
+	world.step(1/60); // Fixed timestep
+	jumper.update(dt);
 	// Graphics
 	jumper.visual.position.x = jumper.body.position[0];
 	jumper.visual.position.y = jumper.body.position[1];

@@ -1,4 +1,11 @@
 
+var JumperState = {
+	WAITING: 0,
+	SLIDING: 1,
+	FLYING: 2,
+	LANDED: 3
+};
+
 function Jumper(world, scene) {
 	// Physical body
 	var jumperHeight = 1.7;
@@ -8,11 +15,12 @@ function Jumper(world, scene) {
 	this.skisShape.material = new p2.Material();
 	this.jumperShape = new p2.Rectangle(0.3, jumperHeight);
 	this.jumperShape.material = new p2.Material();
+
 	this.hasJumped = false;
 	this.body = new p2.Body({
-		mass: 5,
-		position: [-75, 45],
+		mass: 5
 	});
+
 	this.body.addShape(this.skisShape);
 	this.body.addShape(this.jumperShape, [0, jumperHeight * 0.5]);
 	world.addBody(this.body);
@@ -29,15 +37,59 @@ function Jumper(world, scene) {
 	jumperMesh.position.y = this.jumperShape.height * 0.5;
 	this.visual.add(jumperMesh);
 	scene.add(this.visual);
+
+	this.reset();
 };
 
-Jumper.prototype.jump = function() {
-	if (this.isOnRamp())
-	{
-		this.body.velocity[1] = 5;
-		this.hasJumped = true;
+Jumper.prototype.reset = function() {
+	this.state = JumperState.WAITING;
+	this.flyTime = 0;
+	this.body.sleep();
+	this.body.position[0] = -75; // TODO: Get from slope?
+	this.body.position[1] = 45;
+	this.body.angle = 0;
+};
+
+Jumper.prototype.action = function() {
+	switch (this.state) {
+		case JumperState.WAITING:
+			this.state = JumperState.SLIDING;
+			this.body.wakeUp();
+			break;
+		case JumperState.SLIDING:
+			if (this.isOnRamp() && this.body.position[0] > -20) { // TODO: Right amount of x
+				this.body.velocity[1] = 5;
+				this.state = JumperState.FLYING;
+			}
+		case JumperState.FLYING:
+			break;
+		case JumperState.LANDED:
+			this.reset();
+			break;
+		default:
+			throw "Unkown state " + this.state;
+
 	}
 };
+
+Jumper.prototype.update = function(dt) {
+	switch (this.state) {
+		case JumperState.WAITING:
+			break;
+		case JumperState.SLIDING:
+			break;
+		case JumperState.FLYING:
+			this.physics();
+			this.flyTime += dt;
+			if (this.flyTime > 1 && this.isOnRamp())
+				this.state = JumperState.LANDED;
+			break;
+		case JumperState.LANDED:
+			break;
+		default:
+			throw "Unkown state " + this.state;
+	}
+}
 
 Jumper.prototype.isOnRamp = function() {
 	for (var i = 0; i < world.narrowphase.contactEquations.length; i++) {
@@ -84,7 +136,7 @@ Jumper.prototype.calculateForces = function() {
 };
 
 Jumper.prototype.applyForces = function(lift, drag) {
-	if (this.hasJumped)
+	if (this.state == JumperState.FLYING)
 	{
 		this.body.setZeroForce();
 		this.body.applyForce([-drag, lift], this.body.position);

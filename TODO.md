@@ -9,7 +9,6 @@ Uncategorized tasks
 [ ] Scoring based on landing goodness?
 [ ] Finish slope generating code
 [ ] Sliding physics sometimes get stuck
-[ ] Alltime / daily best
 [ ] Jumping physics are barebones
 	- Use force instead of velocity?
 [ ] Decent fallback for non-WebGL devices

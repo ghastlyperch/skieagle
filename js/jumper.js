@@ -44,7 +44,8 @@ Jumper.prototype.reset = function() {
 	this.body.position[0] = -75; // TODO: Get from slope?
 	this.body.position[1] = 45;
 	this.body.angle = 0;
-	document.getElementById("hint").innerHTML = "Click to start"; // TODO: Customize for mobile
+	var msg = isTouchDevice ? "Tap to start" : "Click to start";
+	document.getElementById("hint").innerHTML = msg;
 };
 
 Jumper.prototype.action = function() {

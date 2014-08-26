@@ -20,6 +20,9 @@ function Controller(obj) {
 		if (e.keyCode == 32 || e.keyCode == 38) // Space / Up
 			obj.action();
 
+		if (e.keyCode == 68) // D
+			ramp.visual.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+
 		e.preventDefault();
 	}
 

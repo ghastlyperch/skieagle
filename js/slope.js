@@ -34,13 +34,18 @@ function Slope(world, scene) {
 
 	// Visual representation
 	var visShape = new THREE.Shape();
+	var x, y, minY = 1000;
 	for (var i = 0; i < slopeProfile.length; ++i) {
-		var x = i * this.elementWidth;
-		var y = slopeProfile[i];
+		x = i * this.elementWidth;
+		y = slopeProfile[i];
+		if (y < minY)
+			minY = y;
 		if (i == 0) visShape.moveTo(x, y);
 		else visShape.lineTo(x, y);
 	}
-	var material = new THREE.MeshBasicMaterial({ color: 0x886622 });
+	visShape.lineTo(x, minY - 50);
+	visShape.lineTo(0, minY - 50);
+	var material = new THREE.MeshBasicMaterial({ color: 0xcccccc });
 	this.visual = new THREE.Mesh(new THREE.ShapeGeometry(visShape), material);
 	scene.add(this.visual);
 }

@@ -1,4 +1,4 @@
-var world;
+var world, stats;
 var jumper, controller, ramp;
 var camera, scene, renderer;
 
@@ -40,6 +40,9 @@ function init() {
 		friction : 0,
 	});
 	world.addContactMaterial(frictionContactMaterial);
+
+	stats = new Stats();
+	document.body.appendChild(stats.domElement);
 }
 
 function resize() {
@@ -66,6 +69,7 @@ function render() {
 	camera.position.x = jumper.visual.position.x;
 	camera.position.y = jumper.visual.position.y;
 	renderer.render(scene, camera);
+	stats.update();
 	requestAnimationFrame(render);
 }
 render();

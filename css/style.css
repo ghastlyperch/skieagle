@@ -19,6 +19,22 @@ canvas {
 	font-weight: bold;
 }
 
+#results {
+	display: none;
+	position: absolute;
+	top: 10%;
+	width: 100%;
+}
+
+#results table {
+	max-width: 480px;
+	margin: 0 auto;
+	color: #004;
+	font-size: 28px;
+	font-weight: bold;
+	border-spacing: 30px 0px;
+}
+
 #debug {
 	position: absolute;
 	left: 10px;

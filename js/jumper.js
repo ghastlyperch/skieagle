@@ -46,6 +46,7 @@ Jumper.prototype.reset = function() {
 	this.body.angle = 0;
 	var msg = isTouchDevice ? "Tap to start" : "Click to start";
 	document.getElementById("hint").innerHTML = msg;
+	document.getElementById("results").style.display = "none";
 };
 
 Jumper.prototype.action = function() {
@@ -85,10 +86,7 @@ Jumper.prototype.update = function(dt) {
 				this.state = JumperState.LANDED;
 				var d = ((this.body.position[0] * 100)|0)/100;
 				records.add(d);
-				var msg = "Distance: " + d + " m<br/>";
-				msg += "Daily Best: " + records.records.daily.distance + " m<br/>";
-				msg += "All-Time Best: " + records.records.allTime.distance + " m<br/>";
-				document.getElementById("hint").innerHTML = msg;
+				document.getElementById("results").style.display = "block";
 			}
 			break;
 		case JumperState.LANDED:

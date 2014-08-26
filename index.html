@@ -9,8 +9,15 @@
 </head>
 <body>
 
-	<div id="hint"></div>
 	<div id="debug"></div>
+	<div id="hint"></div>
+	<div id="results">
+		<table>
+			<tr><td>Distance</td><td id="result"></td><td></td></tr>
+			<tr><td>Daily Best</td><td id="dailyresult"></td><td id="dailydiff"></td></tr>
+			<tr><td>All-Time Best</td><td id="alltimeresult"></td><td id="alltimediff"></td></tr>
+		</table>
+	</div>
 
 	<script>
 		// Not really correct/reliable, but detecting touch screen is currently impossible

@@ -40,6 +40,9 @@ Records.prototype.add = function(distance) {
 		this.records.allTime.time = time;
 	}
 	this.save();
+	document.getElementById("result").innerHTML = distance + " m";
+	document.getElementById("dailyresult").innerHTML = this.records.daily.distance + " m";
+	document.getElementById("alltimeresult").innerHTML = this.records.allTime.distance + " m";
 }
 
 Records.prototype.save = function() {

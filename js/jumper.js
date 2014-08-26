@@ -1,5 +1,13 @@
 
+var JumperState = {
+	WAITING: 0,
+	SLIDING: 1,
+	FLYING: 2,
+	LANDED: 3
+};
+
 function Jumper(world, scene) {
+	this.state = JumperState.WAITING;
 	// Physical body
 	var jumperHeight = 1.7;
 	var skiLength = 2.7;
@@ -8,10 +16,7 @@ function Jumper(world, scene) {
 	this.skisShape.material = new p2.Material();
 	this.jumperShape = new p2.Rectangle(0.3, jumperHeight);
 	this.jumperShape.material = new p2.Material();
-	this.body = new p2.Body({
-		mass: 5,
-		position: [-75, 45],
-	});
+	this.body = new p2.Body({ mass: 5 });
 	this.body.addShape(this.skisShape);
 	this.body.addShape(this.jumperShape, [0, jumperHeight * 0.5]);
 	world.addBody(this.body);
@@ -28,11 +33,36 @@ function Jumper(world, scene) {
 	jumperMesh.position.y = this.jumperShape.height * 0.5;
 	this.visual.add(jumperMesh);
 	scene.add(this.visual);
+
+	this.reset();
 };
 
-Jumper.prototype.jump = function() {
-	if (this.isOnRamp())
-		this.body.velocity[1] = 5;
+Jumper.prototype.reset = function() {
+	this.state = JumperState.WAITING;
+	this.body.sleep();
+	this.body.position[0] = -75; // TODO: Get from slope?
+	this.body.position[1] = 45;
+};
+
+Jumper.prototype.action = function() {
+	switch (this.state) {
+		case JumperState.WAITING:
+			this.state = JumperState.SLIDING;
+			this.body.wakeUp();
+			break;
+		case JumperState.SLIDING:
+			if (this.isOnRamp() && this.body.position[0] > -20) { // TODO: Right amount of x
+				this.body.velocity[1] = 5;
+				this.state = JumperState.FLYING;
+			}
+		case JumperState.FLYING:
+			break;
+		case JumperState.LANDED:
+			this.reset();
+			break;
+		default:
+			throw "Unkown state " + this.state;
+	}
 };
 
 Jumper.prototype.isOnRamp = function() {

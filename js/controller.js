@@ -18,7 +18,7 @@ function Controller(obj) {
 			return;
 
 		if (e.keyCode == 32 || e.keyCode == 38) // Space / Up
-			obj.jump();
+			obj.action();
 
 		e.preventDefault();
 	}
@@ -29,7 +29,7 @@ function Controller(obj) {
 	}
 
 	function onClick(e) {
-		obj.jump();
+		obj.action();
 		e.preventDefault();
 	}
 
@@ -41,7 +41,7 @@ function Controller(obj) {
 			var gamepad = gamepads[i];
 			if (!gamepad) continue;
 			if (gamepad.buttons[0].pressed)
-				obj.jump();
+				obj.action();
 		}
 	};
 

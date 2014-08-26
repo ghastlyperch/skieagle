@@ -74,10 +74,12 @@ SlopeBuilder.prototype.buildFISSlope = function()
 	slopeProfile.push([0, 0]);
 	slopeProfile.push([E2x, E2y]); // Start of take-off table
 	
-	var xIncr = (Math.abs(E1x)-Math.abs(E2x))/4;
+	// Transition segment
+	var nIter = 4; // Number of sub-segments in transition segment
+	var xIncr = (Math.abs(E1x)-Math.abs(E2x))/nIter;
 	var xCur = E2x - xIncr;
-	var i = 1;
-	while (xCur > E1x) 
+
+	for (var i = 0; i < nIter - 1; ++i) 
 	{
 		var P = 1/Math.tan(degToRad*gamma)/3/C;
 		var Q = (xCur + t*Math.cos(degToRad*alpha)+f*Math.sin(degToRad*gamma)+d*Math.cos(degToRad*gamma))/2/C/Math.sin(degToRad*gamma);
@@ -86,14 +88,13 @@ SlopeBuilder.prototype.buildFISSlope = function()
 		var yTran = t*Math.sin(degToRad*alpha)-f*Math.cos(degToRad*gamma)+d*Math.sin(degToRad*gamma)-ksi*Math.sin(degToRad*gamma)+C*ksi*ksi*ksi*Math.cos(degToRad*gamma);
 		slopeProfile.push([xCur, yTran]);
 		xCur -= xIncr;
-		i++;
 	}
 	slopeProfile.push([E1x, E1y]); // Start of transition segment
 	slopeProfile.push([E1x-(e1-l)*Math.cos(degToRad*gamma),E1y+(e1-l)*Math.sin(degToRad*gamma)]); // Starting position
 	slopeProfile.push([E1x-(e1-l)*Math.cos(degToRad*gamma), -40]);
 	slopeProfile.push([120, -40]);
 	slope.fromPolygon(slopeProfile);
-
+	
 	for (var i = 0; i < slope.shapes.length; ++i)
 	{
 		slope.shapes[i].material = new p2.Material();

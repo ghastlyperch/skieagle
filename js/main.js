@@ -72,7 +72,7 @@ function drawDebug() {
 	for (var s in JumperState)
 		if (JumperState[s] == jumper.state)
 			msg += "State: " + s;
-	document.getElementById("debug").innerHTML = msg;
+	$("#debug").innerHTML = msg;
 }
 
 var physicsStep = 1/120;

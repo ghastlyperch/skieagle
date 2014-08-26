@@ -45,8 +45,8 @@ Jumper.prototype.reset = function() {
 	this.body.position[1] = 45;
 	this.body.angle = 0;
 	var msg = isTouchDevice ? "Tap to start" : "Click to start";
-	document.getElementById("hint").innerHTML = msg;
-	document.getElementById("results").style.display = "none";
+	$("#hint").innerHTML = msg;
+	$("#results").style.display = "none";
 };
 
 Jumper.prototype.action = function() {
@@ -54,7 +54,7 @@ Jumper.prototype.action = function() {
 		case JumperState.WAITING:
 			this.state = JumperState.SLIDING;
 			this.body.wakeUp();
-			document.getElementById("hint").innerHTML = "";
+			$("#hint").innerHTML = "";
 			break;
 		case JumperState.SLIDING:
 			if (this.isOnRamp() && this.body.position[0] > -20) { // TODO: Right amount of x
@@ -86,7 +86,7 @@ Jumper.prototype.update = function(dt) {
 				this.state = JumperState.LANDED;
 				var d = Number(this.body.position[0]).toFixed(2);
 				records.add(d);
-				document.getElementById("results").style.display = "block";
+				$("#results").style.display = "block";
 			}
 			break;
 		case JumperState.LANDED:

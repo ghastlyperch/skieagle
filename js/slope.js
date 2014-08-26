@@ -120,7 +120,6 @@ function FISSlope(world, scene) {
 	for (var i = 0; i < slopeProfile.length; ++i) {
 		var x = slopeProfile[i][0];
 		var y = slopeProfile[i][1];
-		console.log(x, y);
 		if (i == 0) visShape.moveTo(x, y);
 		else visShape.lineTo(x, y);
 	}

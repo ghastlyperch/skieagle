@@ -3,6 +3,7 @@ var DEBUG = true;
 var world, stats, records;
 var jumper, controller, ramp;
 var camera, scene, renderer;
+var clock;
 
 var viewportWidth = 100; // meters
 
@@ -12,6 +13,7 @@ function init() {
 	camera = new THREE.OrthographicCamera(-50, 50, 50, -50, 1, 1000);
 	camera.position.set(0, 0, 100);
 
+	clock = new THREE.Clock();
 	scene = new THREE.Scene();
 
 	if (window.WebGLRenderingContext) // TODO: Better check, use Detector?
@@ -73,17 +75,21 @@ function drawDebug() {
 	document.getElementById("debug").innerHTML = msg;
 }
 
+var physicsStep = 1/120;
+var timeAccumulator = 0;
 function render() {
-	var dt = 1/60; // TODO: Measure this
+	var dt = clock.getDelta();
+	if (dt > 0.05) dt = 0.05; // No bigger deltas than 20 FPS
+	timeAccumulator += dt;
 	// Input
 	controller.poll();
 	// Physics
-	world.step(1/60); // Fixed timestep
+	while (timeAccumulator >= physicsStep) {
+		world.step(physicsStep);
+		timeAccumulator -= physicsStep;
+	}
 	jumper.update(dt);
 	// Graphics
-	jumper.visual.position.x = jumper.body.position[0];
-	jumper.visual.position.y = jumper.body.position[1];
-	jumper.visual.rotation.z = jumper.body.angle;
 	camera.position.x = jumper.visual.position.x;
 	camera.position.y = jumper.visual.position.y;
 	renderer.render(scene, camera);

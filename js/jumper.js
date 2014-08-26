@@ -16,7 +16,7 @@ function Jumper(world, scene) {
 	this.jumperShape = new p2.Rectangle(0.3, jumperHeight);
 	this.jumperShape.material = new p2.Material();
 
-	this.body = new p2.Body({ mass: 5 });
+	this.body = new p2.Body({ mass: 65 });
 	this.body.addShape(this.skisShape);
 	this.body.addShape(this.jumperShape, [0, jumperHeight * 0.5]);
 	world.addBody(this.body);
@@ -44,7 +44,8 @@ Jumper.prototype.reset = function() {
 	this.body.position[0] = -75; // TODO: Get from slope?
 	this.body.position[1] = 45;
 	this.body.angle = 0;
-	document.getElementById("hint").innerHTML = "Click to start"; // TODO: Customize for mobile
+	var msg = isTouchDevice ? "Tap to start" : "Click to start";
+	document.getElementById("hint").innerHTML = msg;
 };
 
 Jumper.prototype.action = function() {
@@ -95,6 +96,9 @@ Jumper.prototype.update = function(dt) {
 		default:
 			throw "Unkown state " + this.state;
 	}
+	this.visual.position.x = this.body.position[0];
+	this.visual.position.y = this.body.position[1];
+	this.visual.rotation.z = this.body.angle;
 }
 
 Jumper.prototype.isOnRamp = function() {

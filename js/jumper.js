@@ -10,7 +10,7 @@ function Jumper(world, scene) {
 	// Physical body
 	var jumperHeight = 1.7;
 	var skiLength = 2.7;
-
+	this.skiLength = skiLength;
 	this.skisShape = new p2.Rectangle(skiLength, 0.02);
 	this.skisShape.material = new p2.Material();
 	this.jumperShape = new p2.Rectangle(0.3, jumperHeight);
@@ -107,10 +107,6 @@ Jumper.prototype.isOnRamp = function() {
 };
 
 Jumper.prototype.physics = function() {
-	this.calculateForces();
-};
-
-Jumper.prototype.calculateForces = function() {
 	// Wind not implemented yet, so speed of air wrt jumper is zero
 	var vax = 0, vay = 0;
 	
@@ -129,22 +125,35 @@ Jumper.prototype.calculateForces = function() {
 	var gamma = 160; // Hip angle
 	var alpha = 35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
 	
+	// Lift and drag coefficients
+	var cD = 0.8;
+	var cL = 0.2;
+
+	// Area projections
+	var aX = 0.5*Math.cos(alpha*Math.PI/180.0);
+	var aY = 0.5*Math.sin(alpha*Math.PI/180.0);
+
+	// Drag force x and y components
+	var dX = 0.5*rho*cD*aX*vX*vX;
+	var dY = 0.5*rho*cD*aY*vY*vY;
+
+	// Lift (only y)
+	var lY = 0.5*rho*cL*aX*vX*vX;
+
 	// These numbers are valid for constant beta and gamma 
-	var L = -0.43903 + 0.060743*alpha - 7.192e-4*alpha*alpha
-	var D = -0.032061 + 0.01232*alpha + 2.283e-4*alpha*alpha
+	//var L = -0.43903 + 0.060743*alpha - 7.192e-4*alpha*alpha
+	//var D = -0.032061 + 0.01232*alpha + 2.283e-4*alpha*alpha
 
-	var liftForce = rho/2*L*vSqr;
-	var dragForce = rho/2*D*vSqr;
+	//var liftForce = 0; rho/2*L*vSqr;
+	//var dragForce = rho/2*D*vSqr;
 	
-	if (vX < 0) dragForce *= -1;
-
-	this.applyForces(liftForce, dragForce);
-};
-
-Jumper.prototype.applyForces = function(lift, drag) {
+	if (vX > 0) dX *= -1;
+	if (vY > 0) dY *= -1;
+	
+	// Apply forces if jumper is in flying state
 	if (this.state == JumperState.FLYING)
 	{
 		this.body.setZeroForce();
-		this.body.applyForce([-drag, lift], this.body.position);
+		this.body.applyForce([dX, lY+dY], this.body.position);
 	}
 };

@@ -84,7 +84,7 @@ Jumper.prototype.update = function(dt) {
 			this.flyTime += dt;
 			if (this.flyTime > 1 && this.isOnRamp()) {
 				this.state = JumperState.LANDED;
-				var d = ((this.body.position[0] * 100)|0)/100;
+				var d = Number(this.body.position[0]).toFixed(2);
 				records.add(d);
 				document.getElementById("results").style.display = "block";
 			}

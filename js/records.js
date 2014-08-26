@@ -30,6 +30,8 @@ Records.prototype.reset = function() {
 };
 
 Records.prototype.add = function(distance) {
+	var dailyDiff = Number(distance - this.records.daily.distance).toFixed(2);
+	var allTimeDiff = Number(distance - this.records.allTime.distance).toFixed(2);
 	var time = Date.now();
 	if (distance > this.records.daily.distance) {
 		this.records.daily.distance = distance;
@@ -43,6 +45,8 @@ Records.prototype.add = function(distance) {
 	document.getElementById("result").innerHTML = distance + " m";
 	document.getElementById("dailyresult").innerHTML = this.records.daily.distance + " m";
 	document.getElementById("alltimeresult").innerHTML = this.records.allTime.distance + " m";
+	document.getElementById("dailydiff").innerHTML = (dailyDiff >= 0 ? "+" : "") + dailyDiff + " m";
+	document.getElementById("alltimediff").innerHTML = (allTimeDiff >= 0 ? "+" : "") + allTimeDiff + " m";
 }
 
 Records.prototype.save = function() {

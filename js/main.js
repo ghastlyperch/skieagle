@@ -11,7 +11,10 @@ function init() {
 
 	scene = new THREE.Scene();
 
-	renderer = new THREE.WebGLRenderer({ antialias: true });
+	if (window.WebGLRenderingContext)
+		renderer = new THREE.WebGLRenderer({ antialias: true });
+	else
+		renderer = new THREE.CanvasRenderer();
 	renderer.setClearColor(0x9999ff);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);

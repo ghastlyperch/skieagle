@@ -82,7 +82,7 @@ function render() {
 	if (dt > 0.05) dt = 0.05; // No bigger deltas than 20 FPS
 	timeAccumulator += dt;
 	// Input
-	controller.poll();
+	controller.poll(dt);
 	// Physics
 	while (timeAccumulator >= physicsStep) {
 		world.step(physicsStep);

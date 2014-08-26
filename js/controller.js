@@ -36,8 +36,12 @@ function Controller(obj) {
 		e.preventDefault();
 	}
 
-	this.poll = function() {
+	this.poll = function(dt) {
 		if (!navigator.getGamepads) return;
+
+		var steer = 0;
+		if (pressed[39]) steer += 1;
+		if (pressed[37]) steer -= 1;
 
 		var gamepads = navigator.getGamepads();
 		for (var i = 0; i < gamepads.length; ++i) {
@@ -45,7 +49,12 @@ function Controller(obj) {
 			if (!gamepad) continue;
 			if (gamepad.buttons[0].pressed)
 				obj.action();
+			var axis = gamepad.axes[0];
+			if (Math.abs(axis) > 0.1)
+				steer += axis;
 		}
+
+		if (steer != 0) obj.steer(steer * dt);
 	};
 
 	document.addEventListener('keydown', onKeyDown, true);

@@ -71,6 +71,23 @@ Jumper.prototype.action = function() {
 	}
 };
 
+Jumper.prototype.steer = function(steer) {
+	switch (this.state) {
+		case JumperState.WAITING:
+			break;
+		case JumperState.SLIDING:
+			break;
+		case JumperState.FLYING:
+			// TODO: This is just a place holder, should rotate jumper and not skis
+			this.body.angle -= 1 * steer; // Radians per second
+			break;
+		case JumperState.LANDED:
+			break;
+		default:
+			throw "Unkown state " + this.state;
+	}
+};
+
 Jumper.prototype.update = function(dt) {
 	switch (this.state) {
 		case JumperState.WAITING:

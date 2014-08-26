@@ -26,9 +26,11 @@ function init() {
 	world = new p2.World({
 		gravity : [0, -9.81],
 	});
+	world.solver.iterations = 20;
+	world.solver.frictionIterations = 10;
 
 	// Create ramp
-	ramp = new Slope(world, scene);
+	ramp = new FISSlope(world, scene);
 
 	// Create jumper
 	jumper = new Jumper(world, scene);
@@ -36,10 +38,12 @@ function init() {
 
 	// When the materials of the plane and the first circle meet, they should yield
 	// a contact friction specified. We tell p2 this by creating a ContactMaterial.
-	frictionContactMaterial = new p2.ContactMaterial(ramp.body.shapes[0].material, jumper.skisShape.material, {
-		friction : 0,
-	});
-	world.addContactMaterial(frictionContactMaterial);
+	for (var i = 0; i < ramp.body.shapes.length; ++i)
+	{
+		world.addContactMaterial(
+			new p2.ContactMaterial(ramp.body.shapes[i].material, jumper.skisShape.material, {friction : 0.0})
+			);
+	}
 
 	stats = new Stats();
 	document.body.appendChild(stats.domElement);

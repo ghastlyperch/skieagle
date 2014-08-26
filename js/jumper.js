@@ -7,7 +7,6 @@ var JumperState = {
 };
 
 function Jumper(world, scene) {
-	this.state = JumperState.WAITING;
 	// Physical body
 	var jumperHeight = 1.7;
 	var skiLength = 2.7;
@@ -39,6 +38,7 @@ function Jumper(world, scene) {
 
 Jumper.prototype.reset = function() {
 	this.state = JumperState.WAITING;
+	this.flyTime = 0;
 	this.body.sleep();
 	this.body.position[0] = -75; // TODO: Get from slope?
 	this.body.position[1] = 45;
@@ -66,14 +66,15 @@ Jumper.prototype.action = function() {
 	}
 };
 
-Jumper.prototype.update = function() {
+Jumper.prototype.update = function(dt) {
 	switch (this.state) {
 		case JumperState.WAITING:
 			break;
 		case JumperState.SLIDING:
 			break;
 		case JumperState.FLYING:
-			if (this.isOnRamp()) // TODO: Needs delay
+			this.flyTime += dt;
+			if (this.flyTime > 1 && this.isOnRamp())
 				this.state = JumperState.LANDED;
 			break;
 		case JumperState.LANDED:

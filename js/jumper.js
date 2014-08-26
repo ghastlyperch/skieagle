@@ -96,6 +96,9 @@ Jumper.prototype.update = function(dt) {
 		default:
 			throw "Unkown state " + this.state;
 	}
+	this.visual.position.x = this.body.position[0];
+	this.visual.position.y = this.body.position[1];
+	this.visual.rotation.z = this.body.angle;
 }
 
 Jumper.prototype.isOnRamp = function() {

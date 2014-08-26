@@ -90,9 +90,6 @@ function render() {
 	}
 	jumper.update(dt);
 	// Graphics
-	jumper.visual.position.x = jumper.body.position[0];
-	jumper.visual.position.y = jumper.body.position[1];
-	jumper.visual.rotation.z = jumper.body.angle;
 	camera.position.x = jumper.visual.position.x;
 	camera.position.y = jumper.visual.position.y;
 	renderer.render(scene, camera);

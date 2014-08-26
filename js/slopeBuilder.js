@@ -33,7 +33,7 @@ SlopeBuilder.prototype.buildSlope = function()
 	slopeShape.material = new p2.Material();
 	var slope = new p2.Body();
 	slope.addShape(slopeShape);
-	
+	slope.getJumpedDistance = function(xCoord) { return xCoord; };	
 	return slope;
 };
 
@@ -97,6 +97,9 @@ SlopeBuilder.prototype.buildFISSlope = function()
 	for (var i = 0; i < slope.shapes.length; ++i)
 	{
 		slope.shapes[i].material = new p2.Material();
-	}		
+	}
+
+	// Distance measuring function
+	slope.getJumpedDistance = function(xCoord) { return xCoord; };		
 	return slope;
 };

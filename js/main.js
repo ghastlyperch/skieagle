@@ -19,7 +19,7 @@ function init() {
 	if (window.WebGLRenderingContext) // TODO: Better check, use Detector?
 		renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 	else
-		renderer = new THREE.CanvasRenderer();
+		renderer = new THREE.CanvasRenderer({ alpha: true });
 	renderer.setClearColor(0x000000, 0);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
@@ -55,11 +55,11 @@ function init() {
 	var cloudMats = [
 		new THREE.MeshBasicMaterial({
 			map: THREE.ImageUtils.loadTexture("assets/cloud-01.png"),
-			transparent: true
+			transparent: true, overdraw: 0.25
 		}),
 		new THREE.MeshBasicMaterial({
 			map: THREE.ImageUtils.loadTexture("assets/cloud-02.png"),
-			transparent: true
+			transparent: true, overdraw: 0.25
 		})
 	];
 	for (var i = 0; i < 25; ++i) {

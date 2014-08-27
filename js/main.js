@@ -69,6 +69,7 @@ init();
 function drawDebug() {
 	var msg = "";
 	msg += "Position: " + (jumper.body.position[0]|0) + ", " + (jumper.body.position[1]|0) + "\n";
+	msg += "Speed: " + Math.round(jumper.speed) + " m/s = " + Math.round(jumper.speed * 3.6) + " km/h\n";
 	for (var s in JumperState)
 		if (JumperState[s] == jumper.state)
 			msg += "State: " + s;

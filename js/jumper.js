@@ -10,6 +10,7 @@ function Jumper(world, scene) {
 	// Physical body
 	var jumperHeight = 1.7;
 	var skiLength = 2.7;
+	this.speed = 0;
 	this.skiLength = skiLength;
 	this.skisShape = new p2.Rectangle(skiLength, 0.02);
 	this.skisShape.material = new p2.Material();
@@ -89,6 +90,9 @@ Jumper.prototype.steer = function(steer) {
 };
 
 Jumper.prototype.update = function(dt) {
+	var vx = this.body.velocity[0], vy = this.body.velocity[1];
+	this.speed = Math.sqrt(vx*vx + vy*vy);
+
 	switch (this.state) {
 		case JumperState.WAITING:
 			break;

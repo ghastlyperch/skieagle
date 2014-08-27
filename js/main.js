@@ -74,6 +74,7 @@ function init() {
 
 	stats = new Stats();
 	document.body.appendChild(stats.domElement);
+	if (DEBUG) $("#mediaquerydebug").style.display = "block";
 }
 
 function resize() {

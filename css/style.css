@@ -1,11 +1,35 @@
 
 body {
 	margin: 0;
+	font-size: 28px;
 	font-family: 'Slackey', cursive;
 	/*background-image: url('../assets/background-01.jpg');
 	background-repeat: repeat;*/
 	background: linear-gradient(to bottom, #1e528e 0%, #265889 50%, #9da671 100%);
 }
+
+#mediaquerydebug {
+	display: none;
+	position: absolute;
+	width: 4px;
+	height: 4px;
+}
+
+@media (max-width: 600px) {
+	body {
+		font-size: 22px;
+	}
+	#mediaquerydebug { background-color: green; }
+}
+
+@media (max-width: 480px) {
+	body {
+		font-size: 14px;
+	}
+	#mediaquerydebug { background-color: red; }
+}
+
+/* Use 'em' units in font-sizes when you want the size to be smaller on smaller screens */
 
 canvas {
 	width: 100%;
@@ -25,6 +49,7 @@ canvas {
 #results {
 	display: none;
 	position: absolute;
+	margin: 0;
 	top: 10%;
 	width: 100%;
 }
@@ -33,7 +58,7 @@ canvas {
 	max-width: 600px;
 	margin: 0 auto;
 	color: #004;
-	font-size: 28px;
+	font-size: 1em;
 	font-weight: bold;
 	border-spacing: 20px 0px;
 }
@@ -43,7 +68,7 @@ canvas {
 	left: 10px;
 	top: 10px;
 	white-space: pre;
-	font-size: 12px;
+	font-size: 0.5em;
 	font-family: monospace;
 }
 

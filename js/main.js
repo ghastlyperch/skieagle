@@ -93,7 +93,9 @@ function drawDebug() {
 	msg += "Speed: " + Math.round(jumper.speed) + " m/s = " + Math.round(jumper.speed * 3.6) + " km/h\n";
 	for (var s in JumperState)
 		if (JumperState[s] == jumper.state)
-			msg += "State: " + s;
+			msg += "State: " + s + "\n";
+	if (controller.motionDebug)
+		msg += controller.motionDebug + "\n";
 	$("#debug").innerHTML = msg;
 }
 

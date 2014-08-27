@@ -8,6 +8,7 @@ window.addEventListener("gamepadconnected", function(e) {
 
 function Controller(obj) {
 	this.object = obj;
+	var self = this;
 	var pressed = [];
 
 	function onKeyDown(e) {
@@ -36,6 +37,14 @@ function Controller(obj) {
 		e.preventDefault();
 	}
 
+	function onDeviceMotion(e) {
+		if (e.interval > 0)
+			self.motionDebug = "Device rot rate: " +
+				(e.rotationRate.alpha|0) + ", " +
+				(e.rotationRate.beta|0) + ", " +
+				(e.rotationRate.gamma|0) + " (" + e.interval + ")";
+	}
+
 	this.poll = function(dt) {
 		if (!navigator.getGamepads) return;
 
@@ -60,4 +69,5 @@ function Controller(obj) {
 	document.addEventListener('keydown', onKeyDown, true);
 	document.addEventListener('keyup', onKeyUp, true);
 	document.addEventListener('click', onClick, true);
+	window.addEventListener('devicemotion', onDeviceMotion, true);
 };

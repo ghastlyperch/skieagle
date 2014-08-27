@@ -17,10 +17,10 @@ function init() {
 	scene = new THREE.Scene();
 
 	if (window.WebGLRenderingContext) // TODO: Better check, use Detector?
-		renderer = new THREE.WebGLRenderer({ antialias: true });
+		renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 	else
 		renderer = new THREE.CanvasRenderer();
-	renderer.setClearColor(0x6666ff);
+	renderer.setClearColor(0x000000, 0);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
 

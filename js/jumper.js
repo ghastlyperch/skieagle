@@ -105,7 +105,8 @@ Jumper.prototype.update = function(dt) {
 			this.flyTime += dt;
 			if (this.flyTime > 1 && this.isOnRamp()) {
 				this.state = JumperState.LANDED;
-				var d = Number(this.body.position[0]).toFixed(2);
+				// Round to nearest 0.5m like in real ski jumping
+				var d = Number(Math.round((this.body.position[0]*2))/2).toFixed(1);
 				records.add(d);
 				$("#results").style.display = "block";
 			}

@@ -6,6 +6,7 @@ var camera, scene, renderer;
 var clock;
 
 var viewportWidth = 100; // meters
+var aspect;
 
 function init() {
 	records = new Records(0);
@@ -75,7 +76,7 @@ function init() {
 }
 
 function resize() {
-	var aspect = window.innerWidth / window.innerHeight;
+	aspect = window.innerWidth / window.innerHeight;
 	camera.left = viewportWidth / - 2;
 	camera.right = viewportWidth / 2;
 	camera.top = viewportWidth / aspect / 2;
@@ -112,7 +113,7 @@ function render() {
 	jumper.update(dt);
 	// Graphics
 	camera.position.x = jumper.visual.position.x;
-	camera.position.y = jumper.visual.position.y;
+	camera.position.y = Math.max(jumper.visual.position.y, ramp.minY + viewportWidth / aspect / 2);
 	renderer.render(scene, camera);
 	if (DEBUG) drawDebug();
 	stats.update();

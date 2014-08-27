@@ -96,6 +96,8 @@ function drawDebug() {
 			msg += "State: " + s + "\n";
 	if (controller.motionDebug)
 		msg += controller.motionDebug + "\n";
+	if (window.devicePixelRatio && window.devicePixelRatio !== 1)
+		msg += "DevicePixelRatio: " + window.devicePixelRatio;
 	$("#debug").innerHTML = msg;
 }
 

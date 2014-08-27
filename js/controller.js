@@ -40,9 +40,9 @@ function Controller(obj) {
 	function onDeviceMotion(e) {
 		if (e.interval > 0)
 			self.motionDebug = "Device rot rate: " +
-				(e.rotationRate.alpha|0) + ", " +
-				(e.rotationRate.beta|0) + ", " +
-				(e.rotationRate.gamma|0) + " (" + e.interval + ")";
+				Number(e.rotationRate.alpha).toFixed(2) + ", " +
+				Number(e.rotationRate.beta).toFixed(2) + ", " +
+				Number(e.rotationRate.gamma).toFixed(2) + " (" + e.interval + " ms)";
 	}
 
 	this.poll = function(dt) {

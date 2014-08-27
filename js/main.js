@@ -50,6 +50,26 @@ function init() {
 			);
 	}
 
+	// Some clouds
+	var cloudGeo = new THREE.PlaneGeometry(20, 20);
+	var cloudMats = [
+		new THREE.MeshBasicMaterial({
+			map: THREE.ImageUtils.loadTexture("assets/cloud-01.png"),
+			transparent: true
+		}),
+		new THREE.MeshBasicMaterial({
+			map: THREE.ImageUtils.loadTexture("assets/cloud-02.png"),
+			transparent: true
+		})
+	];
+	for (var i = 0; i < 25; ++i) {
+		var cloudMesh = new THREE.Mesh(cloudGeo, cloudMats[i % cloudMats.length]);
+		cloudMesh.position.x = -200 + Math.random() * 350
+		cloudMesh.position.y = 60 + Math.random() * 50
+		cloudMesh.position.z = Math.random() * 50;
+		scene.add(cloudMesh);
+	}
+
 	stats = new Stats();
 	document.body.appendChild(stats.domElement);
 }

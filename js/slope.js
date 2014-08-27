@@ -55,8 +55,15 @@ function FISSlope(world, scene) {
 	var degToRad = 0.0174532925;
 	var HS = 150; // Hill size
 	var w = 0.885*HS+1.5;
+	
+	var hn = 0.47 ; // Landing hill height-length ratio (to K point)
+	var beta = 45 * degToRad; // Profile angle of inclination (landing hill)
+	var v0 = 20; // Approx in run speed
+	var rho = 1; // Friction angle in deg
+	var deltabeta = 2; // Should depend on alpha
+
 	var gamma = 32 * degToRad; // Inclination of the inrun slope
-	var alpha = 5 * degToRad; // Take-off table inclination
+	var alpha = 6 * degToRad; // Take-off table inclination
 	var t = 10; // Length of the take-off table
 	var r1 = 10; // Curve radius for take-off slope transition end point
 	
@@ -78,6 +85,26 @@ function FISSlope(world, scene) {
 	var E2x = -t*Math.cos(alpha);
 	var E2y = t*Math.sin(alpha);
 	
+	// Landing hill calculations
+	/*
+	var h = w*Math.sin(Math.atan(hn))/1.005;
+	var n = w*Math.cos(Math.atan(hn))/1.005;
+	var vk = 0.68*v0 + 12.44;
+	var rl = vk*vk*w/380;
+	var betal = beta - 1.4/vk; // FIS standard has here also rad2deg conversion
+	var vll = vk - 16/vk - 0.1*rho;
+	var betap = beta + deltabeta;
+	var beta0 = betap/6;
+
+	var r2Lmin = vll*vll/(18-10*Math.cos(betal);
+	
+	var r2L = 0.5*(rl+r2lmin);
+	var r2 = vk*vk/(20*Math.cos(betal) + vk*vk*betal/degToRad/7000 - 12.5);
+	
+	var l1 = deltabeta*rl*Math.PI/180;
+	var l2 = 1.4*rl/vk;
+	*/
+	// Profile generation
 	var slopeProfile = [];
 	var slope = new p2.Body();
 	slopeProfile.push([120, 0]);

@@ -45,7 +45,7 @@ function Slope(world, scene) {
 	}
 	visShape.lineTo(x, minY - 50);
 	visShape.lineTo(0, minY - 50);
-	var material = new THREE.MeshBasicMaterial({ color: 0xcccccc });
+	var material = new THREE.MeshBasicMaterial({ color: 0xcccccc, overdraw: 1 });
 	this.visual = new THREE.Mesh(new THREE.ShapeGeometry(visShape), material);
 	scene.add(this.visual);
 }
@@ -154,7 +154,7 @@ function FISSlope(world, scene) {
 		if (i == 0) visShape.moveTo(x, y);
 		else visShape.lineTo(x, y);
 	}
-	var material = new THREE.MeshBasicMaterial({ color: 0xcccccc });
+	var material = new THREE.MeshBasicMaterial({ color: 0xcccccc, overdraw: 0.75 });
 	this.visual = new THREE.Mesh(new THREE.ShapeGeometry(visShape), material);
 	scene.add(this.visual);
 

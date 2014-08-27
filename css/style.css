@@ -2,6 +2,9 @@
 body {
 	margin: 0;
 	font-family: 'Slackey', cursive;
+	/*background-image: url('../assets/background-01.jpg');
+	background-repeat: repeat;*/
+	background: linear-gradient(to bottom, #1e528e 0%, #265889 50%, #9da671 100%);
 }
 
 canvas {

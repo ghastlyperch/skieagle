@@ -42,8 +42,9 @@ Jumper.prototype.reset = function() {
 	this.state = JumperState.WAITING;
 	this.flyTime = 0;
 	this.body.sleep();
-	this.body.position[0] = -75; // TODO: Get from slope?
-	this.body.position[1] = 45;
+	var slopeStartingPos = ramp.startingPosition;
+	this.body.position[0] = slopeStartingPos[0]; // TODO: Get from slope?
+	this.body.position[1] = slopeStartingPos[1];
 	this.body.angle = 0;
 	var msg = isTouchDevice ? "Tap to start" : "Click to start";
 	$("#hint").innerHTML = msg;

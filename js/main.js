@@ -72,6 +72,7 @@ function drawDebug() {
 	for (var s in JumperState)
 		if (JumperState[s] == jumper.state)
 			msg += "State: " + s;
+	msg += "\nSpeed: " + Math.sqrt(jumper.body.velocity[0]*jumper.body.velocity[0] + jumper.body.velocity[1]*jumper.body.velocity[1])
 	$("#debug").innerHTML = msg;
 }
 

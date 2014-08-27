@@ -107,13 +107,17 @@ Jumper.prototype.update = function(dt) {
 		case JumperState.FLYING:
 			this.physics();
 			this.flyTime += dt;
+			// Round to nearest 0.5m like in real ski jumping
+			var d = Number(Math.round((this.body.position[0]*2))/2).toFixed(1);
+			$("#hint").innerHTML = d + " m";
 			if (this.flyTime > 1 && this.isOnRamp()) {
 				this.state = JumperState.LANDED;
-				// Round to nearest 0.5m like in real ski jumping
-				var d = Number(Math.round((this.body.position[0]*2))/2).toFixed(1);
-				records.add(d);
-				$("#topspeed").innerHTML = Math.round(this.topSpeed * 3.6) + " km/h";
-				$("#results").style.display = "block";
+				window.setTimeout(function() {
+					records.add(d);
+					$("#topspeed").innerHTML = Math.round(jumper.topSpeed * 3.6) + " km/h";
+					$("#hint").innerHTML = "";
+					$("#results").style.display = "block";
+				}, 1500);
 			}
 			break;
 		case JumperState.LANDED:

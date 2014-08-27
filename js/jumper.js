@@ -10,6 +10,7 @@ function Jumper(world, scene) {
 	// Physical body
 	var jumperHeight = 1.7;
 	var skiLength = 2.7;
+	this.speed = 0;
 	this.skiLength = skiLength;
 	this.skisShape = new p2.Rectangle(skiLength, 0.02);
 	this.skisShape.material = new p2.Material();
@@ -89,6 +90,9 @@ Jumper.prototype.steer = function(steer) {
 };
 
 Jumper.prototype.update = function(dt) {
+	var vx = this.body.velocity[0], vy = this.body.velocity[1];
+	this.speed = Math.sqrt(vx*vx + vy*vy);
+
 	switch (this.state) {
 		case JumperState.WAITING:
 			break;
@@ -101,7 +105,8 @@ Jumper.prototype.update = function(dt) {
 			this.flyTime += dt;
 			if (this.flyTime > 1 && this.isOnRamp()) {
 				this.state = JumperState.LANDED;
-				var d = Number(this.body.position[0]).toFixed(2);
+				// Round to nearest 0.5m like in real ski jumping
+				var d = Number(Math.round((this.body.position[0]*2))/2).toFixed(1);
 				records.add(d);
 				$("#results").style.display = "block";
 			}

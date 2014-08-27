@@ -30,8 +30,8 @@ Records.prototype.reset = function() {
 };
 
 Records.prototype.add = function(distance) {
-	var dailyDiff = Number(distance - this.records.daily.distance).toFixed(2);
-	var allTimeDiff = Number(distance - this.records.allTime.distance).toFixed(2);
+	var dailyDiff = Number(distance - this.records.daily.distance).toFixed(1);
+	var allTimeDiff = Number(distance - this.records.allTime.distance).toFixed(1);
 	var time = Date.now();
 	if (distance > this.records.daily.distance) {
 		this.records.daily.distance = distance;

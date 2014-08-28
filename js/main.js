@@ -91,6 +91,8 @@ init();
 
 function drawDebug() {
 	var msg = "";
+	if (!(renderer instanceof THREE.WebGLRenderer))
+		msg += "Fallback renderer\n";
 	msg += "Position: " + (jumper.body.position[0]|0) + ", " + (jumper.body.position[1]|0) + "\n";
 	msg += "Speed: " + Math.round(jumper.speed) + " m/s = " + Math.round(jumper.speed * 3.6) + " km/h\n";
 	for (var s in JumperState)
@@ -99,7 +101,7 @@ function drawDebug() {
 	if (controller.motionDebug)
 		msg += controller.motionDebug + "\n";
 	if (window.devicePixelRatio && window.devicePixelRatio !== 1)
-		msg += "DevicePixelRatio: " + window.devicePixelRatio;
+		msg += "DevicePixelRatio: " + window.devicePixelRatio + "\n";
 	$("#debug").innerHTML = msg;
 }
 

@@ -58,6 +58,7 @@ Jumper.prototype.action = function() {
 			this.state = JumperState.SLIDING;
 			this.body.wakeUp();
 			$("#hint").innerHTML = "";
+			$("#results").style.display = "none";
 			break;
 		case JumperState.SLIDING:
 			if (this.isOnRamp() && this.body.position[0] > -20) { // TODO: Right amount of x

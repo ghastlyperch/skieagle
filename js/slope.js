@@ -60,7 +60,7 @@ function FISSlope(world, scene) {
 	var beta = 45 * degToRad; // Profile angle of inclination (landing hill)
 	var v0 = 20; // Approx in run speed
 	var rho = 1; // Friction angle in deg
-	var deltabeta = 2; // Should depend on alpha
+	var deltabeta = 2 * degToRad; // Should depend on alpha
 
 	var gamma = 32 * degToRad; // Inclination of the inrun slope
 	var alpha = 6 * degToRad; // Take-off table inclination
@@ -110,19 +110,16 @@ function FISSlope(world, scene) {
 	// Profile generation
 	var slopeProfile = [];
 	var slope = new p2.Body();
-	//slopeProfile.push([120, 0]);
-	//slopeProfile.push([100, 0]);
-	//slopeProfile.push([100, -30]);
-	//slopeProfile.push([0, -30]);
 
-	var lX = n + rl*(Math.sin(betal)-Math.sin(beta));
+	var lX = n + rl*(Math.sin(beta)-Math.sin(betal));
 	var lY = -h - rl*(Math.cos(betal)-Math.cos(beta));
+
 	// Landing hill knoll
 	slopeProfile.push([lX, lY]);
 	slopeProfile.push([n, -h]);
 	var nIter = 20;
-	var xIncr = h/nIter;
-	var xCur = h-xIncr;
+	var xIncr = n/nIter;
+	var xCur = n-xIncr;
 	
 	var pX = n - rl*(Math.sin(betap)-Math.sin(beta));
 	var pY = -h -rl*(Math.cos(betap)-Math.cos(beta));
@@ -132,8 +129,8 @@ function FISSlope(world, scene) {
 
 	for (var i = 0; i < nIter -1; ++i)
 	{
-		var yKnoll = w/40 - xCur*Math.tan(beta0) - (3*u-v)*Math.pow((xCur/pX),2)+(2*u-v)*Math.pow(xCur/pX,3);
-		slopeProfile.push([xCur, -yKnoll]);
+		var yKnoll = -w/40 - xCur*Math.tan(beta0) - (3*u-v)*Math.pow((xCur/pX),2)+(2*u-v)*Math.pow(xCur/pX,3);
+		slopeProfile.push([xCur, yKnoll]);
 		xCur -= xIncr
 	}
 	slopeProfile.push([0, -w/40])

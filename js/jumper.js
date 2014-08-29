@@ -62,7 +62,7 @@ Jumper.prototype.action = function() {
 			break;
 		case JumperState.SLIDING:
 			if (this.isOnRamp() && this.body.position[0] > -20) { // TODO: Right amount of x
-				this.body.velocity[1] = 5;
+				this.body.velocity[1] = 10;
 				this.state = JumperState.FLYING;
 			}
 		case JumperState.FLYING:
@@ -160,8 +160,8 @@ Jumper.prototype.physics = function() {
 	var alpha = 35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
 	
 	// Lift and drag coefficients
-	var cD = 0.8;
-	var cL = 0.2;
+	var cD = 0.1;
+	var cL = 0.8;
 
 	// Area projections (0.5 approx width of jumper)
 	var aX = 0.5*Math.cos(alpha*Math.PI/180.0)*this.skiLength;

@@ -53,7 +53,7 @@ function Slope(world, scene) {
 
 function FISSlope(world, scene) {
 	var degToRad = 0.0174532925;
-	var HS = 150; // Hill size
+	var HS = 110; // Hill size
 	var w = 0.885*HS+1.5;
 	
 	var hn = 0.47 ; // Landing hill height-length ratio (to K point)
@@ -63,8 +63,8 @@ function FISSlope(world, scene) {
 	var deltabeta = 2 * degToRad; // Should depend on alpha
 
 	var gamma = 32 * degToRad; // Inclination of the inrun slope
-	var alpha = 6 * degToRad; // Take-off table inclination
-	var t = 10; // Length of the take-off table
+	var alpha = 8 * degToRad; // Take-off table inclination
+	var t = 15; // Length of the take-off table
 	var r1 = 10; // Curve radius for take-off slope transition end point
 	
 	var e1 = 92.3 - 1.517*gamma + 0.426*HS // Highest starting point
@@ -106,6 +106,12 @@ function FISSlope(world, scene) {
 	var l1 = deltabeta*rl*Math.PI/180;
 	var l2 = 1.4*rl/vk;
 	
+	var rL = r2L;
+	var tau = Math.atan((Math.cos(betal)-Math.sqrt(r2/r2L))/Math.sin(betal));
+	var C = 1/(2*r2*Math.pow(Math.cos(tau),3));
+	var a = - Math.tan(betal+tau)/2/C;
+	var b = - Math.tan(tau)/2/C;
+			
 
 	// Profile generation
 	var slopeProfile = [];
@@ -114,12 +120,37 @@ function FISSlope(world, scene) {
 	var lX = n + rl*(Math.sin(beta)-Math.sin(betal));
 	var lY = -h - rl*(Math.cos(betal)-Math.cos(beta));
 
+	var uX = lX + C*Math.sin(tau)*(a*a-b*b)+Math.cos(tau)*(b-a);
+	var uY = lY - C*Math.cos(tau)*(a*a-b*b)+Math.sin(tau)*(b-a);
+
+	var lOr = 50;
+	var bY = uY-20;
+	// Landing hill transition segment
+	slopeProfile.push([uX+lOr,bY]);
+	slopeProfile.push([uX+lOr,uY]);
+	slopeProfile.push([uX, uY]);	
+	var nIter = 10;
+	var xIncr = (uX - lX)/nIter;
+	var xCur = uX - xIncr;
+
+	for (var i = 0; i < nIter - 1; ++i)
+	{
+		var cT = Math.cos(tau);
+		var sT = Math.sin(tau);
+
+		var ksi = (cT - Math.sqrt(cT*cT - 4*C*(xCur-lX-C*a*a*sT+a*cT)*sT))/2/C/sT;
+		var yTran = lY - C*cT*(a*a-ksi*ksi)-sT*(a-ksi);
+		slopeProfile.push([xCur, yTran]);
+		xCur -= xIncr;
+	}
+	
+
 	// Landing hill knoll
 	slopeProfile.push([lX, lY]);
 	slopeProfile.push([n, -h]);
-	var nIter = 20;
-	var xIncr = n/nIter;
-	var xCur = n-xIncr;
+	nIter = 20;
+	xIncr = n/nIter;
+	xCur = n-xIncr;
 	
 	var pX = n - rl*(Math.sin(betap)-Math.sin(beta));
 	var pY = -h -rl*(Math.cos(betap)-Math.cos(beta));
@@ -138,7 +169,7 @@ function FISSlope(world, scene) {
 	slopeProfile.push([E2x, E2y]); // Start of take-off table
 	
 	// Transition segment
-	nIter = 3; // Number of sub-segments in transition segment
+	nIter = 4; // Number of sub-segments in transition segment
 	xIncr = (Math.abs(E1x)-Math.abs(E2x))/nIter;
 	xCur = E2x - xIncr;
 
@@ -154,8 +185,18 @@ function FISSlope(world, scene) {
 	}
 	slopeProfile.push([E1x, E1y]); // Start of transition segment
 	slopeProfile.push([E1x-(e1-l)*Math.cos(gamma),E1y+(e1-l)*Math.sin(gamma)]); // Starting position
-	slopeProfile.push([E1x-(e1-l)*Math.cos(gamma), lY]);
-	//slopeProfile.push([120, -40]);
+	slopeProfile.push([E1x-(e1-l)*Math.cos(gamma), bY]);
+	
+	nIter = 5;
+	xIncr = ((uX + lOr) - (E1x-(e1-l)*Math.cos(gamma)))/nIter;
+	xCur = (E1x-(e1-l)*Math.cos(gamma)) + xIncr;
+
+	for (var i = 0; i < nIter - 2;  ++i)
+	{	
+		slopeProfile.push([xCur, bY]);
+		xCur += xIncr;		
+	}
+
 	slope.fromPolygon(slopeProfile);
 	
 	for (var i = 0; i < slope.shapes.length; ++i)
@@ -167,7 +208,7 @@ function FISSlope(world, scene) {
 
 	// Calculate starting point for jumper
 	this.startingPosition = [E1x-(e1-l-1)*Math.cos(gamma), E1y+(e1-l)*Math.sin(gamma)+1];
-	this.minY = -80; // TODO: Auto calculate?
+	this.minY = bY; // TODO: Auto calculate?
 
 	// Visual representation
 	var visShape = new THREE.Shape();

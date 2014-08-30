@@ -16,7 +16,7 @@ function Jumper(world, scene) {
 	this.jumperShape = new p2.Rectangle(0.3, jumperHeight);
 	this.jumperShape.material = new p2.Material();
 
-	this.body = new p2.Body({ mass: 65 });
+	this.body = new p2.Body({ mass: 55 });
 	this.body.addShape(this.skisShape);
 	this.body.addShape(this.jumperShape, [0, jumperHeight * 0.5]);
 	world.addBody(this.body);

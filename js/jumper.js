@@ -2,8 +2,10 @@
 var JumperState = {
 	WAITING: 0,
 	SLIDING: 1,
-	FLYING: 2,
-	LANDED: 3
+	JUMPING: 2,
+	FLYING:  3,
+	LANDING: 4,
+	LANDED:  5
 };
 
 function Jumper(world, scene) {
@@ -39,7 +41,7 @@ function Jumper(world, scene) {
 
 Jumper.prototype.reset = function() {
 	this.state = JumperState.WAITING;
-	this.flyTime = 0;
+	this.stateTime = 0;
 	this.speed = 0;
 	this.topSpeed = 0;
 	this.body.sleep();
@@ -56,6 +58,7 @@ Jumper.prototype.action = function() {
 	switch (this.state) {
 		case JumperState.WAITING:
 			this.state = JumperState.SLIDING;
+			this.stateTime = 0;
 			this.body.wakeUp();
 			$("#hint").innerHTML = "";
 			$("#results").style.display = "none";
@@ -63,9 +66,14 @@ Jumper.prototype.action = function() {
 		case JumperState.SLIDING:
 			if (this.isOnRamp() && this.body.position[0] > -20) { // TODO: Right amount of x
 				this.body.velocity[1] = 10;
-				this.state = JumperState.FLYING;
+				this.state = JumperState.FLYING; // TODO: Should go to Jumping state to charge the jump
+				this.stateTime = 0;
 			}
+		case JumperState.JUMPING:
+			break;
 		case JumperState.FLYING:
+			break;
+		case JumperState.LANDING:
 			break;
 		case JumperState.LANDED:
 			this.reset();
@@ -81,9 +89,13 @@ Jumper.prototype.steer = function(steer) {
 			break;
 		case JumperState.SLIDING:
 			break;
+		case JumperState.JUMPING:
+			break;
 		case JumperState.FLYING:
 			// TODO: This is just a place holder, should rotate jumper and not skis
 			this.body.angle -= 1 * steer; // Radians per second
+			break;
+		case JumperState.LANDING:
 			break;
 		case JumperState.LANDED:
 			break;
@@ -93,6 +105,7 @@ Jumper.prototype.steer = function(steer) {
 };
 
 Jumper.prototype.update = function(dt) {
+	this.stateTime += dt;
 	var vx = this.body.velocity[0], vy = this.body.velocity[1];
 	this.speed = Math.sqrt(vx*vx + vy*vy);
 	if (this.speed > this.topSpeed)
@@ -102,23 +115,31 @@ Jumper.prototype.update = function(dt) {
 		case JumperState.WAITING:
 			break;
 		case JumperState.SLIDING:
-			if (this.body.position[0] > 1)
+			if (this.body.position[0] > 1) {
 				this.state = JumperState.FLYING;
+				this.stateTime = 0;
+			}
+			break;
+		case JumperState.JUMPING:
 			break;
 		case JumperState.FLYING:
 			this.physics();
-			this.flyTime += dt;
 			// Round to nearest 0.5m like in real ski jumping
 			var d = Number(Math.round((this.body.position[0]*2))/2).toFixed(1);
 			$("#hint").innerHTML = d + " m";
-			if (this.flyTime > 1 && this.isOnRamp()) {
+			if (this.stateTime > 1 && this.isOnRamp()) {
+				records.add(d);
+				$("#topspeed").innerHTML = Math.round(jumper.topSpeed * 3.6) + " km/h";
+				this.state = JumperState.LANDING;
+				this.stateTime = 0;
+			}
+			break;
+		case JumperState.LANDING:
+			if (this.stateTime > 1.5) {
+				$("#hint").innerHTML = "";
+				$("#results").style.display = "block";
 				this.state = JumperState.LANDED;
-				window.setTimeout(function() {
-					records.add(d);
-					$("#topspeed").innerHTML = Math.round(jumper.topSpeed * 3.6) + " km/h";
-					$("#hint").innerHTML = "";
-					$("#results").style.display = "block";
-				}, 1500);
+				this.stateTime = 0;
 			}
 			break;
 		case JumperState.LANDED:

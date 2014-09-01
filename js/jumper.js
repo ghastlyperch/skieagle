@@ -99,6 +99,7 @@ Jumper.prototype.steer = function(steer) {
 		case JumperState.FLYING:
 			// TODO: This is just a place holder, should rotate jumper and not skis
 			this.jumperAngle -= 1 * steer; // Radians per second
+			this.jumperAngle = THREE.Math.clamp(this.jumperAngle, -Math.PI / 3, 0);
 			break;
 		case JumperState.LANDING:
 			break;

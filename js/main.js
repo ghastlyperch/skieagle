@@ -95,6 +95,7 @@ function drawDebug() {
 		msg += "Fallback renderer\n";
 	msg += "Position: " + (jumper.body.position[0]|0) + ", " + (jumper.body.position[1]|0) + "\n";
 	msg += "Speed: " + Math.round(jumper.speed) + " m/s = " + Math.round(jumper.speed * 3.6) + " km/h\n";
+	msg += "Angles: " + (jumper.body.angle * 57.2957795).toFixed(1) + "&deg;, " + (jumper.jumperAngle * 57.2957795).toFixed(1) + "&deg;\n";
 	msg += "Forces: " + jumper.forces[0].toFixed(1) + ", " + jumper.forces[1].toFixed(1) + "\n";
 	for (var s in JumperState)
 		if (JumperState[s] == jumper.state)

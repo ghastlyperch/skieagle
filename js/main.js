@@ -3,7 +3,7 @@ var DEBUG = true;
 var world, stats, records;
 var jumper, controller, ramp;
 var camera, scene, renderer;
-var clock;
+var clock, timeScale = 1;
 
 var viewportWidth = 100; // meters
 var aspect;
@@ -112,7 +112,7 @@ var timeAccumulator = 0;
 function render() {
 	var dt = clock.getDelta();
 	if (dt > 0.05) dt = 0.05; // No bigger deltas than 20 FPS
-	timeAccumulator += dt;
+	timeAccumulator += dt * timeScale;
 	// Input
 	controller.poll(dt);
 	// Physics

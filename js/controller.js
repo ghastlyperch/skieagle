@@ -63,6 +63,8 @@ function Controller(obj) {
 				steer += axis;
 		}
 
+		timeScale = pressed[83] ? 4 : 1; // Debug fast-forward
+
 		if (steer != 0) obj.steer(steer * dt);
 	};
 

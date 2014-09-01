@@ -53,19 +53,19 @@ function Slope(world, scene) {
 
 function FISSlope(world, scene) {
 	var degToRad = 0.0174532925;
-	var HS = 110; // Hill size
+	var HS = 100; // Hill size
 	var w = 0.885*HS+1.5;
 	
-	var hn = 0.47 ; // Landing hill height-length ratio (to K point)
+	var hn = 0.55 ; // Landing hill height-length ratio (to K point)
 	var beta = 45 * degToRad; // Profile angle of inclination (landing hill)
-	var v0 = 20; // Approx in run speed
+	var v0 = 24.25; // Approx in run speed
 	var rho = 1; // Friction angle in deg
 	var deltabeta = 2 * degToRad; // Should depend on alpha
 
-	var gamma = 32 * degToRad; // Inclination of the inrun slope
-	var alpha = 8 * degToRad; // Take-off table inclination
-	var t = 15; // Length of the take-off table
-	var r1 = 10; // Curve radius for take-off slope transition end point
+	var gamma = 35 * degToRad; // Inclination of the inrun slope
+	var alpha = 10.5 * degToRad; // Take-off table inclination
+	var t = 0.25*(v0+0.95); //15; // Length of the take-off table
+	var r1 = 0.14*(v0+0.95)*(v0+0.95);//10; // Curve radius for take-off slope transition end point
 	
 	var e1 = 92.3 - 1.517*gamma + 0.426*HS // Highest starting point
 	var e2 = 67.3 - 0.944*gamma + 0.331*HS // Lowest starting point
@@ -75,7 +75,7 @@ function FISSlope(world, scene) {
 	var tan_ga = Math.tan(gamma-alpha);
 	
 	var d = 2*r1*sin_ga*cos_ga*cos_ga;
-	var C = tan_ga/3/(d*d);
+	var C_ir = tan_ga/3/(d*d);
 	var f = tan_ga*d/3;
 	var l = d*(1+0.1*tan_ga*tan_ga);
 	
@@ -90,7 +90,6 @@ function FISSlope(world, scene) {
 	var h = w*Math.sin(Math.atan(hn))/1.005;
 	var n = w*Math.cos(Math.atan(hn))/1.005;
 	
-	
 	var vk = 0.68*v0 + 12.44;
 	var rl = vk*vk*w/380;
 	var betal = beta - 1.4/vk; // FIS standard has here also rad2deg conversion
@@ -99,7 +98,6 @@ function FISSlope(world, scene) {
 	var beta0 = betap/6;
 
 	var r2Lmin = vll*vll/(18-10*Math.cos(betal));
-	
 	var r2L = 0.5*(rl+r2Lmin);
 	var r2 = vk*vk/(20*Math.cos(betal) + vk*vk*betal/degToRad/7000 - 12.5);
 	
@@ -112,19 +110,22 @@ function FISSlope(world, scene) {
 	var a = - Math.tan(betal+tau)/2/C;
 	var b = - Math.tan(tau)/2/C;
 			
-
-	// Profile generation
-	var slopeProfile = [];
-	var slope = new p2.Body();
-
 	var lX = n + rl*(Math.sin(beta)-Math.sin(betal));
 	var lY = -h - rl*(Math.cos(betal)-Math.cos(beta));
 
 	var uX = lX + C*Math.sin(tau)*(a*a-b*b)+Math.cos(tau)*(b-a);
 	var uY = lY - C*Math.cos(tau)*(a*a-b*b)+Math.sin(tau)*(b-a);
 
-	var lOr = 50;
+	var pX = n - rl*(Math.sin(betap)-Math.sin(beta));
+	var pY = -h -rl*(Math.cos(betap)-Math.cos(beta));
+	
+	var lOr = 79; // Length of out-run
 	var bY = uY-20;
+	
+	// Profile generation
+	var slopeProfile = [];
+	var slope = new p2.Body();
+	
 	// Landing hill transition segment
 	slopeProfile.push([uX+lOr,bY]);
 	slopeProfile.push([uX+lOr,uY]);
@@ -151,13 +152,10 @@ function FISSlope(world, scene) {
 	nIter = 20;
 	xIncr = n/nIter;
 	xCur = n-xIncr;
-	
-	var pX = n - rl*(Math.sin(betap)-Math.sin(beta));
-	var pY = -h -rl*(Math.cos(betap)-Math.cos(beta));
-	
+		
 	var u = -pY - w/40 - pX*Math.tan(beta0);
 	var v = pX*(Math.tan(betap)-Math.tan(beta0));
-
+	
 	for (var i = 0; i < nIter -1; ++i)
 	{
 		var yKnoll = -w/40 - xCur*Math.tan(beta0) - (3*u-v)*Math.pow((xCur/pX),2)+(2*u-v)*Math.pow(xCur/pX,3);
@@ -169,18 +167,18 @@ function FISSlope(world, scene) {
 	slopeProfile.push([E2x, E2y]); // Start of take-off table
 	
 	// Transition segment
-	nIter = 4; // Number of sub-segments in transition segment
-	xIncr = (Math.abs(E1x)-Math.abs(E2x))/nIter;
-	xCur = E2x - xIncr;
-
-	for (var i = 0; i < nIter - 1; ++i) 
+	nIter = 10; // Number of sub-segments in transition segment
+	xIncr = d/nIter;
+	xCur = d-xIncr;
+	console.log("C_ir: " + C_ir + " d: " + d);
+	for (var i = 0; i < nIter - 2; ++i) 
 	{
-		var P = 1/Math.tan(gamma)/3/C;
-		var Q = (xCur + t*Math.cos(alpha)+f*Math.sin(gamma)+d*Math.cos(gamma))/2/C/Math.sin(gamma);
-		
-		var ksi = Math.pow((Math.pow((Q*Q+P*P*P),0.5)+Q),0.3333) - Math.pow((Math.pow((Q*Q+P*P*P),0.5)-Q),0.3333);
-		var yTran = t*Math.sin(alpha)-f*Math.cos(gamma)+d*Math.sin(gamma)-ksi*Math.sin(gamma)+C*ksi*ksi*ksi*Math.cos(gamma);
-		slopeProfile.push([xCur, yTran]);
+		var xTwisted = xCur;
+		var yTwisted = C_ir*xCur*xCur*xCur;
+		var xTransformed = Math.cos(gamma)*xTwisted + Math.sin(gamma)*yTwisted + E1x;
+		var yTransformed = -Math.sin(gamma)*xTwisted + Math.cos(gamma)*yTwisted + E1y;
+
+		slopeProfile.push([xTransformed, yTransformed]);
 		xCur -= xIncr;
 	}
 	slopeProfile.push([E1x, E1y]); // Start of transition segment

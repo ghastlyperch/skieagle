@@ -44,6 +44,7 @@ Jumper.prototype.reset = function() {
 	this.stateTime = 0;
 	this.speed = 0;
 	this.topSpeed = 0;
+	this.forces = [0, 0];
 	this.body.sleep();
 	var slopeStartingPos = ramp.startingPosition;
 	this.body.position[0] = slopeStartingPos[0]; // TODO: Get from slope?
@@ -127,7 +128,7 @@ Jumper.prototype.update = function(dt) {
 			this.physics();
 			// Round to nearest 0.5m like in real ski jumping
 			var d = Number(Math.round((this.body.position[0]*2))/2).toFixed(1);
-			$("#hint").innerHTML = d + " m\n Fx: " + this.forces[0].toFixed(1) + "\n Fy: " + this.forces[1].toFixed(1);
+			$("#hint").innerHTML = d + " m";
 			if (this.stateTime > 1 && this.isOnRamp()) {
 				records.add(d);
 				$("#topspeed").innerHTML = Math.round(jumper.topSpeed * 3.6) + " km/h";

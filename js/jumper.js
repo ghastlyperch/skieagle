@@ -66,6 +66,7 @@ Jumper.prototype.action = function() {
 		case JumperState.SLIDING:
 			if (this.isOnRamp() && this.body.position[0] > -20) { // TODO: Right amount of x
 				this.body.velocity[1] = 10;
+				this.body.angle = 10.5*Math.PI/180;	
 				this.state = JumperState.FLYING; // TODO: Should go to Jumping state to charge the jump
 				this.stateTime = 0;
 			}
@@ -126,7 +127,7 @@ Jumper.prototype.update = function(dt) {
 			this.physics();
 			// Round to nearest 0.5m like in real ski jumping
 			var d = Number(Math.round((this.body.position[0]*2))/2).toFixed(1);
-			$("#hint").innerHTML = d + " m";
+			$("#hint").innerHTML = d + " m\n Fx: " + this.forces[0].toFixed(1) + "\n Fy: " + this.forces[1].toFixed(1);
 			if (this.stateTime > 1 && this.isOnRamp()) {
 				records.add(d);
 				$("#topspeed").innerHTML = Math.round(jumper.topSpeed * 3.6) + " km/h";
@@ -176,17 +177,17 @@ Jumper.prototype.physics = function() {
 	var rho = 1.315
 	
 	// Various angles (in degrees)
-	var beta = 9.5; // Body-to-ski
-	var gamma = 160; // Hip angle
-	var alpha = 35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
+	var beta = 9.5 * Math.PI/180; // Body-to-ski
+	var gamma = 160 * Math.PI/180; // Hip angle
+	var alpha = this.body.angle; //35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
 	
 	// Lift and drag coefficients
 	var cD = 0.1;
 	var cL = 0.8;
 
 	// Area projections (0.5 approx width of jumper)
-	var aX = 0.5*Math.cos(alpha*Math.PI/180.0)*this.skiLength;
-	var aY = 0.5*Math.sin(alpha*Math.PI/180.0)*this.skiLength;
+	var aX = 0.5*Math.cos(alpha)*this.skiLength;
+	var aY = 0.5*Math.sin(alpha)*this.skiLength;
 
 	// Drag force x and y components
 	var dX = 0.5*rho*cD*aX*vX*vX;
@@ -206,5 +207,6 @@ Jumper.prototype.physics = function() {
 	if (vY > 0) dY *= -1;
 	
 	this.body.setZeroForce();
+	this.forces = [dX, lY+dY];
 	this.body.applyForce([dX, lY+dY], this.body.position);
 };

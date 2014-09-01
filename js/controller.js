@@ -23,13 +23,7 @@ function Controller(obj) {
 
 		if (e.keyCode == 68) // D
 			ramp.visual.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-		
-		if (e.keyCode == 81) // Q
-			obj.steer(-0.087); // Approx 5 degrees
-		
-		if (e.keyCode == 69) // E
-			obj.steer(0.087);
-			
+
 		e.preventDefault();
 	}
 
@@ -55,8 +49,8 @@ function Controller(obj) {
 		if (!navigator.getGamepads) return;
 
 		var steer = 0;
-		if (pressed[39]) steer += 1;
-		if (pressed[37]) steer -= 1;
+		if (pressed[39] || pressed[69]) steer += 1; // Left or E
+		if (pressed[37] || pressed[81]) steer -= 1; // Left or Q
 
 		var gamepads = navigator.getGamepads();
 		for (var i = 0; i < gamepads.length; ++i) {

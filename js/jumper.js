@@ -25,17 +25,16 @@ function Jumper(world, scene) {
 
 	// Visual representation
 	var skiGeometry = new THREE.PlaneGeometry(this.skisShape.width, 0.2);
-	var jumperGeometry = new THREE.PlaneGeometry(this.jumperShape.width, this.jumperShape.height);
 	var skiMaterial = new THREE.MeshBasicMaterial({ color: 0x2222ff });
 	this.visual = new THREE.Object3D();
 	var skiMesh = new THREE.Mesh(skiGeometry, skiMaterial);
 	skiMesh.position.y = 0.1;
 	this.visual.add(skiMesh);
+	var jumperGeometry = new THREE.PlaneGeometry(this.jumperShape.width, this.jumperShape.height);
+	jumperGeometry.applyMatrix((new THREE.Matrix4()).makeTranslation(0, jumperHeight * 0.5 + 0.1, 0)); // Move center
 	var jumperMaterial = new THREE.MeshBasicMaterial({ color: 0x22ff22 });
 	var jumperMesh = new THREE.Mesh(jumperGeometry, jumperMaterial);
-	jumperMesh.position.x = -1/5*this.skiLength;
-	jumperMesh.position.y = this.jumperShape.height * 0.5 + 0.1;
-	jumperMesh.rotation.z = -10 * Math.PI / 180;
+	jumperMesh.position.x = -1/5 * this.skiLength;
 	this.visual.add(jumperMesh);
 	scene.add(this.visual);
 
@@ -53,7 +52,7 @@ Jumper.prototype.reset = function() {
 	this.body.position[0] = slopeStartingPos[0];
 	this.body.position[1] = slopeStartingPos[1];
 	this.body.angle = 0;
-	this.jumperAngle = 0;
+	this.jumperAngle = -10 * Math.PI / 180;
 	var msg = isTouchDevice ? "Tap to start" : "Click to start";
 	$("#hint").innerHTML = msg;
 	$("#results").style.display = "none";
@@ -71,7 +70,7 @@ Jumper.prototype.action = function() {
 		case JumperState.SLIDING:
 			if (this.isOnRamp() && this.body.position[0] > -20) { // TODO: Right amount of x
 				this.body.velocity[1] = 10;
-				this.body.angle = 0;	
+				this.body.angle = 0;
 				this.state = JumperState.FLYING; // TODO: Should go to Jumping state to charge the jump
 				this.stateTime = 0;
 			}
@@ -156,8 +155,6 @@ Jumper.prototype.update = function(dt) {
 	this.visual.position.x = this.body.position[0];
 	this.visual.position.y = this.body.position[1];
 	this.visual.rotation.z = this.body.angle;
-	this.visual.children[1].position.x = -1/5*this.skiLength - Math.sin(this.jumperAngle)*0.5*1.7;
-	this.visual.children[1].position.y = this.jumperShape.height * 0.5 + 0.1 - 0.5*this.jumperShape.height*(1-Math.cos(this.jumperAngle))
 	this.visual.children[1].rotation.z = this.jumperAngle;
 }
 

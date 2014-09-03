@@ -4,11 +4,10 @@ TODO
 Uncategorized tasks
 -------------------
 
-[ ] Distance measurement on the slope instead of x-coord
 [ ] Wind
 [ ] Scoring based on landing goodness?
-[ ] Finish slope generating code
-[ ] Sliding physics sometimes get stuck
+[ ] Slope end
+[ ] Distance measurement on the slope instead of x-coord
 [ ] Jumping physics are barebones
 	- Use force instead of velocity?
 [ ] Decent fallback for non-WebGL devices
@@ -24,15 +23,23 @@ Milestone 1
 Milestone 2
 -----------
 
-[ ] More complex ramp profile
-[ ] Lift force
-[ ] Drag force
+[X] More complex ramp profile
+[X] Lift force
+[X] Drag force
 [ ] Landing fail/pass detection
-[ ] Distance measurement
+[X] Distance measurement
 
 Milestone 3
 -----------
 
 [ ] Cooler graphics
-[ ] Make it easy to create many different ramps
+[ ] Multiple slopes & slope selection
+[ ] Per slope records
+
+Milestone 4
+-----------
+
+[ ] Package as .apk (using Phonegap or similar?)
+[ ] Global leaderboards (Google Play API?)
+
 

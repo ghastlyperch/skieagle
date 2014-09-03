@@ -186,7 +186,7 @@ Jumper.prototype.physics = function() {
 	var beta = 9.5 * Math.PI/180; // Body-to-ski
 	var gamma = 160 * Math.PI/180; // Hip angle
 	var alpha = (Math.PI/2 - (-this.jumperAngle))*180/Math.PI; //35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
-	console.log(alpha);
+	
 	// Lift and drag coefficients
 	var cD = 0.1;
 	var cL = 0.8;

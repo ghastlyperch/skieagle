@@ -18,6 +18,7 @@ function Jumper(world, scene) {
 	this.jumperShape = new p2.Rectangle(0.3, jumperHeight);
 	this.jumperShape.material = new p2.Material();
 
+	this.landingStart = 0;
 	this.body = new p2.Body({ mass: 65 });
 	this.body.addShape(this.skisShape);
 	//this.body.addShape(this.jumperShape, [0, jumperHeight * 0.5]);
@@ -77,6 +78,10 @@ Jumper.prototype.action = function() {
 		case JumperState.JUMPING:
 			break;
 		case JumperState.FLYING:
+			this.landingStart = this.stateTime;
+			console.log("Landing started: " + this.landingStart);
+			this.jumperAngle = -15 * Math.PI/180;
+			// TODO: Lock steering
 			break;
 		case JumperState.LANDING:
 			break;
@@ -136,6 +141,12 @@ Jumper.prototype.update = function(dt) {
 			if (this.stateTime > 1 && this.isOnRamp()) {
 				records.add(d);
 				$("#topspeed").innerHTML = Math.round(jumper.topSpeed * 3.6) + " km/h";
+				if (this.landingStart > 0) {
+					var landingTime = this.stateTime - this.landingStart;
+					console.log("Time since landing started: " + landingTime);
+				} else {
+					console.log("Landing not succesful!");
+				}
 				this.state = JumperState.LANDING;
 				this.stateTime = 0;
 			}

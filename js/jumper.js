@@ -10,15 +10,15 @@ var JumperState = {
 
 function Jumper(world, scene) {
 	// Physical body
-	var jumperHeight = 1.85;
-	var skiLength = 2.7;
+	var jumperHeight = 1.78;
+	var skiLength = 2.5;
 	this.skiLength = skiLength;
 	this.skisShape = new p2.Rectangle(skiLength, 0.02);
 	this.skisShape.material = new p2.Material();
 	this.jumperShape = new p2.Rectangle(0.3, jumperHeight);
 	this.jumperShape.material = new p2.Material();
 
-	this.body = new p2.Body({ mass: 55 });
+	this.body = new p2.Body({ mass: 65 });
 	this.body.addShape(this.skisShape);
 	//this.body.addShape(this.jumperShape, [0, jumperHeight * 0.5]);
 	world.addBody(this.body);
@@ -99,7 +99,7 @@ Jumper.prototype.steer = function(steer) {
 		case JumperState.FLYING:
 			// TODO: This is just a place holder, should rotate jumper and not skis
 			this.jumperAngle -= 1 * steer; // Radians per second
-			this.jumperAngle = THREE.Math.clamp(this.jumperAngle, -Math.PI / 3, 0);
+			this.jumperAngle = THREE.Math.clamp(this.jumperAngle, -80 * Math.PI / 180, -15 * Math.PI/180);
 			break;
 		case JumperState.LANDING:
 			break;
@@ -185,13 +185,13 @@ Jumper.prototype.physics = function() {
 	// Various angles (in degrees)
 	var beta = 9.5 * Math.PI/180; // Body-to-ski
 	var gamma = 160 * Math.PI/180; // Hip angle
-	var alpha = this.jumperAngle; //35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
-	
+	var alpha = (Math.PI/2 - (-this.jumperAngle))*180/Math.PI; //35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
+	console.log(alpha);
 	// Lift and drag coefficients
 	var cD = 0.1;
 	var cL = 0.8;
 
-	// Area projections (0.5 approx width of jumper)
+	// Area projections (0.5 approx width of jumper) against the flow
 	var aX = 0.5*Math.cos(alpha)*this.skiLength;
 	var aY = 0.5*Math.sin(alpha)*this.skiLength;
 
@@ -203,16 +203,19 @@ Jumper.prototype.physics = function() {
 	var lY = 0.5*rho*cL*aX*vX*vX;
 
 	// These numbers are valid for constant beta and gamma 
-	//var L = -0.43903 + 0.060743*alpha - 7.192e-4*alpha*alpha
-	//var D = -0.032061 + 0.01232*alpha + 2.283e-4*alpha*alpha
+	var L = -0.43903 + 0.060743*alpha - 7.192e-4*alpha*alpha
+	var D = -0.032061 + 0.01232*alpha + 2.283e-4*alpha*alpha
 
-	//var liftForce = 0; rho/2*L*vSqr;
-	//var dragForce = rho/2*D*vSqr;
+	//var L_b = -0.645718+0.0126185*beta-3.348e-4*beta*beta;
+	//var D_b = 0.408435 + 0.012364*beta+3.9308e-5*beta*beta;
+
+	var liftForce = rho/2*L*vSqr;
+	var dragForce = rho/2*D*vSqr;
 	
 	if (vX > 0) dX *= -1;
 	if (vY > 0) dY *= -1;
 	
 	this.body.setZeroForce();
-	this.forces = [dX, lY+dY];
-	this.body.applyForce([dX, lY+dY], this.body.position);
+	this.forces = [-dragForce, liftForce]; //[dX, lY+dY];
+	this.body.applyForce(this.forces, this.body.position);
 };

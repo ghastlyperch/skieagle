@@ -87,8 +87,6 @@ function resize() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-init();
-
 function drawDebug() {
 	var msg = "";
 	if (!(renderer instanceof THREE.WebGLRenderer))
@@ -129,5 +127,16 @@ function render() {
 	stats.update();
 	requestAnimationFrame(render);
 }
-render();
 
+if (isTouchDevice) {
+	try {
+		init();
+		render();
+	} catch(e) {
+		alert(e.message + "\n" + e.stack);
+		console.log(e);
+	}
+} else {
+	init();
+	render();
+}

@@ -1,6 +1,8 @@
 
 body {
 	margin: 0;
+	padding: 0;
+	overflow: hidden;
 	font-size: 28px;
 	font-family: 'Slackey', cursive;
 	/*background-image: url('../assets/background-01.jpg');

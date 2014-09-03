@@ -18,10 +18,12 @@ function init() {
 	scene = new THREE.Scene();
 
 	// TODO: Better check, use Detector?
-	if (window.WebGLRenderingContext)
-		renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-	else // Using devicePixelRatio 1 here so that HDPI screens render less pixels -> more performance
+	if (window.WebGLRenderingContext) {
+		var dpr = window.devicePixelRatio && window.devicePixelRatio > 1 ? 1 + (window.devicePixelRatio - 1)/2 : 1;
+		renderer = new THREE.WebGLRenderer({ devicePixelRatio: dpr, alpha: true, antialias: true });
+	} else { // Using devicePixelRatio 1 here so that HDPI screens render less pixels -> more performance
 		renderer = new THREE.CanvasRenderer({ devicePixelRatio: 1, alpha: true });
+	}
 	renderer.setClearColor(0x000000, 0);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);

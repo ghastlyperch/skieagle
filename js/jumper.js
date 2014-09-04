@@ -55,6 +55,7 @@ Jumper.prototype.reset = function() {
 	this.body.angle = 0;
 	this.jumperAngle = -10 * Math.PI / 180;
 	this.landingStart = 0;
+	this.landingPoints = 0;
 	var msg = isTouchDevice ? "Tap to start" : "Click to start";
 	$("#hint").innerHTML = msg;
 	$("#results").style.display = "none";
@@ -146,11 +147,14 @@ Jumper.prototype.update = function(dt) {
 			if (this.stateTime > 1 && this.isOnRamp()) {
 				records.add(d);
 				$("#topspeed").innerHTML = Math.round(jumper.topSpeed * 3.6) + " km/h";
-				if (this.landingStart > 0) {
+				if (this.landingStart > 0 && this.stateTime - this.landingStart > 0.050) {
 					var landingTime = this.stateTime - this.landingStart;
-					console.log("Time since landing started: " + landingTime);
+					this.landingPoints = 12 + THREE.Math.clamp(landingTime * 80, 0, 8);
+					console.log("Landing time: " + landingTime);
+					console.log("Landing points: " + this.landingPoints);
 				} else {
-					console.log("Landing not succesful!");
+					this.jumperAngle = -Math.PI/2;
+					this.landingPoints = 4;
 				}
 				this.state = JumperState.LANDING;
 				this.stateTime = 0;
@@ -167,7 +171,7 @@ Jumper.prototype.update = function(dt) {
 		case JumperState.LANDED:
 			break;
 		default:
-			throw "Unkown state " + this.state;
+			throw "Unknown state " + this.state;
 	}
 	this.visual.position.x = this.body.position[0];
 	this.visual.position.y = this.body.position[1];

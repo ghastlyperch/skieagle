@@ -54,6 +54,7 @@ Jumper.prototype.reset = function() {
 	this.body.position[1] = slopeStartingPos[1];
 	this.body.angle = 0;
 	this.jumperAngle = -10 * Math.PI / 180;
+	this.landingStart = 0;
 	var msg = isTouchDevice ? "Tap to start" : "Click to start";
 	$("#hint").innerHTML = msg;
 	$("#results").style.display = "none";
@@ -103,8 +104,12 @@ Jumper.prototype.steer = function(steer) {
 			break;
 		case JumperState.FLYING:
 			// TODO: This is just a place holder, should rotate jumper and not skis
-			this.jumperAngle -= 1 * steer; // Radians per second
-			this.jumperAngle = THREE.Math.clamp(this.jumperAngle, -80 * Math.PI / 180, -15 * Math.PI/180);
+			
+			// Steering enabled only if landing manouver has not started yets
+			if (this.landingStart == 0) {
+				this.jumperAngle -= 1 * steer; // Radians per second
+				this.jumperAngle = THREE.Math.clamp(this.jumperAngle, -80 * Math.PI / 180, -15 * Math.PI/180);
+			}
 			break;
 		case JumperState.LANDING:
 			break;

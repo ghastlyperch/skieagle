@@ -1,5 +1,5 @@
 
-if (!!navigator.getGamepads) console.log("Gamepads are supported");
+if (CAPS.gamepads) console.log("Gamepads are supported");
 else console.log("No gamepad support");
 window.addEventListener("gamepadconnected", function(e) {
 	// This event listener is currently needed for Firefox
@@ -75,7 +75,7 @@ function Controller(obj) {
 
 		steer += THREE.Math.clamp(touchDelta[1], -1, 1);
 
-		if (navigator.getGamepads) {
+		if (CAPS.gamepads) {
 			var gamepads = navigator.getGamepads();
 			for (var i = 0; i < gamepads.length; ++i) {
 				var gamepad = gamepads[i];

@@ -104,8 +104,6 @@ Jumper.prototype.steer = function(steer) {
 		case JumperState.JUMPING:
 			break;
 		case JumperState.FLYING:
-			// TODO: This is just a place holder, should rotate jumper and not skis
-			
 			// Steering enabled only if landing manouver has not started yets
 			if (this.landingStart == 0) {
 				this.jumperAngle -= 1 * steer; // Radians per second
@@ -156,6 +154,7 @@ Jumper.prototype.update = function(dt) {
 					this.jumperAngle = -Math.PI/2;
 					this.landingPoints = 4;
 				}
+				$("#points").innerHTML = this.landingPoints;
 				this.state = JumperState.LANDING;
 				this.stateTime = 0;
 			}

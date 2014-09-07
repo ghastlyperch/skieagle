@@ -27,6 +27,7 @@ Records.prototype.reset = function() {
 			distance: 0
 		}
 	};
+	console.log("Records reset");
 };
 
 Records.prototype.add = function(distance) {

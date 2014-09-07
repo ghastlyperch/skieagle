@@ -65,6 +65,23 @@ canvas {
 	border-spacing: 20px 0px;
 }
 
+#settings-container {
+	position: absolute;
+	top: 5px;
+	right: 10px;
+}
+
+#settings-icon {
+	font-size: 30px;
+	font-weight: bold;
+	cursor: pointer;
+	float: right;
+}
+
+#settings {
+	display: none;
+}
+
 #debug {
 	position: absolute;
 	left: 10px;

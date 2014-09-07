@@ -9,6 +9,7 @@ var viewportWidth = 100; // meters
 var aspect;
 
 function init() {
+	initUI();
 	records = new Records(0);
 	//camera = new THREE.OrthographicCamera(window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000);
 	camera = new THREE.OrthographicCamera(-50, 50, 50, -50, 1, 1000);

@@ -56,7 +56,7 @@ Jumper.prototype.reset = function() {
 	this.jumperAngle = -10 * Math.PI / 180;
 	this.landingStart = 0;
 	this.landingPoints = 0;
-	var msg = isTouchDevice ? "Tap to start" : "Click to start";
+	var msg = CAPS.touch ? "Tap to start" : "Click to start";
 	$("#hint").innerHTML = msg;
 	$("#results").style.display = "none";
 };
@@ -83,7 +83,6 @@ Jumper.prototype.action = function() {
 			this.landingStart = this.stateTime;
 			console.log("Landing started: " + this.landingStart);
 			this.jumperAngle = -15 * Math.PI/180;
-			// TODO: Lock steering
 			break;
 		case JumperState.LANDING:
 			break;
@@ -104,7 +103,7 @@ Jumper.prototype.steer = function(steer) {
 		case JumperState.JUMPING:
 			break;
 		case JumperState.FLYING:
-			// Steering enabled only if landing manouver has not started yets
+			// Steering enabled only if landing manouver has not started yet
 			if (this.landingStart == 0) {
 				this.jumperAngle -= 1 * steer; // Radians per second
 				this.jumperAngle = THREE.Math.clamp(this.jumperAngle, -80 * Math.PI / 180, -15 * Math.PI/180);

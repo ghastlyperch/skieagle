@@ -21,7 +21,7 @@ function Controller(obj) {
 			return;
 
 		if (e.keyCode == 32 || e.keyCode == 38) // Space / Up
-			obj.action();
+			obj.action(true);
 
 		if (e.keyCode == 68) // D
 			ramp.visual.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
@@ -32,11 +32,24 @@ function Controller(obj) {
 	function onKeyUp(e) {
 		e.preventDefault();
 		pressed[e.keyCode] = false;
+
+		if (e.keyCode == 32 || e.keyCode == 38) // Space / Up
+			obj.action(false);
 	}
 
 	function onClick(e) {
 		e.preventDefault();
-		obj.action();
+		obj.action(true);
+	}
+
+	function onMouseDown(e) {
+		e.preventDefault();
+		obj.action(true);
+	}
+
+	function onMouseUp(e) {
+		e.preventDefault();
+		obj.action(false);
 	}
 
 	// Can't prevent default in touchstart/end as click events won't then go through
@@ -81,7 +94,7 @@ function Controller(obj) {
 				var gamepad = gamepads[i];
 				if (!gamepad) continue;
 				if (gamepad.buttons[0].pressed)
-					obj.action();
+					obj.action(true); // TODO: Press/release
 				var axis = gamepad.axes[0];
 				if (Math.abs(axis) > 0.1)
 					steer += axis;
@@ -95,7 +108,9 @@ function Controller(obj) {
 
 	document.addEventListener('keydown', onKeyDown, true);
 	document.addEventListener('keyup', onKeyUp, true);
-	document.addEventListener('click', onClick, true);
+	//document.addEventListener('click', onClick, true);
+	document.addEventListener('mousedown', onMouseDown, true);
+	document.addEventListener('mouseup', onMouseUp, true);
 	document.addEventListener('touchstart', onTouchStart, true);
 	document.addEventListener('touchmove', onTouchMove, true);
 	document.addEventListener('touchend', onTouchEnd, true);

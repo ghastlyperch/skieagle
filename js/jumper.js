@@ -56,12 +56,13 @@ Jumper.prototype.reset = function() {
 	this.jumperAngle = -10 * Math.PI / 180;
 	this.landingStart = 0;
 	this.landingPoints = 0;
+	this.charge = 0;
 	var msg = CAPS.touch ? "Tap to start" : "Click to start";
 	$("#hint").innerHTML = msg;
 	$("#results").style.display = "none";
 };
 
-Jumper.prototype.action = function() {
+Jumper.prototype.action = function(pressed) {
 	switch (this.state) {
 		case JumperState.WAITING:
 			this.state = JumperState.SLIDING;
@@ -71,13 +72,18 @@ Jumper.prototype.action = function() {
 			$("#results").style.display = "none";
 			break;
 		case JumperState.SLIDING:
-			if (this.isOnRamp() && this.body.position[0] > -20) { // TODO: Right amount of x
-				this.body.velocity[1] = 10;
-				this.body.angle = 0;
-				this.state = JumperState.FLYING; // TODO: Should go to Jumping state to charge the jump
+			if (pressed && this.isOnRamp() && this.body.position[0] > -40) { // TODO: Right amount of x
+				this.state = JumperState.JUMPING;
 				this.stateTime = 0;
 			}
+			break;
 		case JumperState.JUMPING:
+			if (!pressed && this.isOnRamp()) {
+				this.body.velocity[1] = this.charge * 0.2;
+				this.body.angle = 0;
+				this.state = JumperState.FLYING;
+				this.stateTime = 0;
+			}
 			break;
 		case JumperState.FLYING:
 			this.landingStart = this.stateTime;
@@ -135,12 +141,18 @@ Jumper.prototype.update = function(dt) {
 			}
 			break;
 		case JumperState.JUMPING:
+			this.charge = (this.charge + (100 * dt)) % 100;
+			$("#hint").innerHTML = Math.round(this.charge) + " %";
+			if (this.body.position[0] > 1) {
+				this.state = JumperState.FLYING;
+				this.stateTime = 0;
+			}
 			break;
 		case JumperState.FLYING:
 			this.physics();
 			// Round to nearest 0.5m like in real ski jumping
 			var d = Number(Math.round((this.body.position[0]*2))/2).toFixed(1);
-			$("#hint").innerHTML = d + " m";
+			$("#hint").innerHTML = d > 0 ? (d + " m") : "";
 			if (this.stateTime > 1 && this.isOnRamp()) {
 				records.add(d);
 				$("#topspeed").innerHTML = Math.round(jumper.topSpeed * 3.6) + " km/h";

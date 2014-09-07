@@ -165,7 +165,7 @@ Jumper.prototype.update = function(dt) {
 					this.jumperAngle = -Math.PI/2;
 					this.landingPoints = 4;
 				}
-				$("#points").innerHTML = this.landingPoints;
+				$("#points").innerHTML = Math.round(this.landingPoints);
 				this.state = JumperState.LANDING;
 				this.stateTime = 0;
 			}

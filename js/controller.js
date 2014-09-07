@@ -54,6 +54,7 @@ function Controller(obj) {
 
 	// Can't prevent default in touchstart/end as click events won't then go through
 	function onTouchStart(e) {
+		obj.action(true);
 		touchStart[0] = e.changedTouches[0].screenX;
 		touchStart[1] = e.changedTouches[0].screenY;
 	}
@@ -69,6 +70,7 @@ function Controller(obj) {
 	}
 
 	function onTouchEnd(e) {
+		obj.action(false);
 		touchDelta[0] = 0;
 		touchDelta[1] = 0;
 	}

@@ -72,7 +72,7 @@ Jumper.prototype.action = function(pressed) {
 			$("#results").style.display = "none";
 			break;
 		case JumperState.SLIDING:
-			if (pressed && this.isOnRamp() && this.body.position[0] > -40) { // TODO: Right amount of x
+			if (pressed && this.isOnRamp() && this.body.position[0] > -80) { // TODO: Right amount of x
 				this.state = JumperState.JUMPING;
 				this.stateTime = 0;
 			}

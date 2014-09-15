@@ -153,7 +153,7 @@ Jumper.prototype.update = function(dt) {
 			break;
 		case JumperState.JUMPING:
 			$("#hint").innerHTML = "Release to jump!";
-			this.charge = (this.charge + (100 * dt)) % 100;
+			this.charge = (this.charge + (80 * dt)) % 100;
 			$("#power-bar").style.width = Math.round(this.charge) + "%";
 			if (this.body.position[0] > 1) {
 				this.state = JumperState.FLYING;

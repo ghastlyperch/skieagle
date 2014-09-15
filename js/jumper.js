@@ -26,7 +26,10 @@ function Jumper(world, scene) {
 
 	// Visual representation
 	var skiGeometry = new THREE.PlaneGeometry(this.skisShape.width, 0.2);
-	var skiMaterial = new THREE.MeshBasicMaterial({ color: 0x2222ff });
+	var skiMaterial = new THREE.MeshBasicMaterial({
+		map: THREE.ImageUtils.loadTexture("assets/ski.png"),
+		transparent: true
+		});
 	this.visual = new THREE.Object3D();
 	var skiMesh = new THREE.Mesh(skiGeometry, skiMaterial);
 	skiMesh.position.y = 0.1;

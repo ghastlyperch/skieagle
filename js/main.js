@@ -6,7 +6,7 @@ var camera, scene, renderer;
 var clock, timeScale = 1;
 var clouds = [];
 
-var viewportWidth = 100; // meters
+var viewportWidth = 80; // meters
 var aspect;
 
 function init() {

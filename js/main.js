@@ -4,6 +4,7 @@ var world, stats, records;
 var jumper, controller, ramp, wind;
 var camera, scene, renderer;
 var clock, timeScale = 1;
+var clouds = [];
 
 var viewportWidth = 100; // meters
 var aspect;
@@ -75,6 +76,7 @@ function init() {
 		cloudMesh.position.y = 60 + Math.random() * 50
 		cloudMesh.position.z = Math.random() * 50;
 		scene.add(cloudMesh);
+		clouds.push(cloudMesh);
 	}
 
 	stats = new Stats();
@@ -125,6 +127,14 @@ function render() {
 		timeAccumulator -= physicsStep;
 	}
 	jumper.update(dt);
+	for (var i = 0; i < clouds.length; ++i) {
+		var cloud = clouds[i];
+		cloud.position.x += wind.magnitude * 0.005 * (15 + (i % 5)); // Magic constant to make the clouds not move so fast and add some variablity
+		if (cloud.position.x < camera.position.x - viewportWidth * 0.6)
+			cloud.position.x += viewportWidth * 1.2
+		else if (cloud.position.x > camera.position.x + viewportWidth * 0.6)
+			cloud.position.x -= viewportWidth * 1.2
+	}
 	// Graphics
 	camera.position.x = jumper.visual.position.x;
 	camera.position.y = Math.max(jumper.visual.position.y, ramp.minY + viewportWidth / aspect / 2);

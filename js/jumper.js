@@ -37,7 +37,7 @@ function Jumper(world, scene) {
 	var jumperGeometry = new THREE.PlaneGeometry(this.jumperShape.width, this.jumperShape.height);
 	jumperGeometry.applyMatrix((new THREE.Matrix4()).makeTranslation(0, jumperHeight * 0.5 + 0.1, 0)); // Move center
 	var jumperMaterial = new THREE.MeshBasicMaterial({
-		map: THREE.ImageUtils.loadTexture("assets/jumper2.png"),
+		map: THREE.ImageUtils.loadTexture("assets/jumper.png"),
 		transparent: true
 	});
 	var jumperMesh = new THREE.Mesh(jumperGeometry, jumperMaterial);

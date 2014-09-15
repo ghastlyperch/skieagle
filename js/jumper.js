@@ -203,13 +203,9 @@ Jumper.prototype.isOnRamp = function() {
 };
 
 Jumper.prototype.physics = function() {
-	// Wind not implemented yet, so speed of air wrt jumper is zero
-	var vax = wind.magnitude;
-	var vay = 0;
-	
 	// Jumper airspeed
-	var vX = this.body.velocity[0] - vax;
-	var vY = this.body.velocity[1] - vay;
+	var vX = this.body.velocity[0] + wind.magnitude;
+	var vY = this.body.velocity[1];
 	
 	// Square of velocity
 	var vSqr = vX*vX; // + vY*vY TODO: fix

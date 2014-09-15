@@ -144,12 +144,15 @@ Jumper.prototype.update = function(dt) {
 		case JumperState.WAITING:
 			break;
 		case JumperState.SLIDING:
+			if (this.body.position[0] > -80) // TODO: Right amount of x
+				$("#hint").innerHTML = "Hold to charge jump";
 			if (this.body.position[0] > 1) {
 				this.state = JumperState.FLYING;
 				this.stateTime = 0;
 			}
 			break;
 		case JumperState.JUMPING:
+			$("#hint").innerHTML = "Release to jump!";
 			this.charge = (this.charge + (100 * dt)) % 100;
 			$("#power-bar").style.width = Math.round(this.charge) + "%";
 			if (this.body.position[0] > 1) {

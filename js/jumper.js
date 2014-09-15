@@ -15,7 +15,7 @@ function Jumper(world, scene) {
 	this.skiLength = skiLength;
 	this.skisShape = new p2.Rectangle(skiLength, 0.02);
 	this.skisShape.material = new p2.Material();
-	this.jumperShape = new p2.Rectangle(0.3, jumperHeight);
+	this.jumperShape = new p2.Rectangle(0.5 * jumperHeight, jumperHeight);
 	this.jumperShape.material = new p2.Material();
 
 	this.landingStart = 0;

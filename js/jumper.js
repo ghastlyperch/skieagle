@@ -65,6 +65,7 @@ Jumper.prototype.reset = function() {
 Jumper.prototype.action = function(pressed) {
 	switch (this.state) {
 		case JumperState.WAITING:
+			wind.reset();
 			this.state = JumperState.SLIDING;
 			this.stateTime = 0;
 			this.body.wakeUp();
@@ -200,7 +201,8 @@ Jumper.prototype.isOnRamp = function() {
 
 Jumper.prototype.physics = function() {
 	// Wind not implemented yet, so speed of air wrt jumper is zero
-	var vax = 0, vay = 0;
+	var vax = wind.magnitude;
+	var vay = 0;
 	
 	// Jumper airspeed
 	var vX = this.body.velocity[0] - vax;

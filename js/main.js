@@ -1,7 +1,7 @@
 var DEBUG = true;
 
 var world, stats, records;
-var jumper, controller, ramp;
+var jumper, controller, ramp, wind;
 var camera, scene, renderer;
 var clock, timeScale = 1;
 
@@ -38,6 +38,9 @@ function init() {
 	world.solver.iterations = 20;
 	world.solver.frictionIterations = 10;
 
+	// Create wind
+	wind = new Wind();
+	
 	// Create ramp
 	ramp = new FISSlope(world, scene);
 
@@ -97,6 +100,7 @@ function drawDebug() {
 	msg += "Speed: " + Math.round(jumper.speed) + " m/s = " + Math.round(jumper.speed * 3.6) + " km/h\n";
 	msg += "Angles: " + (jumper.body.angle * 57.2957795).toFixed(1) + "&deg;, " + (jumper.jumperAngle * 57.2957795).toFixed(1) + "&deg;\n";
 	msg += "Forces: " + jumper.forces[0].toFixed(1) + ", " + jumper.forces[1].toFixed(1) + "\n";
+	msg += "Wind: " + wind.magnitude.toFixed(1) + "\n";
 	for (var s in JumperState)
 		if (JumperState[s] == jumper.state)
 			msg += "State: " + s + "\n";

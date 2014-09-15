@@ -66,6 +66,7 @@ Jumper.prototype.reset = function() {
 	var msg = CAPS.touch ? "Tap to start" : "Click to start";
 	$("#hint").innerHTML = msg;
 	$("#results").style.display = "none";
+	$("#power-container").style.display = "none";
 };
 
 Jumper.prototype.action = function(pressed) {
@@ -82,6 +83,7 @@ Jumper.prototype.action = function(pressed) {
 			if (pressed && this.isOnRamp() && this.body.position[0] > -80) { // TODO: Right amount of x
 				this.state = JumperState.JUMPING;
 				this.stateTime = 0;
+				$("#power-container").style.display = "block";
 			}
 			break;
 		case JumperState.JUMPING:
@@ -149,7 +151,7 @@ Jumper.prototype.update = function(dt) {
 			break;
 		case JumperState.JUMPING:
 			this.charge = (this.charge + (100 * dt)) % 100;
-			$("#hint").innerHTML = Math.round(this.charge) + " %";
+			$("#power-bar").style.width = Math.round(this.charge) + "%";
 			if (this.body.position[0] > 1) {
 				this.state = JumperState.FLYING;
 				this.stateTime = 0;
@@ -157,6 +159,7 @@ Jumper.prototype.update = function(dt) {
 			break;
 		case JumperState.FLYING:
 			this.physics();
+			$("#power-container").style.display = "none";
 			// Round to nearest 0.5m like in real ski jumping
 			var d = Number(Math.round((this.body.position[0]*2))/2).toFixed(1);
 			$("#hint").innerHTML = d > 0 ? (d + " m") : "";

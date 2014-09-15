@@ -33,7 +33,10 @@ function Jumper(world, scene) {
 	this.visual.add(skiMesh);
 	var jumperGeometry = new THREE.PlaneGeometry(this.jumperShape.width, this.jumperShape.height);
 	jumperGeometry.applyMatrix((new THREE.Matrix4()).makeTranslation(0, jumperHeight * 0.5 + 0.1, 0)); // Move center
-	var jumperMaterial = new THREE.MeshBasicMaterial({ color: 0x22ff22 });
+	var jumperMaterial = new THREE.MeshBasicMaterial({
+		map: THREE.ImageUtils.loadTexture("assets/jumper2.png"),
+		transparent: true
+	});
 	var jumperMesh = new THREE.Mesh(jumperGeometry, jumperMaterial);
 	jumperMesh.position.x = -1/5 * this.skiLength;
 	this.visual.add(jumperMesh);

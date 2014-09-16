@@ -70,19 +70,22 @@ Jumper.prototype.reset = function() {
 	$("#power-container").style.display = "none";
 };
 
+Jumper.prototype.changeState = function(state) {
+	this.state = state;
+	this.stateTime = 0;
+};
+
 Jumper.prototype.action = function(pressed) {
 	switch (this.state) {
 		case JumperState.WAITING:
-			this.state = JumperState.SLIDING;
-			this.stateTime = 0;
+			this.changeState(JumperState.SLIDING);
 			this.body.wakeUp();
 			$("#hint").innerHTML = "";
 			$("#results").style.display = "none";
 			break;
 		case JumperState.SLIDING:
 			if (pressed && this.isOnRamp() && this.body.position[0] > -80) { // TODO: Right amount of x
-				this.state = JumperState.JUMPING;
-				this.stateTime = 0;
+				this.changeState(JumperState.JUMPING);
 				$("#power-container").style.display = "block";
 			}
 			break;
@@ -90,8 +93,7 @@ Jumper.prototype.action = function(pressed) {
 			if (!pressed && this.isOnRamp()) {
 				this.body.velocity[1] = this.charge * 0.2;
 				this.body.angle = 0;
-				this.state = JumperState.FLYING;
-				this.stateTime = 0;
+				this.changeState(JumperState.FLYING);
 			}
 			break;
 		case JumperState.FLYING:
@@ -147,8 +149,7 @@ Jumper.prototype.update = function(dt) {
 			if (this.body.position[0] > -80) // TODO: Right amount of x
 				$("#hint").innerHTML = "Hold to charge jump";
 			if (this.body.position[0] > 1) {
-				this.state = JumperState.FLYING;
-				this.stateTime = 0;
+				this.changeState(JumperState.FLYING);
 			}
 			break;
 		case JumperState.JUMPING:
@@ -156,8 +157,7 @@ Jumper.prototype.update = function(dt) {
 			this.charge = (this.charge + (80 * dt)) % 100;
 			$("#power-bar").style.width = Math.round(this.charge) + "%";
 			if (this.body.position[0] > 1) {
-				this.state = JumperState.FLYING;
-				this.stateTime = 0;
+				this.changeState(JumperState.FLYING);
 			}
 			break;
 		case JumperState.FLYING:
@@ -179,16 +179,14 @@ Jumper.prototype.update = function(dt) {
 					this.landingPoints = 4;
 				}
 				$("#points").innerHTML = Math.round(this.landingPoints);
-				this.state = JumperState.LANDING;
-				this.stateTime = 0;
+				this.changeState(JumperState.LANDING);
 			}
 			break;
 		case JumperState.LANDING:
 			if (this.stateTime > 1.5) {
 				$("#hint").innerHTML = "";
 				$("#results").style.display = "block";
-				this.state = JumperState.LANDED;
-				this.stateTime = 0;
+				this.changeState(JumperState.LANDED);
 			}
 			break;
 		case JumperState.LANDED:

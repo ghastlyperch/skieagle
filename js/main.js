@@ -127,6 +127,7 @@ function render() {
 		timeAccumulator -= physicsStep;
 	}
 	jumper.update(dt);
+	wind.update(dt);
 	for (var i = 0; i < clouds.length; ++i) {
 		var cloud = clouds[i];
 		cloud.position.x += wind.magnitude * 0.005 * (15 + (i % 5)); // Magic constant to make the clouds not move so fast and add some variablity

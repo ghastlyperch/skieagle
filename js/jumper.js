@@ -49,6 +49,7 @@ function Jumper(world, scene) {
 };
 
 Jumper.prototype.reset = function() {
+	wind.reset();
 	this.state = JumperState.WAITING;
 	this.stateTime = 0;
 	this.speed = 0;
@@ -72,7 +73,6 @@ Jumper.prototype.reset = function() {
 Jumper.prototype.action = function(pressed) {
 	switch (this.state) {
 		case JumperState.WAITING:
-			wind.reset();
 			this.state = JumperState.SLIDING;
 			this.stateTime = 0;
 			this.body.wakeUp();

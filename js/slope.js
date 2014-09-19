@@ -93,7 +93,6 @@ function FISSlope(world, scene) {
 		xCur -= xIncr;
 	}
 
-
 	// Landing hill knoll
 	slopeProfile.push([lX, lY]);
 	slopeProfile.push([n, -h]);
@@ -118,7 +117,7 @@ function FISSlope(world, scene) {
 	nIter = 20; // Number of sub-segments in transition segment
 	xIncr = d/nIter;
 	xCur = d-xIncr;
-	console.log("C_ir: " + C_ir + " d: " + d);
+	//console.log("C_ir: " + C_ir + " d: " + d);
 	for (var i = 0; i < nIter - 2; ++i)
 	{
 		var xTwisted = xCur;
@@ -154,7 +153,8 @@ function FISSlope(world, scene) {
 
 	// Calculate starting point for jumper
 	this.startingPosition = [E1x-(e1-l-1)*Math.cos(gamma), E1y+(e1-l)*Math.sin(gamma)+1];
-	this.minY = bY; // TODO: Auto calculate?
+	this.minY = bY;
+	this.maxX = uX + lOr;
 
 	// Visual representation
 	var visShape = new THREE.Shape();

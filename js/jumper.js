@@ -19,7 +19,11 @@ function Jumper(world, scene) {
 	this.jumperShape.material = new p2.Material();
 
 	this.landingStart = 0;
-	this.body = new p2.Body({ mass: 65 });
+	this.body = new p2.Body({
+		mass: 65,
+		damping: 0, // 0.1 is p2's default
+		angularDamping: 0.1 // 0.1 is p2's default
+	});
 	this.body.addShape(this.skisShape);
 	//this.body.addShape(this.jumperShape, [0, jumperHeight * 0.5]);
 	world.addBody(this.body);
@@ -57,6 +61,7 @@ Jumper.prototype.reset = function() {
 	this.forces = [0, 0];
 	this.body.sleep();
 	var slopeStartingPos = ramp.startingPosition;
+	this.body.damping = 0;
 	this.body.position[0] = slopeStartingPos[0];
 	this.body.position[1] = slopeStartingPos[1];
 	this.body.angle = 0;
@@ -190,6 +195,7 @@ Jumper.prototype.update = function(dt) {
 			}
 			break;
 		case JumperState.LANDED:
+			this.body.damping = 0.4;
 			break;
 		default:
 			throw "Unknown state " + this.state;

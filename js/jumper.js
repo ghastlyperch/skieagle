@@ -83,6 +83,7 @@ Jumper.prototype.changeState = function(state) {
 Jumper.prototype.action = function(pressed) {
 	switch (this.state) {
 		case JumperState.WAITING:
+			if (!pressed) break;
 			this.changeState(JumperState.SLIDING);
 			this.body.wakeUp();
 			$("#hint").innerHTML = "";
@@ -109,7 +110,8 @@ Jumper.prototype.action = function(pressed) {
 		case JumperState.LANDING:
 			break;
 		case JumperState.LANDED:
-			this.reset();
+			if (pressed)
+				this.reset();
 			break;
 		default:
 			throw "Unkown state " + this.state;

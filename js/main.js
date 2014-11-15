@@ -19,7 +19,7 @@ function init() {
 	clock = new THREE.Clock();
 	scene = new THREE.Scene();
 
-	if (CAPS.webgl) {
+	if (CAPS.webgl && !window.location.hash.contains("#nowebgl")) {
 		var dpr = window.devicePixelRatio && window.devicePixelRatio > 1 ? 1 + (window.devicePixelRatio - 1)/2 : 1;
 		renderer = new THREE.WebGLRenderer({ devicePixelRatio: dpr, alpha: true, antialias: true });
 	} else { // Using devicePixelRatio 1 here so that HDPI screens render less pixels -> more performance

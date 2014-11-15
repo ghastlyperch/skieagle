@@ -4,13 +4,9 @@ TODO
 Uncategorized tasks
 -------------------
 
-[ ] Wind
+[ ] Landing scoring needs work, too easy to get 20
 [ ] Scoring based on landing goodness?
-[ ] Slope end
 [ ] Distance measurement on the slope instead of x-coord
-[ ] Jumping physics are barebones
-	- Use force instead of velocity?
-[ ] Decent fallback for non-WebGL devices
 
 Milestone 1
 -----------

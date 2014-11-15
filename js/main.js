@@ -1,4 +1,4 @@
-var DEBUG = true;
+var DEBUG = window.location.hash.contains("#debug");
 
 var world, stats, records;
 var jumper, controller, ramp, wind;
@@ -81,7 +81,10 @@ function init() {
 
 	stats = new Stats();
 	document.body.appendChild(stats.domElement);
-	if (DEBUG) $("#mediaquerydebug").style.display = "block";
+	if (DEBUG) {
+		$("#debug").style.display = "block";
+		$("#mediaquerydebug").style.display = "block";
+	}
 }
 
 function resize() {

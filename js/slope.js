@@ -170,7 +170,10 @@ function FISSlope(world, scene) {
 		if (i == 0) visShape.moveTo(x, y);
 		else visShape.lineTo(x, y);
 	}
-	var material = new THREE.MeshBasicMaterial({ color: 0xcccccc, overdraw: 0.75 });
+	var tex = THREE.ImageUtils.loadTexture("assets/snow.png");
+	tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+	tex.repeat.set(0.05, 0.05);
+	var material = new THREE.MeshBasicMaterial({ color: 0xcccccc, overdraw: 0.75, map: tex });
 	this.visual = new THREE.Mesh(new THREE.ShapeGeometry(visShape), material);
 	scene.add(this.visual);
 

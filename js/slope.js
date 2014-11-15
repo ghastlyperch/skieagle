@@ -129,8 +129,12 @@ function FISSlope(world, scene) {
 		xCur -= xIncr;
 	}
 	slopeProfile.push([E1x, E1y]); // Start of transition segment
-	slopeProfile.push([E1x-(e1-l)*Math.cos(gamma),E1y+(e1-l)*Math.sin(gamma)]); // Starting position
-	slopeProfile.push([E1x-(e1-l)*Math.cos(gamma), bY]);
+	var topX = E1x - (e1-l) * Math.cos(gamma);
+	var topY = E1y + (e1-l) * Math.sin(gamma);
+	var plateau = 6;
+	slopeProfile.push([topX, topY]); // Starting position
+	slopeProfile.push([topX - plateau, topY]); // Tiny plateau at top
+	slopeProfile.push([topX - plateau, bY]); // Left side vertical wall
 
 	nIter = 5;
 	xIncr = ((uX + lOr) - (E1x-(e1-l)*Math.cos(gamma)))/nIter;
@@ -151,11 +155,12 @@ function FISSlope(world, scene) {
 	this.body = slope;
 	world.addBody(this.body);
 
-	// Calculate starting point for jumper
-	this.startingPosition = [E1x-(e1-l-1)*Math.cos(gamma), E1y+(e1-l)*Math.sin(gamma)+1];
-	this.minX = this.startingPosition[0] - 10;
+	// Calculate starting point for jumper and slope extents
+	this.startingPosition = [topX + 5, topY - 2];
+	this.minX = topX - plateau;
 	this.maxX = uX + lOr;
 	this.minY = bY;
+	this.maxY = this.startingPosition[1];
 
 	// Visual representation
 	var visShape = new THREE.Shape();

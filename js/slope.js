@@ -153,8 +153,9 @@ function FISSlope(world, scene) {
 
 	// Calculate starting point for jumper
 	this.startingPosition = [E1x-(e1-l-1)*Math.cos(gamma), E1y+(e1-l)*Math.sin(gamma)+1];
-	this.minY = bY;
+	this.minX = this.startingPosition[0] - 10;
 	this.maxX = uX + lOr;
+	this.minY = bY;
 
 	// Visual representation
 	var visShape = new THREE.Shape();

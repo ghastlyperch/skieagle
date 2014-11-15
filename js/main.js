@@ -140,7 +140,8 @@ function render() {
 			cloud.position.x -= viewportWidth * 1.2
 	}
 	// Graphics
-	camera.position.x = Math.min(jumper.visual.position.x, ramp.maxX - viewportWidth / 2);
+	camera.position.x = Math.min(jumper.visual.position.x + viewportWidth * 0.2, ramp.maxX - viewportWidth / 2);
+	camera.position.x = Math.max(camera.position.x, ramp.minX + viewportWidth / 2);
 	camera.position.y = Math.max(jumper.visual.position.y, ramp.minY + viewportWidth / aspect / 2);
 	renderer.render(scene, camera);
 	if (DEBUG) drawDebug();

@@ -80,8 +80,8 @@ function init() {
 	}
 
 	stats = new Stats();
-	document.body.appendChild(stats.domElement);
 	if (DEBUG) {
+		document.body.appendChild(stats.domElement);
 		$("#debug").style.display = "block";
 		$("#mediaquerydebug").style.display = "block";
 	}
@@ -144,8 +144,10 @@ function render() {
 	camera.position.x = Math.max(camera.position.x, ramp.minX + viewportWidth / 2);
 	camera.position.y = Math.max(jumper.visual.position.y, ramp.minY + viewportWidth / aspect / 2);
 	renderer.render(scene, camera);
-	if (DEBUG) drawDebug();
-	stats.update();
+	if (DEBUG) {
+		drawDebug();
+		stats.update();
+	}
 	requestAnimationFrame(render);
 }
 

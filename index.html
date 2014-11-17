@@ -38,6 +38,8 @@
 	</div>
 
 	<script>
+		if (!String.prototype.contains)
+			String.prototype.contains = function() { return String.prototype.indexOf.apply(this, arguments) !== -1; };
 		function $(selector) { return document.querySelector(selector); }
 		if (!window.requestAnimationFrame) alert("Error: requestAnimationFrame unsupported");
 		var CAPS = {

@@ -74,7 +74,7 @@ function init() {
 		var cloudMesh = new THREE.Mesh(cloudGeo, cloudMats[i % cloudMats.length]);
 		cloudMesh.position.x = -200 + Math.random() * 350
 		cloudMesh.position.y = 60 + Math.random() * 50
-		cloudMesh.position.z = Math.random() * 50;
+		cloudMesh.position.z = -Math.random() * 50;
 		scene.add(cloudMesh);
 		clouds.push(cloudMesh);
 	}

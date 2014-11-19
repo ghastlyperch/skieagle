@@ -109,8 +109,8 @@ function Controller(obj) {
 	};
 
 	var inputElem = $("#canvas");
-	inputElem.addEventListener('keydown', onKeyDown, true);
-	inputElem.addEventListener('keyup', onKeyUp, true);
+	document.addEventListener('keydown', onKeyDown, true);
+	document.addEventListener('keyup', onKeyUp, true);
 	//inputElem.addEventListener('click', onClick, true);
 	inputElem.addEventListener('mousedown', onMouseDown, true);
 	inputElem.addEventListener('mouseup', onMouseUp, true);

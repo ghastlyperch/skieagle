@@ -108,13 +108,14 @@ function Controller(obj) {
 		if (steer != 0) obj.steer(THREE.Math.clamp(steer, -1, 1) * dt);
 	};
 
-	document.addEventListener('keydown', onKeyDown, true);
-	document.addEventListener('keyup', onKeyUp, true);
-	//document.addEventListener('click', onClick, true);
-	document.addEventListener('mousedown', onMouseDown, true);
-	document.addEventListener('mouseup', onMouseUp, true);
-	document.addEventListener('touchstart', onTouchStart, true);
-	document.addEventListener('touchmove', onTouchMove, true);
-	document.addEventListener('touchend', onTouchEnd, true);
+	var inputElem = $("#canvas");
+	inputElem.addEventListener('keydown', onKeyDown, true);
+	inputElem.addEventListener('keyup', onKeyUp, true);
+	//inputElem.addEventListener('click', onClick, true);
+	inputElem.addEventListener('mousedown', onMouseDown, true);
+	inputElem.addEventListener('mouseup', onMouseUp, true);
+	inputElem.addEventListener('touchstart', onTouchStart, true);
+	inputElem.addEventListener('touchmove', onTouchMove, true);
+	inputElem.addEventListener('touchend', onTouchEnd, true);
 	window.addEventListener('devicemotion', onDeviceMotion, true);
 };

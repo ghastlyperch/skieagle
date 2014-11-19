@@ -27,6 +27,7 @@ function init() {
 	}
 	renderer.setClearColor(0x000000, 0);
 	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.domElement.id = "canvas";
 	document.body.appendChild(renderer.domElement);
 
 	window.addEventListener('resize', resize, false);

@@ -8,7 +8,15 @@ var JumperState = {
 	LANDED:  5
 };
 
+var PhysicsMode = {
+	PARAMETRIC: 0,
+	SIMPLE_LIFTDRAG: 1
+};
+
 function Jumper(world, scene) {
+	// Physics solver mode
+	this.physicsMode = PhysicsMode.PARAMETRIC;
+	
 	// Physical body
 	var jumperHeight = 1.78;
 	var skiLength = 2.5;
@@ -97,7 +105,7 @@ Jumper.prototype.action = function(pressed) {
 			break;
 		case JumperState.JUMPING:
 			if (!pressed && this.isOnRamp()) {
-				this.body.velocity[1] = this.charge * 0.2;
+				this.body.velocity[1] = this.charge * 0.05;
 				this.body.angle = 0;
 				this.changeState(JumperState.FLYING);
 			}
@@ -228,40 +236,56 @@ Jumper.prototype.physics = function() {
 	// Air density [kg/m^3]
 	var rho = 1.315
 	
-	// Various angles (in degrees)
-	var beta = 9.5 * Math.PI/180; // Body-to-ski
-	var gamma = 160 * Math.PI/180; // Hip angle
-	var alpha = (Math.PI/2 - (-this.jumperAngle))*180/Math.PI; //35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
+	var liftForce = 0;
+	var dragForce = 0;
 	
-	// Lift and drag coefficients
-	var cD = 0.1;
-	var cL = 0.8;
+	switch (this.physicsMode)
+	{
+		case PhysicsMode.PARAMETRIC:
+			// Various angles (in degrees)
+			var beta = 9.5 * Math.PI/180; // Body-to-ski
+			var gamma = 160 * Math.PI/180; // Hip angle
+			var alpha = (Math.PI/2 - (-this.jumperAngle))*180/Math.PI; //35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
+			
+			// These numbers are valid for constant beta and gamma 
+			var L = -0.43903 + 0.060743*alpha - 7.192e-4*alpha*alpha
+			var D = -0.032061 + 0.01232*alpha + 2.283e-4*alpha*alpha
+			//var L_b = -0.645718+0.0126185*beta-3.348e-4*beta*beta;
+			//var D_b = 0.408435 + 0.012364*beta+3.9308e-5*beta*beta;
+					
+			liftForce = rho/2*L*vSqr;
+			dragForce = rho/2*D*vSqr;
+		break;
+		
+		case PhysicsMode.SIMPLE_LIFTDRAG:
+			// Lift and drag coefficients
+			var cD = 0.1;
+			var cL = 0.8;
 
-	// Area projections (0.5 approx width of jumper) against the flow
-	var aX = 0.5*Math.cos(alpha)*this.skiLength;
-	var aY = 0.5*Math.sin(alpha)*this.skiLength;
+			// Area projections (0.5 approx width of jumper) against the flow
+			var aX = 0.5*Math.cos(alpha)*this.skiLength;
+			var aY = 0.5*Math.sin(alpha)*this.skiLength;
 
-	// Drag force x and y components
-	var dX = 0.5*rho*cD*aX*vX*vX;
-	var dY = 0.5*rho*cD*aY*vY*vY;
+			// Drag force x and y components
+			var dX = 0.5*rho*cD*aX*vX*vX;
+			var dY = 0.5*rho*cD*aY*vY*vY;
 
-	// Lift (only y)
-	var lY = 0.5*rho*cL*aX*vX*vX;
-
-	// These numbers are valid for constant beta and gamma 
-	var L = -0.43903 + 0.060743*alpha - 7.192e-4*alpha*alpha
-	var D = -0.032061 + 0.01232*alpha + 2.283e-4*alpha*alpha
-
-	//var L_b = -0.645718+0.0126185*beta-3.348e-4*beta*beta;
-	//var D_b = 0.408435 + 0.012364*beta+3.9308e-5*beta*beta;
-
-	var liftForce = rho/2*L*vSqr;
-	var dragForce = rho/2*D*vSqr;
-	
-	if (vX > 0) dX *= -1;
-	if (vY > 0) dY *= -1;
+			// Lift (only y)
+			var lY = 0.5*rho*cL*aX*vX*vX;
+			
+			if (vX > 0) dX *= -1;
+			if (vY > 0) dY *= -1;
+			liftForce = lY + dY;
+			dragForce = dX;
+		break;
+		
+		default:
+			throw "Unknown physics mode " + this.physicsMode
+		break;
+		
+	}
 	
 	this.body.setZeroForce();
-	this.forces = [-dragForce, liftForce]; //[dX, lY+dY];
+	this.forces = [-dragForce, liftForce];
 	this.body.applyForce(this.forces, this.body.position);
 };

@@ -105,7 +105,7 @@ Jumper.prototype.action = function(pressed) {
 			break;
 		case JumperState.JUMPING:
 			if (!pressed && this.isOnRamp()) {
-				this.body.velocity[1] = this.charge * 0.2;
+				this.body.velocity[1] = this.charge * 0.05;
 				this.body.angle = 0;
 				this.changeState(JumperState.FLYING);
 			}

@@ -117,19 +117,14 @@ function drawDebug() {
 	$("#debug").innerHTML = msg;
 }
 
-var physicsStep = 1/120;
-var timeAccumulator = 0;
+var physicsStep = 1 / 60;
 function render() {
 	var dt = clock.getDelta();
 	if (dt > 0.05) dt = 0.05; // No bigger deltas than 20 FPS
-	timeAccumulator += dt * timeScale;
 	// Input
 	controller.poll(dt);
 	// Physics
-	while (timeAccumulator >= physicsStep) {
-		world.step(physicsStep);
-		timeAccumulator -= physicsStep;
-	}
+	world.step(physicsStep, dt * timeScale, 10);
 	jumper.update(dt);
 	wind.update(dt);
 	for (var i = 0; i < clouds.length; ++i) {

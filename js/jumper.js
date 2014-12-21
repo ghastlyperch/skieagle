@@ -186,11 +186,12 @@ Jumper.prototype.update = function(dt) {
 			// Jumper angle control, angles are both negative
 			if (this.landingStart == 0 && this.jumperAngle > this.jumperTargetAngle)
 			{
-				this.jumperAngle -= 0.04;
-			} 
+				this.jumperAngle -= 2.4 * dt;
+			}
 			else if (this.landingStart > 0 && this.jumperAngle < this.jumperTargetAngle)
 			{
-				this.jumperAngle += 0.04; // TODO: Speed should be determined so that player best landing points would be received when jumper has just reached landing position when he hits the ground.
+				// TODO: Speed should be determined so that player best landing points would be received when jumper has just reached landing position when he hits the ground.
+				this.jumperAngle += 2.4 * dt;
 			}
 			
 			$("#hint").innerHTML = d > 0 ? (d + " m") : "";

@@ -107,7 +107,9 @@ Jumper.prototype.action = function(pressed) {
 		case JumperState.JUMPING:
 			if (!pressed && this.isOnRamp()) {
 				this.body.velocity[1] = this.charge * 0.05;
-				this.jumperTargetAngle = this.charge * (-0.01) * 85 *Math.PI/180; // Set target body angle while flying based on jump timing, TODO: find out optimum angle and replace 85 with it.
+				// Set target body angle while flying based on jump timing
+				// TODO: find out optimum angle and replace 85 with it.
+				this.jumperTargetAngle = this.charge * (-0.01) * 85 *Math.PI/180; 
 				this.body.angle = 0;
 				this.changeState(JumperState.FLYING);
 			}
@@ -190,7 +192,9 @@ Jumper.prototype.update = function(dt) {
 			}
 			else if (this.landingStart > 0 && this.jumperAngle < this.jumperTargetAngle)
 			{
-				// TODO: Speed should be determined so that player best landing points would be received when jumper has just reached landing position when he hits the ground.
+				// TODO: Speed should be determined so that player best landing 
+				// points would be received when jumper has just reached landing
+				// position when he hits the ground.
 				this.jumperAngle += 2.4 * dt;
 			}
 			

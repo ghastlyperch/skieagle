@@ -26,6 +26,7 @@ function Jumper(world, scene) {
 	this.jumperShape = new p2.Rectangle(0.5 * jumperHeight, jumperHeight);
 	this.jumperShape.material = new p2.Material();
 
+	this.jumperTargetAngle = 0;
 	this.landingStart = 0;
 	this.body = new p2.Body({
 		mass: 65,
@@ -106,6 +107,7 @@ Jumper.prototype.action = function(pressed) {
 		case JumperState.JUMPING:
 			if (!pressed && this.isOnRamp()) {
 				this.body.velocity[1] = this.charge * 0.05;
+				this.jumperTargetAngle = this.charge * (-0.01) * 85 *Math.PI/180; // Set target body angle while flying based on jump timing, TODO: find out optimum angle and replace 85 with it.
 				this.body.angle = 0;
 				this.changeState(JumperState.FLYING);
 			}
@@ -113,7 +115,7 @@ Jumper.prototype.action = function(pressed) {
 		case JumperState.FLYING:
 			this.landingStart = this.stateTime;
 			console.log("Landing started: " + this.landingStart);
-			this.jumperAngle = -15 * Math.PI/180;
+			this.jumperTargetAngle = -15 * Math.PI/180;
 			break;
 		case JumperState.LANDING:
 			break;
@@ -180,6 +182,17 @@ Jumper.prototype.update = function(dt) {
 			$("#power-container").style.display = "none";
 			// Round to nearest 0.5m like in real ski jumping
 			var d = Number(Math.round((this.body.position[0]*2))/2).toFixed(1);
+			
+			// Jumper angle control, angles are both negative
+			if (this.landingStart == 0 && this.jumperAngle > this.jumperTargetAngle)
+			{
+				this.jumperAngle -= 0.04;
+			} 
+			else if (this.landingStart > 0 && this.jumperAngle < this.jumperTargetAngle)
+			{
+				this.jumperAngle += 0.04; // TODO: Speed should be determined so that player best landing points would be received when jumper has just reached landing position when he hits the ground.
+			}
+			
 			$("#hint").innerHTML = d > 0 ? (d + " m") : "";
 			if (this.stateTime > 1 && this.isOnRamp()) {
 				records.add(d);

@@ -85,6 +85,7 @@ function Controller(obj) {
 
 	this.poll = function(dt) {
 		var steer = 0;
+		/*
 		if (pressed[39] || pressed[69]) steer += 1; // Right or E
 		if (pressed[37] || pressed[81]) steer -= 1; // Left or Q
 
@@ -102,10 +103,11 @@ function Controller(obj) {
 					steer += axis;
 			}
 		}
-
+		*/
 		timeScale = pressed[83] ? 4 : 1; // Debug fast-forward
-
+			
 		if (steer != 0) obj.steer(THREE.Math.clamp(steer, -1, 1) * dt);
+		
 	};
 
 	var inputElem = $("#canvas");

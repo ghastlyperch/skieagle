@@ -13,13 +13,28 @@ var PhysicsMode = {
 	SIMPLE_LIFTDRAG: 1
 };
 
+var Params = {
+	
+	Jumper: {
+		height: 1.78,
+		mass: 65,
+		skiLength: 2.5,
+		takeoffStr: 0.05,
+		takeoffTargetAngle: -85 * Math.PI/180,
+		landingTargetAngle: -15 * Math.PI/180,
+		angVelToFlyPosition: -2.4,
+		angVelToLandingPosition: 2.4
+	}
+
+};
+
 function Jumper(world, scene) {
 	// Physics solver mode
 	this.physicsMode = PhysicsMode.PARAMETRIC;
 	
 	// Physical body
-	var jumperHeight = 1.78;
-	var skiLength = 2.5;
+	var jumperHeight = Params.Jumper.height;
+	var skiLength = Params.Jumper.skiLength;
 	this.skiLength = skiLength;
 	this.skisShape = new p2.Rectangle(skiLength, 0.02);
 	this.skisShape.material = new p2.Material();
@@ -29,7 +44,7 @@ function Jumper(world, scene) {
 	this.jumperTargetAngle = 0;
 	this.landingStart = 0;
 	this.body = new p2.Body({
-		mass: 65,
+		mass: Params.Jumper.mass,
 		damping: 0, // 0.1 is p2's default
 		angularDamping: 0.1 // 0.1 is p2's default
 	});
@@ -106,10 +121,10 @@ Jumper.prototype.action = function(pressed) {
 			break;
 		case JumperState.JUMPING:
 			if (!pressed && this.isOnRamp()) {
-				this.body.velocity[1] = this.charge * 0.05;
+				this.body.velocity[1] = this.charge * Params.Jumper.takeoffStr;
 				// Set target body angle while flying based on jump timing
 				// TODO: find out optimum angle and replace 85 with it.
-				this.jumperTargetAngle = this.charge * (-0.01) * 85 *Math.PI/180; 
+				this.jumperTargetAngle = 0.01 * this.charge * Params.Jumper.takeoffTargetAngle; 
 				this.body.angle = 0;
 				this.changeState(JumperState.FLYING);
 			}
@@ -117,7 +132,7 @@ Jumper.prototype.action = function(pressed) {
 		case JumperState.FLYING:
 			this.landingStart = this.stateTime;
 			console.log("Landing started: " + this.landingStart);
-			this.jumperTargetAngle = -15 * Math.PI/180;
+			this.jumperTargetAngle = Params.Jumper.landingTargetAngle;
 			break;
 		case JumperState.LANDING:
 			break;
@@ -188,14 +203,14 @@ Jumper.prototype.update = function(dt) {
 			// Jumper angle control, angles are both negative
 			if (this.landingStart == 0 && this.jumperAngle > this.jumperTargetAngle)
 			{
-				this.jumperAngle -= 2.4 * dt;
+				this.jumperAngle += Params.Jumper.angVelToFlyPosition * dt;
 			}
 			else if (this.landingStart > 0 && this.jumperAngle < this.jumperTargetAngle)
 			{
 				// TODO: Speed should be determined so that player best landing 
 				// points would be received when jumper has just reached landing
 				// position when he hits the ground.
-				this.jumperAngle += 2.4 * dt;
+				this.jumperAngle += Params.Jumper.angVelToLandingPosition * dt;
 			}
 			
 			$("#hint").innerHTML = d > 0 ? (d + " m") : "";

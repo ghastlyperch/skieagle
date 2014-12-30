@@ -9,6 +9,11 @@ var Params = {
 		landingTargetAngle: -15 * Math.PI/180,
 		angVelToFlyPosition: -2.4,
 		angVelToLandingPosition: 2.4
+	},
+
+	Wind: {
+		maxSpeed: 3,
+		maxChangePerSec: 0.3
 	}
 
 };

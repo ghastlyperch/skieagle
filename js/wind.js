@@ -1,7 +1,5 @@
 
 function Wind() {
-	this.MAX_WINDSPEED = 3;
-	this.MAX_CHANGE_PER_SEC = 0.3;
 	this.directionChangeTime = 0;
 	this.change = 0;
 	this.magnitude = 0
@@ -10,7 +8,7 @@ function Wind() {
 };
 
 Wind.prototype.reset = function() {
-	this.magnitude = Math.random() * 2 * this.MAX_WINDSPEED - this.MAX_WINDSPEED;
+	this.magnitude = Math.random() * 2 * Params.Wind.maxSpeed - Params.Wind.maxSpeed;
 	this.directionChangeTime = 0;
 	this.change = 0;
 };
@@ -19,8 +17,8 @@ Wind.prototype.update = function(dt) {
 	this.directionChangeTime -= dt;
 	if (this.directionChangeTime <= 0) {
 		this.directionChangeTime = Math.random() * 3 + 1;
-		this.change = Math.random() * 2 * this.MAX_CHANGE_PER_SEC - this.MAX_CHANGE_PER_SEC;
+		this.change = Math.random() * 2 * Params.Wind.maxChangePerSec - Params.Wind.maxChangePerSec;
 	}
 	this.magnitude += this.change * dt;
-	this.magnitude = THREE.Math.clamp(this.magnitude, -this.MAX_WINDSPEED, this.MAX_WINDSPEED);
+	this.magnitude = THREE.Math.clamp(this.magnitude, -Params.Wind.maxSpeed, Params.Wind.maxSpeed);
 };

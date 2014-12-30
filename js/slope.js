@@ -1,7 +1,6 @@
 
-function FISSlope(world, scene) {
+function FISSlope(world, scene, HS) {
 	var degToRad = 0.0174532925;
-	var HS = 100; // Hill size
 	var w = 0.885*HS+1.5;
 
 	var hn = 0.55 ; // Landing hill height-length ratio (to K point)

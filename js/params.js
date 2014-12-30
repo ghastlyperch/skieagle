@@ -1,5 +1,12 @@
 var Params = {
 
+	Slopes: {
+		"K80": 80,
+		"K100": 100,
+		"K120": 120,
+		"K200": 200
+	},
+
 	Jumper: {
 		height: 1.78,
 		mass: 65,

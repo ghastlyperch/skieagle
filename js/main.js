@@ -44,7 +44,13 @@ function init() {
 	wind = new Wind();
 	
 	// Create ramp
-	ramp = new FISSlope(world, scene);
+	var hillSize = 100;
+	var hillParam = window.location.search.substr(1);
+	if (Params.Slopes[hillParam]) {
+		hillSize = Params.Slopes[hillParam];
+		console.log("Hill " + hillParam + " with hill size " + hillSize);
+	}
+	ramp = new FISSlope(world, scene, hillSize);
 
 	// Create jumper
 	jumper = new Jumper(world, scene);

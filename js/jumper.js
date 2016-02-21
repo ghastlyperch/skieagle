@@ -20,6 +20,9 @@ function Jumper(world, scene) {
 	// Physical body
 	var jumperHeight = Params.Jumper.height;
 	var skiLength = Params.Jumper.skiLength;
+	this.angleAtLanding = 0;
+	this.minAngleAfterLanding = 0;
+	this.maxAngleAfterLanding = 0;
 	this.skiLength = skiLength;
 	this.skisShape = new p2.Rectangle(skiLength, 0.02);
 	this.skisShape.material = new p2.Material();
@@ -118,6 +121,7 @@ Jumper.prototype.action = function(pressed) {
 			this.landingStart = this.stateTime;
 			console.log("Landing started: " + this.landingStart);
 			this.jumperTargetAngle = Params.Jumper.landingTargetAngle;
+			console.log("Jumper angle: " + this.body.angle*180/Math.PI);
 			break;
 		case JumperState.LANDING:
 			break;
@@ -210,26 +214,16 @@ Jumper.prototype.update = function(dt) {
 					console.log("Landing time: " + landingTime);
 					this.landingPoints = 20 - Math.abs(optimalLandingTime - landingTime) * 50;
 					this.landingPoints = THREE.Math.clamp(this.landingPoints,4,20);
+					this.angleAtLanding = this.body.angle;
+					console.log('Angle at landing: ' + this.angleAtLanding);
+					this.minAngleAfterLanding = this.angleAtLanding;
+					this.maxAngleAfterLanding = this.angleAtLanding;
 					
 					if (this.landingPoints == 4) {
 						this.jumperAngle = -Math.PI/2;
 					}
-					
-					var commentStr = '';
-					
-					if (this.landingPoints == 4)
-					{
-						commentStr = 'Maybe you should try something else than skijumping';
-					} else if (optimalLandingTime - landingTime > 0) {
-						commentStr = 'Try starting landing a bit earlier';
-					} else if (optimalLandingTime - landingTime < 0) {
-						commentStr = 'You started your landing way too early';		
-					}else {
-						commentStr = 'The landing was spot on!';
-					}
-					console.log("Landing points: " + this.landingPoints);
 				}
-				$("#points").innerHTML = Math.round(this.landingPoints);
+				
 				$("#comments").innerHTML = commentStr;
 				this.changeState(JumperState.LANDING);
 			}
@@ -237,9 +231,47 @@ Jumper.prototype.update = function(dt) {
 		case JumperState.LANDING:
 			if (this.stateTime > 1.5) {
 				$("#hint").innerHTML = "";
+				
+				$("#points").innerHTML = Math.round(this.landingPoints);
 				$("#results").style.display = "block";
 				this.changeState(JumperState.LANDED);
 			}
+			
+			// Monitor jumper angle for 1 second after landing for sommersaults etc
+			if (this.stateTime < 1.0) {
+				if (this.minAngleAfterLanding > this.body.angle) {
+					this.minAngleAfterLanding = this.body.angle;
+				}
+				
+				if (this.maxAngleAfterLanding < this.body.angle) {
+					this.maxAngleAfterLanding = this.body.angle;
+				}	
+			} else {
+				
+				if (this.maxAngleAfterLanding > 0)
+					this.landingPoints = 4;
+				
+				if (this.minAngleAfterLanding < (-55*Math.PI/180.0) )
+					this.landingPoints = 4;
+				
+				var commentStr = '';
+				
+				if (this.landingPoints == 20) {
+					commentStr = 'Awesome landing!';
+				} else if (this.landingPoints > 18) {
+					commentStr = 'Great landing!';
+				} else if (this.landingPoints > 15) {
+					commentStr = 'Getting there.';
+				} else if (this.landingPoints > 10) {
+					commentStr = 'Some more practice needed...';
+				} else {
+					commentStr = 'Maybe you should try something else than skijumping';
+				}
+				
+				$("#comments").innerHTML = commentStr;
+			}
+			
+			
 			break;
 		case JumperState.LANDED:
 			this.body.damping = 0.4;

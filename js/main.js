@@ -121,6 +121,9 @@ function drawDebug() {
 	if (window.devicePixelRatio && window.devicePixelRatio !== 1)
 		msg += "DevicePixelRatio: " + window.devicePixelRatio + "\n";
 	$("#debugmsg").innerHTML = msg;
+	// Debug sliders
+	$("#debugparamlabel").innerHTML = $("#debugparam").value;
+	// something = window.parseFloat($("#debugparam").value);
 }
 
 var physicsStep = 1 / 60;

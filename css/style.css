@@ -90,9 +90,13 @@ canvas {
 	right: 10px;
 }
 
-#settings-icon {
-	font-size: 30px;
-	font-weight: bold;
+#fullscreen-container {
+	position: fixed;
+	top: 5px;
+	right: 50px;
+}
+
+.icon {
 	cursor: pointer;
 	float: right;
 }

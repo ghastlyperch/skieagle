@@ -1,5 +1,7 @@
 
 function initUI() {
+	$("#fullscreen-icon").addEventListener("click", toggleFullscreen, true);
+
 	$("#settings-icon").addEventListener("click", function(e) {
 		e.preventDefault();
 		var elem = $("#settings");
@@ -13,4 +15,21 @@ function initUI() {
 			records.save();
 		}
 	}, true);
+}
+
+function toggleFullscreen() {
+	if (!document.fullscreenElement && !document.mozFullScreenElement &&
+		!document.webkitFullscreenElement && !document.msFullscreenElement)
+	{
+		var d = document.documentElement;
+		if (d.requestFullscreen) d.requestFullscreen();
+		else if (d.msRequestFullscreen) d.msRequestFullscreen();
+		else if (d.mozRequestFullScreen) d.mozRequestFullScreen();
+		else if (d.webkitRequestFullscreen) d.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+	} else {
+		if (document.exitFullscreen) document.exitFullscreen();
+		else if (document.msExitFullscreen) document.msExitFullscreen();
+		else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+		else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+	}
 }

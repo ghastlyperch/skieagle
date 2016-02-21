@@ -106,9 +106,12 @@ canvas {
 	position: absolute;
 	left: 10px;
 	top: 10px;
-	white-space: pre;
 	font-size: 0.5em;
 	font-family: monospace;
+}
+
+#debugmsg {
+	white-space: pre;
 }
 
 #stats {

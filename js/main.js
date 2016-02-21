@@ -120,7 +120,7 @@ function drawDebug() {
 		msg += controller.motionDebug + "\n";
 	if (window.devicePixelRatio && window.devicePixelRatio !== 1)
 		msg += "DevicePixelRatio: " + window.devicePixelRatio + "\n";
-	$("#debug").innerHTML = msg;
+	$("#debugmsg").innerHTML = msg;
 }
 
 var physicsStep = 1 / 60;

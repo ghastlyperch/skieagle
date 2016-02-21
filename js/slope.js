@@ -147,9 +147,28 @@ function FISSlope(world, scene, HS) {
 
 	slope.fromPolygon(slopeProfile);
 
+	var debugGeo = new THREE.Geometry();
 	for (var i = 0; i < slope.shapes.length; ++i)
 	{
 		slope.shapes[i].material = new p2.Material();
+		// Collision mesh debug visualization
+		if (DEBUG) {
+			var offsetx = slope.position[0] + slope.shapeOffsets[i][0];
+			var offsety = slope.position[1] + slope.shapeOffsets[i][1];
+			for (var t = 0; t < slope.shapes[i].triangles.length; ++t) {
+				var tri = slope.shapes[i].triangles[t];
+				var v0 = slope.shapes[i].vertices[tri[0]];
+				var v1 = slope.shapes[i].vertices[tri[1]];
+				var v2 = slope.shapes[i].vertices[tri[2]];
+				debugGeo.vertices.push(
+					new THREE.Vector3(v0[0] + offsetx, v0[1] + offsety, 0),
+					new THREE.Vector3(v1[0] + offsetx, v1[1] + offsety, 0),
+					new THREE.Vector3(v2[0] + offsetx, v2[1] + offsety, 0)
+				);
+				var triIndex = debugGeo.vertices.length - 3;
+				debugGeo.faces.push(new THREE.Face3(triIndex, triIndex + 1, triIndex + 2));
+			}
+		}
 	}
 	this.body = slope;
 	world.addBody(this.body);
@@ -178,6 +197,15 @@ function FISSlope(world, scene, HS) {
 		map: renderer instanceof THREE.WebGLRenderer ? tex : null });
 	this.visual = new THREE.Mesh(new THREE.ShapeGeometry(visShape), material);
 	scene.add(this.visual);
+
+	// Activate collision mesh debug vis
+	if (DEBUG) {
+		debugGeo.computeBoundingSphere();
+		debugGeo.computeBoundingBox();
+		var debugVis = new THREE.Mesh(debugGeo, new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true }));
+		debugVis.position.z = 1;
+		scene.add(debugVis);
+	}
 
 	// Distance measuring function
 	this.getJumpedDistance = function(xCoord) { return xCoord; };

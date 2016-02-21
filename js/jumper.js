@@ -217,14 +217,20 @@ Jumper.prototype.update = function(dt) {
 			if (this.stateTime > 1 && this.isOnRamp()) {
 				records.add(d);
 				$("#topspeed").innerHTML = Math.round(jumper.topSpeed * 3.6) + " km/h";
-				if (this.landingStart > 0 && this.stateTime - this.landingStart > 0.050) {
-					var landingTime = this.stateTime - this.landingStart;
-					this.landingPoints = 12 + THREE.Math.clamp(landingTime * 80, 0, 8);
+				
+				// Time from initiating landing until hitting the slope
+				var landingTime = this.stateTime - this.landingStart;
+				var optimalLandingTime = 0.150; // TODO: Magic number, should be moved to parameter struct
+				if (this.landingStart > 0 && landingTime > 0.050) {
 					console.log("Landing time: " + landingTime);
+					this.landingPoints = 20 - Math.abs(optimalLandingTime - landingTime) * 50;
+					this.landingPoints = THREE.Math.clamp(this.landingPoints,4,20);
+					
+					if (this.landingPoints == 4) {
+						this.jumperAngle = -Math.PI/2;
+					}
+					
 					console.log("Landing points: " + this.landingPoints);
-				} else {
-					this.jumperAngle = -Math.PI/2;
-					this.landingPoints = 4;
 				}
 				$("#points").innerHTML = Math.round(this.landingPoints);
 				this.changeState(JumperState.LANDING);

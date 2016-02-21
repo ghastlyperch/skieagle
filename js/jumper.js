@@ -215,9 +215,22 @@ Jumper.prototype.update = function(dt) {
 						this.jumperAngle = -Math.PI/2;
 					}
 					
+					var commentStr = '';
+					
+					if (this.landingPoints == 4)
+					{
+						commentStr = 'Maybe you should try something else than skijumping';
+					} else if (optimalLandingTime - landingTime > 0) {
+						commentStr = 'Try starting landing a bit earlier';
+					} else if (optimalLandingTime - landingTime < 0) {
+						commentStr = 'You started your landing way too early';		
+					}else {
+						commentStr = 'The landing was spot on!';
+					}
 					console.log("Landing points: " + this.landingPoints);
 				}
 				$("#points").innerHTML = Math.round(this.landingPoints);
+				$("#comments").innerHTML = commentStr;
 				this.changeState(JumperState.LANDING);
 			}
 			break;

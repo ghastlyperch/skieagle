@@ -85,7 +85,7 @@ canvas {
 }
 
 #settings-container {
-	position: absolute;
+	position: fixed;
 	top: 5px;
 	right: 10px;
 }
@@ -103,7 +103,7 @@ canvas {
 
 #debug {
 	display: none;
-	position: absolute;
+	position: fixed;
 	left: 10px;
 	top: 10px;
 	font-size: 0.5em;

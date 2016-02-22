@@ -70,11 +70,10 @@ function FISSlope(world, scene, HS) {
 	var bY = uY-20;
 
 	// Profile generation
-	var slopeProfile = [];
+	var slopeProfile = []; // Only slope surface verts, no bottom stuff
 	var slope = new p2.Body();
 
 	// Landing hill transition segment
-	slopeProfile.push([uX+lOr,bY]);
 	slopeProfile.push([uX+lOr,uY]);
 	slopeProfile.push([uX, uY]);
 	var nIter = 20;
@@ -133,20 +132,8 @@ function FISSlope(world, scene, HS) {
 	var plateau = 6;
 	slopeProfile.push([topX, topY]); // Starting position
 	slopeProfile.push([topX - plateau, topY]); // Tiny plateau at top
-	slopeProfile.push([topX - plateau, bY]); // Left side vertical wall
-	var profileEnd = slopeProfile.length - 2;
 
-	nIter = 5;
-	xIncr = ((uX + lOr) - (E1x-(e1-l)*Math.cos(gamma)))/nIter;
-	xCur = (E1x-(e1-l)*Math.cos(gamma)) + xIncr;
-
-	for (var i = 0; i < nIter - 2;  ++i)
-	{
-		slopeProfile.push([xCur, bY]);
-		xCur += xIncr;
-	}
-
-	for (var i = 1; i < profileEnd; ++i) {
+	for (var i = 0; i < slopeProfile.length - 1; ++i) {
 		var a = slopeProfile[i];
 		var b = slopeProfile[i+1];
 		var vertices = [[a[0], bY], [a[0], a[1]], [b[0], b[1]], [b[0], bY]];
@@ -202,6 +189,17 @@ function FISSlope(world, scene, HS) {
 		if (i == 0) visShape.moveTo(x, y);
 		else visShape.lineTo(x, y);
 	}
+	// Bottom verts
+	visShape.lineTo(slopeProfile[slopeProfile.length - 1][0], bY); // Bottom-right corner
+	/*nIter = 5;
+	xIncr = ((uX + lOr) - (E1x-(e1-l)*Math.cos(gamma)))/nIter;
+	xCur = (E1x-(e1-l)*Math.cos(gamma)) + xIncr;
+	for (var i = 0; i < nIter - 2;  ++i)
+	{
+		visShape.lineTo(xCur, bY);
+		xCur += xIncr;
+	}*/
+	visShape.lineTo(slopeProfile[0][0], bY);
 	var tex = THREE.ImageUtils.loadTexture("assets/snow.png");
 	tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
 	tex.repeat.set(0.05, 0.05);

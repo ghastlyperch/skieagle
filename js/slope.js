@@ -134,6 +134,7 @@ function FISSlope(world, scene, HS) {
 	slopeProfile.push([topX, topY]); // Starting position
 	slopeProfile.push([topX - plateau, topY]); // Tiny plateau at top
 	slopeProfile.push([topX - plateau, bY]); // Left side vertical wall
+	var profileEnd = slopeProfile.length - 2;
 
 	nIter = 5;
 	xIncr = ((uX + lOr) - (E1x-(e1-l)*Math.cos(gamma)))/nIter;
@@ -145,7 +146,20 @@ function FISSlope(world, scene, HS) {
 		xCur += xIncr;
 	}
 
-	slope.fromPolygon(slopeProfile);
+	for (var i = 1; i < profileEnd; ++i) {
+		var a = slopeProfile[i];
+		var b = slopeProfile[i+1];
+		var vertices = [[a[0], bY], [a[0], a[1]], [b[0], b[1]], [b[0], bY]];
+		// This is rather ugly, but p2.js does not seem to work with absolute coordinates in shapes
+		var centerx = 0.25 * (vertices[0][0] + vertices[1][0] + vertices[2][0] + vertices[3][0]);
+		var centery = 0.25 * (vertices[0][1] + vertices[1][1] + vertices[2][1] + vertices[3][1]);
+		vertices[0] = [ vertices[0][0] - centerx, vertices[0][1] - centery ];
+		vertices[1] = [ vertices[1][0] - centerx, vertices[1][1] - centery ];
+		vertices[2] = [ vertices[2][0] - centerx, vertices[2][1] - centery ];
+		vertices[3] = [ vertices[3][0] - centerx, vertices[3][1] - centery ];
+        var slopeColumnShape = new p2.Convex(vertices);
+        slope.addShape(slopeColumnShape, [ centerx, centery ]);
+	}
 
 	var debugGeo = new THREE.Geometry();
 	for (var i = 0; i < slope.shapes.length; ++i)

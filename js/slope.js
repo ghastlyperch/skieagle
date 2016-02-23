@@ -137,7 +137,7 @@ function FISSlope(world, scene, HS) {
 	for (var i = 0; i < slopeProfile.length - 1; ++i) {
 		var a = slopeProfile[i];
 		var b = slopeProfile[i+1];
-		var vertices = [[a[0], a[1]-5], [a[0], a[1]], [b[0], b[1]], [b[0], b[1]-5]];
+		var vertices = [[a[0], a[1]-5], [a[0], a[1]], [b[0], b[1]-0.01], [b[0], b[1]-5]];
 		// This is rather ugly, but p2.js does not seem to work with absolute coordinates in shapes
 		var centerx = 0.25 * (vertices[0][0] + vertices[1][0] + vertices[2][0] + vertices[3][0]);
 		var centery = 0.25 * (vertices[0][1] + vertices[1][1] + vertices[2][1] + vertices[3][1]);

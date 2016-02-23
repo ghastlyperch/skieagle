@@ -225,25 +225,24 @@ function FISSlope(world, scene, HS) {
 	this.slopeProfile = slopeProfile.reverse();
 }
 
-FISSlope.prototype.getY = function(x) {
-	
-	var that = this;
-	
-	if (that.slopeProfile[0][0] > x)
-		return that.slopeProfile[0][1];
+FISSlope.prototype.getYandAngle = function(x) {
+
+	var yCoord = this.slopeProfile[0][1];
+	var slopeAngle = 0;
+	if (this.slopeProfile[0][0] > x)
+		return {y: yCoord, angle: 0};
 			
-	for (var k = 1; k < that.slopeProfile.length; ++k)
+	for (var k = 1; k < this.slopeProfile.length; ++k)
 	{
 		if (this.slopeProfile[k][0] > x) {
-			return that.slopeProfile[k][1] - (that.slopeProfile[k][0]-x)*(that.slopeProfile[k][1]-that.slopeProfile[k-1][1])/(that.slopeProfile[k][0]-that.slopeProfile[k-1][0]);
+			slopeAngle = (this.slopeProfile[k][1]-this.slopeProfile[k-1][1])/(this.slopeProfile[k][0]-this.slopeProfile[k-1][0])
+			yCoord = this.slopeProfile[k][1] - (this.slopeProfile[k][0]-x)*slopeAngle;
+			return {y: yCoord, angle: slopeAngle}
 		}
 	}	
-	return this.slopeProfile[this.slopeProfile.length - 1][1];
-}
-
-FISSlope.prototype.getAngle = function(x) {
+	yCoord = this.slopeProfile[that.slopeProfile.length - 1][1];
 	
-	return 0;
+	return {y: yCoord, angle: 0}
 }
 
 /*

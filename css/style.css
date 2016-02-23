@@ -121,7 +121,7 @@ canvas {
 	left: 35%;
 	bottom: 30%;
 	width: 30%;
-	height: 20px;
+	height: 30px;
 	padding: 5px;
 	background-color: rgba(0, 0, 0, 0.5);
 	border-radius: 10px;
@@ -149,6 +149,11 @@ canvas {
 	font-size: 1em;
 	font-weight: bold;
 	border-spacing: 20px 0px;
+}
+
+#comments {
+	padding-top: 20px;
+	font-size: 0.7em;
 }
 
 #settings-container {

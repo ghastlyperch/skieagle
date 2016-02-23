@@ -15,6 +15,45 @@ function initUI() {
 			records.save();
 		}
 	}, true);
+
+	function hideAllMenus() {
+		var divs = document.querySelectorAll(".menu");
+		for (var i = 0; i < divs.length; ++i)
+			divs[i].style.display = "none";
+	}
+
+	function startGame() {
+		hideAllMenus();
+		$("#menu-container").style.display = "none";
+		$("#hint").style.display = "block";
+	}
+
+	$("#btn-newgame").addEventListener("click", function(e) {
+		startGame();
+	}, true);
+
+	$("#btn-instructions").addEventListener("click", function(e) {
+		hideAllMenus();
+		$("#menu-instructions").style.display = "block";
+	}, true);
+
+	$("#btn-records").addEventListener("click", function(e) {
+		hideAllMenus();
+		$("#menu-records").style.display = "block";
+	}, true);
+
+	var backs = document.querySelectorAll(".btn-back");
+	for (var i = 0; i < backs.length; ++i) {
+		backs[i].addEventListener("click", function(e) {
+			hideAllMenus();
+			$("#menu-main").style.display = "block";
+		}, true);
+	}
+
+	$("#menu-main").style.display = "block";
+
+	if (DEBUG)
+		startGame();
 }
 
 function toggleFullscreen() {

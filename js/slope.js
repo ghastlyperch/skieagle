@@ -133,10 +133,11 @@ function FISSlope(world, scene, HS) {
 	slopeProfile.push([topX, topY]); // Starting position
 	slopeProfile.push([topX - plateau, topY]); // Tiny plateau at top
 
+	
 	for (var i = 0; i < slopeProfile.length - 1; ++i) {
 		var a = slopeProfile[i];
 		var b = slopeProfile[i+1];
-		var vertices = [[a[0], bY], [a[0], a[1]], [b[0], b[1]], [b[0], bY]];
+		var vertices = [[a[0], a[1]-5], [a[0], a[1]], [b[0], b[1]], [b[0], b[1]-5]];
 		// This is rather ugly, but p2.js does not seem to work with absolute coordinates in shapes
 		var centerx = 0.25 * (vertices[0][0] + vertices[1][0] + vertices[2][0] + vertices[3][0]);
 		var centery = 0.25 * (vertices[0][1] + vertices[1][1] + vertices[2][1] + vertices[3][1]);
@@ -221,8 +222,29 @@ function FISSlope(world, scene, HS) {
 
 	// Distance measuring function
 	this.getJumpedDistance = function(xCoord) { return xCoord; };
+	this.slopeProfile = slopeProfile.reverse();
 }
 
+FISSlope.prototype.getY = function(x) {
+	
+	var that = this;
+	
+	if (that.slopeProfile[0][0] > x)
+		return that.slopeProfile[0][1];
+			
+	for (var k = 1; k < that.slopeProfile.length; ++k)
+	{
+		if (this.slopeProfile[k][0] > x) {
+			return that.slopeProfile[k][1] - (that.slopeProfile[k][0]-x)*(that.slopeProfile[k][1]-that.slopeProfile[k-1][1])/(that.slopeProfile[k][0]-that.slopeProfile[k-1][0]);
+		}
+	}	
+	return this.slopeProfile[this.slopeProfile.length - 1][1];
+}
+
+FISSlope.prototype.getAngle = function(x) {
+	
+	return 0;
+}
 
 /*
 function TestSlope(world, scene) {

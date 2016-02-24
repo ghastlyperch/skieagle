@@ -24,7 +24,8 @@ function Jumper(world, scene) {
 	this.minAngleAfterLanding = 0;
 	this.maxAngleAfterLanding = 0;
 	this.skiLength = skiLength;
-	this.skisShape = new p2.Rectangle(skiLength, 0.02);
+	//this.skisShape = new p2.Rectangle(skiLength, 0.02);
+	this.skisShape = new p2.Capsule(skiLength, 0.03);
 	this.skisShape.material = new p2.Material();
 	this.jumperShape = new p2.Rectangle(0.5 * jumperHeight, jumperHeight);
 	this.jumperShape.material = new p2.Material();
@@ -41,11 +42,11 @@ function Jumper(world, scene) {
 	world.addBody(this.body);
 
 	// Visual representation
-	var skiGeometry = new THREE.PlaneGeometry(this.skisShape.width, 0.2);
+	var skiGeometry = new THREE.PlaneGeometry(skiLength, 0.2);
 	var skiMaterial = new THREE.MeshBasicMaterial({
 		map: THREE.ImageUtils.loadTexture("assets/ski.png"),
 		transparent: true
-		});
+	});
 	this.visual = new THREE.Object3D();
 	var skiMesh = new THREE.Mesh(skiGeometry, skiMaterial);
 	skiMesh.position.y = 0.1;

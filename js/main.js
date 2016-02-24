@@ -42,7 +42,7 @@ function init() {
 
 	// Create wind
 	wind = new Wind();
-	
+
 	// Create ramp
 	var hillSize = 100;
 	var hillParam = window.location.search.substr(1);
@@ -131,11 +131,13 @@ function drawDebug() {
 var physicsStep = 1 / 60;
 function render() {
 	var dt = clock.getDelta();
-	if (dt > 0.05) dt = 0.05; // No bigger deltas than 20 FPS
+	var clampDt = 0.05; // No bigger deltas than 20 FPS
+	if (dt > clampDt) dt = clampDt;
 	// Input
 	controller.poll(dt);
 	// Physics
-	world.step(physicsStep, dt * timeScale, 10);
+	var maxSubSteps = timeScale * Math.ceil(clampDt / physicsStep) + 2;
+	world.step(physicsStep, dt * timeScale, maxSubSteps);
 	jumper.update(dt);
 	wind.update(dt);
 	for (var i = 0; i < clouds.length; ++i) {

@@ -16,7 +16,7 @@ var PhysicsMode = {
 function Jumper(world, scene) {
 	// Physics solver mode
 	this.physicsMode = PhysicsMode.PARAMETRIC;
-	
+
 	// Physical body
 	var jumperHeight = Params.Jumper.height;
 	var skiLength = Params.Jumper.skiLength;
@@ -112,7 +112,7 @@ Jumper.prototype.action = function(pressed) {
 				this.body.velocity[1] = this.charge * Params.Jumper.takeoffStr;
 				// Set target body angle while flying based on jump timing
 				// TODO: find out optimum angle and replace 85 with it.
-				this.jumperTargetAngle = 0.01 * this.charge * Params.Jumper.takeoffTargetAngle; 
+				this.jumperTargetAngle = 0.01 * this.charge * Params.Jumper.takeoffTargetAngle;
 				this.body.angle = 0;
 				this.changeState(JumperState.FLYING);
 			}
@@ -188,7 +188,7 @@ Jumper.prototype.update = function(dt) {
 			$("#power-container").style.display = "none";
 			// Round to nearest 0.5m like in real ski jumping
 			var d = Number(Math.round((this.body.position[0]*2))/2).toFixed(1);
-			
+
 			// Jumper angle control, angles are both negative
 			if (this.landingStart == 0 && this.jumperAngle > this.jumperTargetAngle)
 			{
@@ -196,17 +196,17 @@ Jumper.prototype.update = function(dt) {
 			}
 			else if (this.landingStart > 0 && this.jumperAngle < this.jumperTargetAngle)
 			{
-				// TODO: Speed should be determined so that player best landing 
+				// TODO: Speed should be determined so that player best landing
 				// points would be received when jumper has just reached landing
 				// position when he hits the ground.
 				this.jumperAngle += Params.Jumper.angVelToLandingPosition * dt;
 			}
-			
+
 			$("#hint").innerHTML = d > 0 ? (d + " m") : "";
 			if (this.stateTime > 1 && this.isOnRamp()) {
 				records.add(d);
 				$("#topspeed").innerHTML = Math.round(jumper.topSpeed * 3.6) + " km/h";
-				
+
 				// Time from initiating landing until hitting the slope
 				var landingTime = this.stateTime - this.landingStart;
 				var optimalLandingTime = 0.150; // TODO: Magic number, should be moved to parameter struct
@@ -218,12 +218,12 @@ Jumper.prototype.update = function(dt) {
 					console.log('Angle at landing: ' + this.angleAtLanding);
 					this.minAngleAfterLanding = this.angleAtLanding;
 					this.maxAngleAfterLanding = this.angleAtLanding;
-					
+
 					if (this.landingPoints == 4) {
 						this.jumperAngle = -Math.PI/2;
 					}
 				}
-				
+
 				$("#comments").innerHTML = commentStr;
 				this.changeState(JumperState.LANDING);
 			}
@@ -231,31 +231,31 @@ Jumper.prototype.update = function(dt) {
 		case JumperState.LANDING:
 			if (this.stateTime > 1.5) {
 				$("#hint").innerHTML = "";
-				
+
 				$("#points").innerHTML = Math.round(this.landingPoints);
 				$("#results").style.display = "block";
 				this.changeState(JumperState.LANDED);
 			}
-			
+
 			// Monitor jumper angle for 1 second after landing for sommersaults etc
 			if (this.stateTime < 1.0) {
 				if (this.minAngleAfterLanding > this.body.angle) {
 					this.minAngleAfterLanding = this.body.angle;
 				}
-				
+
 				if (this.maxAngleAfterLanding < this.body.angle) {
 					this.maxAngleAfterLanding = this.body.angle;
-				}	
+				}
 			} else {
-				
+
 				if (this.maxAngleAfterLanding > 0)
 					this.landingPoints = 4;
-				
+
 				if (this.minAngleAfterLanding < (-55*Math.PI/180.0) )
 					this.landingPoints = 4;
-				
+
 				var commentStr = '';
-				
+
 				if (this.landingPoints == 20) {
 					commentStr = 'Awesome landing!';
 				} else if (this.landingPoints > 18) {
@@ -267,11 +267,11 @@ Jumper.prototype.update = function(dt) {
 				} else {
 					commentStr = 'Maybe you should try something else than skijumping';
 				}
-				
+
 				$("#comments").innerHTML = commentStr;
 			}
-			
-			
+
+
 			break;
 		case JumperState.LANDED:
 			this.body.damping = 0.4;
@@ -279,9 +279,9 @@ Jumper.prototype.update = function(dt) {
 		default:
 			throw "Unknown state " + this.state;
 	}
-	this.visual.position.x = this.body.position[0];
-	this.visual.position.y = this.body.position[1];
-	this.visual.rotation.z = this.body.angle;
+	this.visual.position.x = this.body.interpolatedPosition[0];
+	this.visual.position.y = this.body.interpolatedPosition[1];
+	this.visual.rotation.z = this.body.interpolatedAngle;
 	this.visual.children[1].rotation.z = this.jumperAngle;
 }
 
@@ -298,16 +298,16 @@ Jumper.prototype.physics = function() {
 	// Jumper airspeed
 	var vX = this.body.velocity[0] + wind.magnitude;
 	var vY = this.body.velocity[1];
-	
+
 	// Square of velocity
 	var vSqr = vX*vX; // + vY*vY TODO: fix
-		
+
 	// Air density [kg/m^3]
 	var rho = 1.315
-	
+
 	var liftForce = 0;
 	var dragForce = 0;
-	
+
 	switch (this.physicsMode)
 	{
 		case PhysicsMode.PARAMETRIC:
@@ -315,17 +315,17 @@ Jumper.prototype.physics = function() {
 			var beta = 9.5 * Math.PI/180; // Body-to-ski
 			var gamma = 160 * Math.PI/180; // Hip angle
 			var alpha = (Math.PI/2 - (-this.jumperAngle))*180/Math.PI; //35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
-			
-			// These numbers are valid for constant beta and gamma 
+
+			// These numbers are valid for constant beta and gamma
 			var L = -0.43903 + 0.060743*alpha - 7.192e-4*alpha*alpha
 			var D = -0.032061 + 0.01232*alpha + 2.283e-4*alpha*alpha
 			//var L_b = -0.645718+0.0126185*beta-3.348e-4*beta*beta;
 			//var D_b = 0.408435 + 0.012364*beta+3.9308e-5*beta*beta;
-					
+
 			liftForce = rho/2*L*vSqr;
 			dragForce = rho/2*D*vSqr;
 		break;
-		
+
 		case PhysicsMode.SIMPLE_LIFTDRAG:
 			// Lift and drag coefficients
 			var cD = 0.1;
@@ -341,19 +341,19 @@ Jumper.prototype.physics = function() {
 
 			// Lift (only y)
 			var lY = 0.5*rho*cL*aX*vX*vX;
-			
+
 			if (vX > 0) dX *= -1;
 			if (vY > 0) dY *= -1;
 			liftForce = lY + dY;
 			dragForce = dX;
 		break;
-		
+
 		default:
 			throw "Unknown physics mode " + this.physicsMode
 		break;
-		
+
 	}
-	
+
 	this.body.setZeroForce();
 	this.forces = [-dragForce, liftForce];
 	this.body.applyForce(this.forces, this.body.position);

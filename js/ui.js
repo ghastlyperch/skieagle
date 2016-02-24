@@ -32,23 +32,12 @@ function initUI() {
 		startGame();
 	}, true);
 
-	$("#btn-instructions").addEventListener("click", function(e) {
+	window.addEventListener("hashchange", function(e) {
+		if (window.location.hash.length < 2)
+			return;
 		hideAllMenus();
-		$("#menu-instructions").style.display = "block";
+		$("#menu-" + window.location.hash.substr(1)).style.display = "block";
 	}, true);
-
-	$("#btn-records").addEventListener("click", function(e) {
-		hideAllMenus();
-		$("#menu-records").style.display = "block";
-	}, true);
-
-	var backs = document.querySelectorAll(".btn-back");
-	for (var i = 0; i < backs.length; ++i) {
-		backs[i].addEventListener("click", function(e) {
-			hideAllMenus();
-			$("#menu-main").style.display = "block";
-		}, true);
-	}
 
 	$("#menu-main").style.display = "block";
 

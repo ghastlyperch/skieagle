@@ -28,9 +28,19 @@ function initUI(showMainMenu) {
 		if (hash.length < 2 || hash.contains("#debug"))
 			return;
 		hideAllMenus();
-		var menudiv = $("#menu-" + hash.substr(1));
-		if (menudiv) menudiv.style.display = "block";
-		else $("#menu-main").style.display = "block";
+		if (hash.startsWith("#records-")) {
+			console.log(hill);
+			var hill = hash.substr(9);
+			var rec = new Records(hill);
+			$("#hillname").innerHTML = hill;
+			$("#dailyrecord").innerHTML = rec.records.daily.distance + " m";
+			$("#alltimerecord").innerHTML = rec.records.allTime.distance + " m";
+			$("#menu-hillrecords").style.display = "block";
+		} else {
+			var menudiv = $("#menu-" + hash.substr(1));
+			if (menudiv) menudiv.style.display = "block";
+			else $("#menu-main").style.display = "block";
+		}
 	}
 
 	window.addEventListener("hashchange", handleHash, true);

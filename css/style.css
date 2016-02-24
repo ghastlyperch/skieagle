@@ -157,6 +157,14 @@ canvas {
 	border-spacing: 20px 0px;
 }
 
+#menu-hillrecords table {
+	max-width: 600px;
+	margin-bottom: 30px;
+	font-size: 1em;
+	font-weight: bold;
+	border-spacing: 20px 0px;
+}
+
 #comments {
 	padding-top: 20px;
 	font-size: 0.7em;

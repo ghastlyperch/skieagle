@@ -294,6 +294,12 @@ Jumper.prototype.isOnRamp = function() {
 	return false;
 };
 
+// This is called for each physics fixed step the physics engine makes
+Jumper.prototype.substep = function() {
+	if (this.state == JumperState.FLYING)
+		this.physics();
+};
+
 Jumper.prototype.physics = function() {
 	// Jumper airspeed
 	var vX = this.body.velocity[0] + wind.magnitude;

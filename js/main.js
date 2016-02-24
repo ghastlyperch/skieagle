@@ -39,6 +39,9 @@ function init() {
 	});
 	world.solver.iterations = 20;
 	world.solver.frictionIterations = 10;
+	world.on("postStep", function() {
+		jumper.substep();
+	});
 
 	// Create wind
 	wind = new Wind();

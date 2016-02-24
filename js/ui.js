@@ -1,5 +1,5 @@
 
-function initUI() {
+function initUI(showMainMenu) {
 	$("#fullscreen-icon").addEventListener("click", toggleFullscreen, true);
 
 	$("#settings-icon").addEventListener("click", function(e) {
@@ -22,27 +22,30 @@ function initUI() {
 			divs[i].style.display = "none";
 	}
 
-	function startGame() {
+
+	function hideMenu() {
 		hideAllMenus();
 		$("#menu-container").style.display = "none";
 		$("#hint").style.display = "block";
 	}
 
-	$("#btn-newgame").addEventListener("click", function(e) {
-		startGame();
-	}, true);
-
-	window.addEventListener("hashchange", function(e) {
-		if (window.location.hash.length < 2)
+	function handleHash() {
+		var hash = window.location.hash;
+		if (hash.length < 2 || hash.contains("#debug"))
 			return;
 		hideAllMenus();
-		$("#menu-" + window.location.hash.substr(1)).style.display = "block";
-	}, true);
+		$("#menu-" + hash.substr(1)).style.display = "block";
+	}
 
-	$("#menu-main").style.display = "block";
+	window.addEventListener("hashchange", handleHash, true);
 
-	if (DEBUG)
-		startGame();
+	if (!showMainMenu || DEBUG) {
+		hideMenu();
+	} else {
+		if (window.location.hash.length < 2)
+			$("#menu-main").style.display = "block";
+		else handleHash();
+	}
 }
 
 function toggleFullscreen() {

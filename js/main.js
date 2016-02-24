@@ -10,7 +10,14 @@ var viewportWidth = 80; // meters
 var aspect;
 
 function init() {
-	initUI();
+	var hillSize = 100;
+	var hillParam = window.location.search.substr(1);
+	if (Params.Slopes[hillParam]) {
+		hillSize = Params.Slopes[hillParam];
+		console.log("Hill " + hillParam + " with hill size " + hillSize);
+		initUI(false);
+	} else initUI(true);
+
 	records = new Records(0);
 	//camera = new THREE.OrthographicCamera(window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000);
 	camera = new THREE.OrthographicCamera(-50, 50, 50, -50, 1, 1000);
@@ -47,12 +54,6 @@ function init() {
 	wind = new Wind();
 
 	// Create ramp
-	var hillSize = 100;
-	var hillParam = window.location.search.substr(1);
-	if (Params.Slopes[hillParam]) {
-		hillSize = Params.Slopes[hillParam];
-		console.log("Hill " + hillParam + " with hill size " + hillSize);
-	}
 	ramp = new FISSlope(world, scene, hillSize);
 
 	// Create jumper

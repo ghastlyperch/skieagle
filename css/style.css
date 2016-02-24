@@ -162,25 +162,15 @@ canvas {
 	font-size: 0.7em;
 }
 
-#settings-container {
+#fullscreen-container {
 	position: fixed;
 	top: 5px;
 	right: 10px;
 }
 
-#fullscreen-container {
-	position: fixed;
-	top: 5px;
-	right: 50px;
-}
-
 .icon {
 	cursor: pointer;
 	float: right;
-}
-
-#settings {
-	display: none;
 }
 
 #debug {

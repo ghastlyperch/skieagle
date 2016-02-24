@@ -2,12 +2,6 @@
 function initUI(showMainMenu) {
 	$("#fullscreen-icon").addEventListener("click", toggleFullscreen, true);
 
-	$("#settings-icon").addEventListener("click", function(e) {
-		e.preventDefault();
-		var elem = $("#settings");
-		elem.style.display = (elem.style.display != "none" ? "none" : "block");
-	}, true);
-
 	$("#reset-records").addEventListener("click", function(e) {
 		e.preventDefault();
 		if (confirm("Are you sure you want to erase all records?")) {
@@ -34,7 +28,9 @@ function initUI(showMainMenu) {
 		if (hash.length < 2 || hash.contains("#debug"))
 			return;
 		hideAllMenus();
-		$("#menu-" + hash.substr(1)).style.display = "block";
+		var menudiv = $("#menu-" + hash.substr(1));
+		if (menudiv) menudiv.style.display = "block";
+		else $("#menu-main").style.display = "block";
 	}
 
 	window.addEventListener("hashchange", handleHash, true);

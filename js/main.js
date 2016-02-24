@@ -12,13 +12,15 @@ var aspect;
 function init() {
 	var hillSize = 100;
 	var hillParam = window.location.search.substr(1);
+	var recordPrefix = "0";
 	if (Params.Slopes[hillParam]) {
+		recordPrefix = hillParam;
 		hillSize = Params.Slopes[hillParam];
 		console.log("Hill " + hillParam + " with hill size " + hillSize);
 		initUI(false);
 	} else initUI(true);
 
-	records = new Records(0);
+	records = new Records(recordPrefix);
 	//camera = new THREE.OrthographicCamera(window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000);
 	camera = new THREE.OrthographicCamera(-50, 50, 50, -50, 1, 1000);
 	camera.position.set(0, 0, 100);

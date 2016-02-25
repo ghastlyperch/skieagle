@@ -280,12 +280,6 @@ Jumper.prototype.isOnRamp = function() {
 	return this.pBody.onRamp();
 };
 
-// This is called for each physics fixed step the physics engine makes
-Jumper.prototype.substep = function() {
-	if (this.state == JumperState.FLYING)
-		this.physics();
-};
-
 Jumper.prototype.physics = function() {
 	// Jumper airspeed
 	// TODO: putting velocities to zero here seems to give quite nice results - tuning needed !??

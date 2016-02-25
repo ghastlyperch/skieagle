@@ -120,6 +120,7 @@ function render() {
 	var dt = clock.getDelta();
 	var clampDt = 0.05; // No bigger deltas than 20 FPS
 	if (dt > clampDt) dt = clampDt;
+	dt *= timeScale;
 	// Input
 	controller.poll(dt);
 	// Physics

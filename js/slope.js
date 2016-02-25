@@ -188,7 +188,7 @@ FISSlope.prototype.getYandAngle = function(x) {
 			return {y: yCoord, angle: slopeAngle}
 		}
 	}
-	yCoord = this.slopeProfile[that.slopeProfile.length - 1][1];
+	yCoord = this.slopeProfile[this.slopeProfile.length - 1][1];
 
 	return {y: yCoord, angle: 0}
 }

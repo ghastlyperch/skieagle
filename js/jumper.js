@@ -32,14 +32,8 @@ function Jumper(world, scene) {
 
 	this.jumperTargetAngle = 0;
 	this.landingStart = 0;
-	this.body = new p2.Body({
-		mass: Params.Jumper.mass,
-		damping: 0, // 0.1 is p2's default
-		angularDamping: 0.1 // 0.1 is p2's default
-	});
-	this.body.addShape(this.skisShape);
-	//this.body.addShape(this.jumperShape, [0, jumperHeight * 0.5]);
-	world.addBody(this.body);
+
+	this.pBody = new PhysicsObject(Params.Jumper.mass,0,0,ramp);
 
 	// Visual representation
 	var skiGeometry = new THREE.PlaneGeometry(skiLength, 0.2);
@@ -72,12 +66,13 @@ Jumper.prototype.reset = function() {
 	this.speed = 0;
 	this.topSpeed = 0;
 	this.forces = [0, 0];
-	this.body.sleep();
+	this.pBody.sleep();
 	var slopeStartingPos = ramp.startingPosition;
-	this.body.damping = 0;
-	this.body.position[0] = slopeStartingPos[0];
-	this.body.position[1] = slopeStartingPos[1];
-	this.body.angle = 0;
+	this.pBody.x = slopeStartingPos[0];
+	this.pBody.y = slopeStartingPos[1];
+	this.pBody.vX = 0; this.pBody.vY = 0;
+	this.pBody.aX = 0; this.pBody.aY = 0;
+	this.pBody.friction = 0.01;
 	this.jumperAngle = -10 * Math.PI / 180;
 	this.landingStart = 0;
 	this.landingPoints = 0;
@@ -98,23 +93,25 @@ Jumper.prototype.action = function(pressed) {
 		case JumperState.WAITING:
 			if (!pressed) break;
 			this.changeState(JumperState.SLIDING);
-			this.body.wakeUp();
+			this.pBody.wakeUp();
 			$("#hint").innerHTML = "";
 			$("#results").style.display = "none";
 			break;
 		case JumperState.SLIDING:
-			if (pressed && this.isOnRamp() && this.body.position[0] > -80) { // TODO: Right amount of x
+			if (pressed && this.isOnRamp() && this.pBody.x > -80) { // TODO: Right amount of x
 				this.changeState(JumperState.JUMPING);
 				$("#power-container").style.display = "block";
 			}
 			break;
 		case JumperState.JUMPING:
 			if (!pressed && this.isOnRamp()) {
-				this.body.velocity[1] = this.charge * Params.Jumper.takeoffStr;
+				this.pBody.vY = this.charge * Params.Jumper.takeoffStr;
+				console.log('Takeoff velocity: ' + this.charge * Params.Jumper.takeoffStr)
+				console.log('Net y-velocity: ' + this.pBody.vY);
 				// Set target body angle while flying based on jump timing
 				// TODO: find out optimum angle and replace 85 with it.
 				this.jumperTargetAngle = 0.01 * this.charge * Params.Jumper.takeoffTargetAngle;
-				this.body.angle = 0;
+				this.pBody.theta = 0;
 				this.changeState(JumperState.FLYING);
 			}
 			break;
@@ -122,7 +119,7 @@ Jumper.prototype.action = function(pressed) {
 			this.landingStart = this.stateTime;
 			console.log("Landing started: " + this.landingStart);
 			this.jumperTargetAngle = Params.Jumper.landingTargetAngle;
-			console.log("Jumper angle: " + this.body.angle*180/Math.PI);
+			console.log("Jumper angle: " + this.pBody.theta*180/Math.PI);
 			break;
 		case JumperState.LANDING:
 			break;
@@ -161,7 +158,7 @@ Jumper.prototype.steer = function(steer) {
 
 Jumper.prototype.update = function(dt) {
 	this.stateTime += dt;
-	var vx = this.body.velocity[0], vy = this.body.velocity[1];
+	var vx = this.pBody.vX, vy = this.pBody.vY;
 	this.speed = Math.sqrt(vx*vx + vy*vy);
 	if (this.speed > this.topSpeed)
 		this.topSpeed = this.speed;
@@ -170,9 +167,11 @@ Jumper.prototype.update = function(dt) {
 		case JumperState.WAITING:
 			break;
 		case JumperState.SLIDING:
-			if (this.body.position[0] > -80) // TODO: Right amount of x
+
+			if (this.pBody.x > -80) // TODO: Right amount of x
 				$("#hint").innerHTML = "Hold to charge jump";
-			if (this.body.position[0] > 1) {
+
+			if (this.pBody.x[0] > 1) {
 				this.changeState(JumperState.FLYING);
 			}
 			break;
@@ -180,7 +179,8 @@ Jumper.prototype.update = function(dt) {
 			$("#hint").innerHTML = "Release to jump!";
 			this.charge = (this.charge + (80 * dt)) % 100;
 			$("#power-bar").style.width = Math.round(this.charge) + "%";
-			if (this.body.position[0] > 1) {
+
+			if (this.pBody.x > 1) {
 				this.changeState(JumperState.FLYING);
 			}
 			break;
@@ -188,8 +188,7 @@ Jumper.prototype.update = function(dt) {
 			this.physics();
 			$("#power-container").style.display = "none";
 			// Round to nearest 0.5m like in real ski jumping
-			var d = Number(Math.round((this.body.position[0]*2))/2).toFixed(1);
-
+			var d = Number(Math.round((this.pBody.x*2))/2).toFixed(1);
 			// Jumper angle control, angles are both negative
 			if (this.landingStart == 0 && this.jumperAngle > this.jumperTargetAngle)
 			{
@@ -215,7 +214,7 @@ Jumper.prototype.update = function(dt) {
 					console.log("Landing time: " + landingTime);
 					this.landingPoints = 20 - Math.abs(optimalLandingTime - landingTime) * 50;
 					this.landingPoints = THREE.Math.clamp(this.landingPoints,4,20);
-					this.angleAtLanding = this.body.angle;
+					this.angleAtLanding = this.pBody.theta;
 					console.log('Angle at landing: ' + this.angleAtLanding);
 					this.minAngleAfterLanding = this.angleAtLanding;
 					this.maxAngleAfterLanding = this.angleAtLanding;
@@ -240,12 +239,11 @@ Jumper.prototype.update = function(dt) {
 
 			// Monitor jumper angle for 1 second after landing for sommersaults etc
 			if (this.stateTime < 1.0) {
-				if (this.minAngleAfterLanding > this.body.angle) {
-					this.minAngleAfterLanding = this.body.angle;
+				if (this.minAngleAfterLanding > this.pBody.theta) {
+					this.minAngleAfterLanding = this.pBody.theta;
 				}
-
-				if (this.maxAngleAfterLanding < this.body.angle) {
-					this.maxAngleAfterLanding = this.body.angle;
+				if (this.maxAngleAfterLanding < this.pBody.theta) {
+					this.maxAngleAfterLanding = this.pBody.theta;
 				}
 			} else {
 
@@ -271,28 +269,21 @@ Jumper.prototype.update = function(dt) {
 
 				$("#comments").innerHTML = commentStr;
 			}
-
-
 			break;
 		case JumperState.LANDED:
-			this.body.damping = 0.4;
+			this.pBody.friction = 0.8;
 			break;
 		default:
 			throw "Unknown state " + this.state;
 	}
-	this.visual.position.x = this.body.interpolatedPosition[0];
-	this.visual.position.y = this.body.interpolatedPosition[1];
-	this.visual.rotation.z = this.body.interpolatedAngle;
+	this.visual.position.x = this.pBody.x;
+	this.visual.position.y = this.pBody.y;
+	this.visual.rotation.z = this.pBody.theta;
 	this.visual.children[1].rotation.z = this.jumperAngle;
 }
 
 Jumper.prototype.isOnRamp = function() {
-	for (var i = 0; i < world.narrowphase.contactEquations.length; i++) {
-		var c = world.narrowphase.contactEquations[i];
-		if (c.bodyA === this.body || c.bodyB === this.body)
-			return true;
-	}
-	return false;
+	return this.pBody.onRamp();
 };
 
 // This is called for each physics fixed step the physics engine makes
@@ -303,8 +294,9 @@ Jumper.prototype.substep = function() {
 
 Jumper.prototype.physics = function() {
 	// Jumper airspeed
-	var vX = this.body.velocity[0] + wind.magnitude;
-	var vY = this.body.velocity[1];
+	// TODO: putting velocities to zero here seems to give quite nice results - tuning needed !??
+	var vX = this.pBody.vX;
+	var vY = this.pBody.vY;
 
 	// Square of velocity
 	var vSqr = vX*vX; // + vY*vY TODO: fix
@@ -361,7 +353,6 @@ Jumper.prototype.physics = function() {
 
 	}
 
-	this.body.setZeroForce();
 	this.forces = [-dragForce, liftForce];
-	this.body.applyForce(this.forces, this.body.position);
+	this.pBody.applyForce(-dragForce, liftForce);
 };

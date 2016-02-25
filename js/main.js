@@ -108,11 +108,12 @@ function drawDebug() {
 	var msg = "";
 	if (!(renderer instanceof THREE.WebGLRenderer))
 		msg += "Fallback renderer\n";
-	msg += "Position: " + (jumper.body.position[0]|0) + ", " + (jumper.body.position[1]|0) + "\n";
-	msg += "Jumper y interp: " + ramp.getYandAngle(jumper.body.position[0]).y + "\n";
-	msg += "Jumper angle interp: " + Math.atan(ramp.getYandAngle(jumper.body.position[0]).angle)*180/Math.PI + "\n";
+	msg += "Position: " + (jumper.pBody.x|0) + ", " + (jumper.pBody.y|0) + "\n";
+	msg += "Jumper y interp: " + ramp.getYandAngle(jumper.pBody.x).y + "\n";
+	msg += "Jumper angle interp: " + Math.atan(ramp.getYandAngle(jumper.pBody.x).angle)*180/Math.PI + "\n";
+	msg += "pBody onRamp(): " + jumper.pBody.onRamp() + "\n";
 	msg += "Speed: " + Math.round(jumper.speed) + " m/s = " + Math.round(jumper.speed * 3.6) + " km/h\n";
-	msg += "Angles: " + (jumper.body.angle * 57.2957795).toFixed(1) + "&deg;, " + (jumper.jumperAngle * 57.2957795).toFixed(1) + "&deg;\n";
+	msg += "Angles: " + (jumper.pBody.theta * 57.2957795).toFixed(1) + "&deg;, " + (jumper.jumperAngle * 57.2957795).toFixed(1) + "&deg;\n";
 	msg += "Forces: " + jumper.forces[0].toFixed(1) + ", " + jumper.forces[1].toFixed(1) + "\n";
 	msg += "Wind: " + wind.magnitude.toFixed(1) + "\n";
 	for (var s in JumperState)
@@ -135,7 +136,7 @@ function render() {
 	// Input
 	controller.poll(dt);
 	// Physics
-	world.step(physicsStep, dt * timeScale, 10);
+	jumper.pBody.step(physicsStep);
 	jumper.update(dt);
 	wind.update(dt);
 	for (var i = 0; i < clouds.length; ++i) {

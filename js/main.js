@@ -42,16 +42,6 @@ function init() {
 	window.addEventListener('resize', resize, false);
 	resize();
 
-	// Create a world
-	world = new p2.World({
-		gravity : [0, -9.81],
-	});
-	world.solver.iterations = 20;
-	world.solver.frictionIterations = 10;
-	world.on("postStep", function() {
-		jumper.substep();
-	});
-
 	// Create wind
 	wind = new Wind();
 
@@ -61,15 +51,6 @@ function init() {
 	// Create jumper
 	jumper = new Jumper(world, scene);
 	controller = new Controller(jumper);
-
-	// When the materials of the plane and the first circle meet, they should yield
-	// a contact friction specified. We tell p2 this by creating a ContactMaterial.
-	for (var i = 0; i < ramp.body.shapes.length; ++i)
-	{
-		world.addContactMaterial(
-			new p2.ContactMaterial(ramp.body.shapes[i].material, jumper.skisShape.material, {friction : 0.0})
-			);
-	}
 
 	// Some clouds
 	var cloudGeo = new THREE.PlaneGeometry(20, 20);

@@ -71,7 +71,6 @@ function FISSlope(world, scene, HS) {
 
 	// Profile generation
 	var slopeProfile = []; // Only slope surface verts, no bottom stuff
-	var slope = new p2.Body();
 
 	// Landing hill transition segment
 	slopeProfile.push([uX+lOr,uY]);
@@ -133,48 +132,6 @@ function FISSlope(world, scene, HS) {
 	slopeProfile.push([topX, topY]); // Starting position
 	slopeProfile.push([topX - plateau, topY]); // Tiny plateau at top
 
-	
-	for (var i = 0; i < slopeProfile.length - 1; ++i) {
-		var a = slopeProfile[i];
-		var b = slopeProfile[i+1];
-		var vertices = [[a[0], a[1]-5], [a[0], a[1]], [b[0], b[1]-0.01], [b[0], b[1]-5]];
-		// This is rather ugly, but p2.js does not seem to work with absolute coordinates in shapes
-		var centerx = 0.25 * (vertices[0][0] + vertices[1][0] + vertices[2][0] + vertices[3][0]);
-		var centery = 0.25 * (vertices[0][1] + vertices[1][1] + vertices[2][1] + vertices[3][1]);
-		vertices[0] = [ vertices[0][0] - centerx, vertices[0][1] - centery ];
-		vertices[1] = [ vertices[1][0] - centerx, vertices[1][1] - centery ];
-		vertices[2] = [ vertices[2][0] - centerx, vertices[2][1] - centery ];
-		vertices[3] = [ vertices[3][0] - centerx, vertices[3][1] - centery ];
-        var slopeColumnShape = new p2.Convex(vertices);
-        slope.addShape(slopeColumnShape, [ centerx, centery ]);
-	}
-
-	var debugGeo = new THREE.Geometry();
-	for (var i = 0; i < slope.shapes.length; ++i)
-	{
-		slope.shapes[i].material = new p2.Material();
-		// Collision mesh debug visualization
-		if (DEBUG) {
-			var offsetx = slope.position[0] + slope.shapeOffsets[i][0];
-			var offsety = slope.position[1] + slope.shapeOffsets[i][1];
-			for (var t = 0; t < slope.shapes[i].triangles.length; ++t) {
-				var tri = slope.shapes[i].triangles[t];
-				var v0 = slope.shapes[i].vertices[tri[0]];
-				var v1 = slope.shapes[i].vertices[tri[1]];
-				var v2 = slope.shapes[i].vertices[tri[2]];
-				debugGeo.vertices.push(
-					new THREE.Vector3(v0[0] + offsetx, v0[1] + offsety, 0),
-					new THREE.Vector3(v1[0] + offsetx, v1[1] + offsety, 0),
-					new THREE.Vector3(v2[0] + offsetx, v2[1] + offsety, 0)
-				);
-				var triIndex = debugGeo.vertices.length - 3;
-				debugGeo.faces.push(new THREE.Face3(triIndex, triIndex + 1, triIndex + 2));
-			}
-		}
-	}
-	this.body = slope;
-	world.addBody(this.body);
-
 	// Calculate starting point for jumper and slope extents
 	this.startingPosition = [topX + 5, topY - 2];
 	this.minX = topX - plateau;
@@ -211,15 +168,6 @@ function FISSlope(world, scene, HS) {
 	this.visual = new THREE.Mesh(new THREE.ShapeGeometry(visShape), material);
 	scene.add(this.visual);
 
-	// Activate collision mesh debug vis
-	if (DEBUG) {
-		debugGeo.computeBoundingSphere();
-		debugGeo.computeBoundingBox();
-		var debugVis = new THREE.Mesh(debugGeo, new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true }));
-		debugVis.position.z = 1;
-		scene.add(debugVis);
-	}
-
 	// Distance measuring function
 	this.getJumpedDistance = function(xCoord) { return xCoord; };
 	this.slopeProfile = slopeProfile.reverse();
@@ -231,7 +179,7 @@ FISSlope.prototype.getYandAngle = function(x) {
 	var slopeAngle = 0;
 	if (this.slopeProfile[0][0] > x)
 		return {y: yCoord, angle: 0};
-			
+
 	for (var k = 1; k < this.slopeProfile.length; ++k)
 	{
 		if (this.slopeProfile[k][0] > x) {
@@ -239,9 +187,9 @@ FISSlope.prototype.getYandAngle = function(x) {
 			yCoord = this.slopeProfile[k][1] - (this.slopeProfile[k][0]-x)*slopeAngle;
 			return {y: yCoord, angle: slopeAngle}
 		}
-	}	
+	}
 	yCoord = this.slopeProfile[that.slopeProfile.length - 1][1];
-	
+
 	return {y: yCoord, angle: 0}
 }
 
@@ -270,14 +218,6 @@ function TestSlope(world, scene) {
 	}
 	slopeProfile.push(0);
 	slopeProfile.push(0);
-
-	this.shape = new p2.Heightfield(slopeProfile, {
-		elementWidth: this.elementWidth
-	});
-	this.shape.material = new p2.Material();
-	this.body = new p2.Body();
-	this.body.addShape(this.shape);
-	world.addBody(this.body);
 
 	// Visual representation
 	var visShape = new THREE.Shape();

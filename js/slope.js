@@ -183,8 +183,10 @@ FISSlope.prototype.getYandAngle = function(x) {
 	for (var k = 1; k < this.slopeProfile.length; ++k)
 	{
 		if (this.slopeProfile[k][0] > x) {
-			slopeAngle = (this.slopeProfile[k][1]-this.slopeProfile[k-1][1])/(this.slopeProfile[k][0]-this.slopeProfile[k-1][0])
-			yCoord = this.slopeProfile[k][1] - (this.slopeProfile[k][0]-x)*slopeAngle;
+			var dx = this.slopeProfile[k][0] - this.slopeProfile[k-1][0];
+			var dy = this.slopeProfile[k][1] - this.slopeProfile[k-1][1];
+			slopeAngle = Math.atan2(dy, dx);
+			yCoord = this.slopeProfile[k][1] - (this.slopeProfile[k][0]-x) * (dy / dx);
 			return {y: yCoord, angle: slopeAngle}
 		}
 	}

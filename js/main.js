@@ -116,7 +116,6 @@ function drawDebug() {
 	// something = window.parseFloat($("#debugparam").value);
 }
 
-var physicsStep = 1 / 60;
 function render() {
 	var dt = clock.getDelta();
 	var clampDt = 0.05; // No bigger deltas than 20 FPS
@@ -124,7 +123,7 @@ function render() {
 	// Input
 	controller.poll(dt);
 	// Physics
-	jumper.pBody.step(physicsStep);
+	jumper.pBody.step(dt);
 	jumper.update(dt);
 	wind.update(dt);
 	for (var i = 0; i < clouds.length; ++i) {

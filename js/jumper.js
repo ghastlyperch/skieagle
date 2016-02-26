@@ -63,7 +63,11 @@ Jumper.prototype.reset = function() {
 	this.pBody.sleep();
 	var slopeStartingPos = ramp.startingPosition;
 	this.pBody.x = slopeStartingPos[0];
-	this.pBody.y = slopeStartingPos[1];
+	
+	// Set jumper starting position y-coordinate and angle so that the jumper starts on the slope at right angle
+	var startYTheta = ramp.getYandAngle(this.pBody.x);
+	this.pBody.y = startYTheta.y;
+	this.pBody.theta = Math.atan(startYTheta.angle); 
 	this.pBody.vX = 0; this.pBody.vY = 0;
 	this.pBody.aX = 0; this.pBody.aY = 0;
 	this.pBody.friction = 0.01;

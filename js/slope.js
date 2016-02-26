@@ -207,15 +207,20 @@ FISSlope.prototype.getJumpedDistance = function(xCoord) {
 		
 		var y = this.slopeProfile[k][1];
 		var prevY = this.slopeProfile[k-1][1];
+		 
+		var angle = Math.atan((y-prevY)/(x-prevX));
 		
-		var angle = atan(y/x);
-		
-		acc += (xCoord-prevX)/Math.cos(angle);
+		if (x < xCoord) {
+			acc += (x-prevX)/Math.cos(angle);//Math.sqrt((x-prevX)*(x-prevX)+(y-prevY)*(y-prevY)); //(xCoord-prevX)/Math.cos(angle);
+		} else {
+			acc += (xCoord-prevX)/Math.cos(angle);
+		}
 		
 		if ( x > xCoord) break;
 	}
 	
-	return x;
+	console.log(xCoord + ' ' + acc);
+	return acc;
 }
 /*
 function TestSlope(world, scene) {

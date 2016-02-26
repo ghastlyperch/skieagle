@@ -187,6 +187,7 @@ Jumper.prototype.update = function(dt) {
 			$("#power-container").style.display = "none";
 			// Round to nearest 0.5m like in real ski jumping
 			var d = Number(Math.round((this.pBody.x*2))/2).toFixed(1);
+			var d = Number(Math.round((ramp.getJumpedDistance(this.pBody.x)*2))/2).toFixed(1);
 			// Jumper angle control, angles are both negative
 			if (this.landingStart == 0 && this.jumperAngle > this.jumperTargetAngle)
 			{

@@ -169,6 +169,24 @@ function FISSlope(world, scene, HS) {
 	scene.add(this.visual);
 
 	this.slopeProfile = slopeProfile.reverse();
+	this.friction = 1;
+	switch (HS) {
+		case 80:
+			this.friction = 0.25;
+			break;
+			
+		case 100:
+			this.friction = 0.2;
+			break;
+			
+		case 120:
+			this.friction = 0.15;
+			break;
+			
+		case 200:
+			this.friction = 0.01;
+			break;
+	}
 }
 
 FISSlope.prototype.getYandAngle = function(x) {
@@ -219,8 +237,11 @@ FISSlope.prototype.getJumpedDistance = function(xCoord) {
 		if ( x > xCoord) break;
 	}
 	
-	console.log(xCoord + ' ' + acc);
 	return acc;
+}
+
+FISSlope.prototype.getFriction = function() {
+	return this.friction;
 }
 /*
 function TestSlope(world, scene) {

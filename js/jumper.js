@@ -13,9 +13,9 @@ var PhysicsMode = {
 	SIMPLE_LIFTDRAG: 1
 };
 
-function Jumper(world, scene) {
+function Jumper(world, scene, takeoff_coeff) {
 	// Physics solver mode
-	this.physicsMode = PhysicsMode.PARAMETRIC;
+	this.physicsMode = PhysicsMode.SIMPLE_LIFTDRAG;
 
 	// Physical body
 	var jumperHeight = Params.Jumper.height;
@@ -26,7 +26,7 @@ function Jumper(world, scene) {
 	this.skiLength = skiLength;
 	this.jumperTargetAngle = 0;
 	this.landingStart = 0;
-
+	this.takeOffCoeff = takeoff_coeff;
 	this.pBody = new PhysicsObject(Params.Jumper.mass,0,0,ramp);
 
 	// Visual representation
@@ -103,9 +103,8 @@ Jumper.prototype.action = function(pressed) {
 			break;
 		case JumperState.JUMPING:
 			if (!pressed && this.isOnRamp()) {
-				this.pBody.vY = this.charge * Params.Jumper.takeoffStr;
+				this.pBody.vY = this.charge * Params.Jumper.takeoffStr * this.takeOffCoeff;
 				console.log('Takeoff velocity: ' + this.charge * Params.Jumper.takeoffStr)
-				console.log('Net y-velocity: ' + this.pBody.vY);
 				// Set target body angle while flying based on jump timing
 				// TODO: find out optimum angle and replace 85 with it.
 				this.jumperTargetAngle = 0.01 * this.charge * Params.Jumper.takeoffTargetAngle;
@@ -186,7 +185,6 @@ Jumper.prototype.update = function(dt) {
 			this.physics();
 			$("#power-container").style.display = "none";
 			// Round to nearest 0.5m like in real ski jumping
-			var d = Number(Math.round((this.pBody.x*2))/2).toFixed(1);
 			var d = Number(Math.round((ramp.getJumpedDistance(this.pBody.x)*2))/2).toFixed(1);
 			// Jumper angle control, angles are both negative
 			if (this.landingStart == 0 && this.jumperAngle > this.jumperTargetAngle)
@@ -307,7 +305,6 @@ Jumper.prototype.physics = function() {
 			var beta = 9.5 * Math.PI/180; // Body-to-ski
 			var gamma = 160 * Math.PI/180; // Hip angle
 			var alpha = (Math.PI/2 - (-this.jumperAngle))*180/Math.PI; //35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
-
 			// These numbers are valid for constant beta and gamma
 			var L = -0.43903 + 0.060743*alpha - 7.192e-4*alpha*alpha
 			var D = -0.032061 + 0.01232*alpha + 2.283e-4*alpha*alpha
@@ -320,8 +317,10 @@ Jumper.prototype.physics = function() {
 
 		case PhysicsMode.SIMPLE_LIFTDRAG:
 			// Lift and drag coefficients
-			var cD = 0.1;
-			var cL = 0.8;
+			var cD = 0.4;
+			var cL = 0.3;
+			
+			var alpha = 20; //(Math.PI/2 - (-this.jumperAngle))*180/Math.PI; //35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
 
 			// Area projections (0.5 approx width of jumper) against the flow
 			var aX = 0.5*Math.cos(alpha)*this.skiLength;
@@ -329,8 +328,7 @@ Jumper.prototype.physics = function() {
 
 			// Drag force x and y components
 			var dX = 0.5*rho*cD*aX*vX*vX;
-			var dY = 0.5*rho*cD*aY*vY*vY;
-
+			var dY = 0; //0.5*rho*cD*aY*vY*vY;
 			// Lift (only y)
 			var lY = 0.5*rho*cL*aX*vX*vX;
 
@@ -346,6 +344,6 @@ Jumper.prototype.physics = function() {
 
 	}
 
-	this.forces = [-dragForce, liftForce];
-	this.pBody.applyForce(-dragForce, liftForce);
+	this.forces = [-dragForce, -liftForce];
+	this.pBody.applyForce(dragForce, liftForce);
 };

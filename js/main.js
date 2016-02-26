@@ -49,7 +49,7 @@ function init() {
 	ramp = new FISSlope(world, scene, hillSize);
 
 	// Create jumper
-	jumper = new Jumper(world, scene);
+	jumper = new Jumper(world, scene, Params.TakeoffCoeffs[hillParam]);
 	controller = new Controller(jumper);
 
 	// Some clouds

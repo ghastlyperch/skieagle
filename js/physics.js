@@ -19,8 +19,6 @@ function PhysicsObject(mass, x0, y0, fisslope) {
 	this.slope = fisslope;
 	this.gravity = -9.81;
 	
-	this.friction = 0.01;
-	
 	this.active = false;
 	this.isOnRamp = false;
 }
@@ -60,8 +58,8 @@ PhysicsObject.prototype.step = function(dt) {
 		fXLoc = -this.gravity * this.mass * Math.sin(-syt.angle);
 		fYLoc = this.gravity * this.mass * Math.cos(-syt.angle);
 		
-		if (this.vX > 0)
-			fXLoc -= -fYLoc * this.friction;
+		if (this.vX > 0 && this.isOnRamp)
+			fXLoc -= -fYLoc * this.slope.getFriction();
 		
 		if (this.y <= syt.y) {
 			fYLoc = 0;

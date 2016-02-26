@@ -5,9 +5,9 @@ TODO
 [ ] Tune landing scoring
 [ ] Tune physics
 [ ] Remove css hover effects on mobile
-[ ] Set jumper on slope at start instead of falling
+[x] Set jumper on slope at start instead of falling
 [ ] Disable play through keyboard when menu is active
-[ ] Saner instructions screen
+[x] Saner instructions screen
 [ ] Distance measurement on the slope instead of x-coord?
 [ ] Pause menu?
 

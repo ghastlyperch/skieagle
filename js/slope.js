@@ -168,8 +168,6 @@ function FISSlope(world, scene, HS) {
 	this.visual = new THREE.Mesh(new THREE.ShapeGeometry(visShape), material);
 	scene.add(this.visual);
 
-	// Distance measuring function
-	this.getJumpedDistance = function(xCoord) { return xCoord; };
 	this.slopeProfile = slopeProfile.reverse();
 }
 
@@ -195,6 +193,30 @@ FISSlope.prototype.getYandAngle = function(x) {
 	return {y: yCoord, angle: 0}
 }
 
+FISSlope.prototype.getJumpedDistance = function(xCoord) {
+	var acc = 0; // Accumulator for distance
+	
+	for (var k = 1; k < this.slopeProfile.length; ++k) {
+		
+		// Skip coordinates less than zero
+		if (this.slopeProfile[k][0] < 0)
+			continue; 
+			
+		var x = this.slopeProfile[k][0];
+		var prevX = this.slopeProfile[k-1][0];
+		
+		var y = this.slopeProfile[k][1];
+		var prevY = this.slopeProfile[k-1][1];
+		
+		var angle = atan(y/x);
+		
+		acc += (xCoord-prevX)/Math.cos(angle);
+		
+		if ( x > xCoord) break;
+	}
+	
+	return x;
+}
 /*
 function TestSlope(world, scene) {
 	this.elementWidth = 2;

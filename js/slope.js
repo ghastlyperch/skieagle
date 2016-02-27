@@ -167,8 +167,34 @@ function FISSlope(world, scene, HS) {
 		map: renderer instanceof THREE.WebGLRenderer ? tex : null });
 	this.visual = new THREE.Mesh(new THREE.ShapeGeometry(visShape), material);
 	scene.add(this.visual);
-
+	
 	this.slopeProfile = slopeProfile.reverse();
+	// Draw K-point flag/post/whatever
+	var yAng_Kpoint = this.getYandAngle(n);
+	console.log('K point at ' + n + ',' + yAng_Kpoint.y);
+	
+	var kPostVis = new THREE.Shape();
+	
+	kPostVis.moveTo(0, 0);
+	kPostVis.lineTo(0, 1);
+	kPostVis.lineTo(0.2, 1);
+	kPostVis.lineTo(0.2, 0);
+	kPostVis.lineTo(0, 0);
+	
+	this.kPointVisual = new THREE.Mesh(new THREE.ShapeGeometry(kPostVis), 
+		new THREE.MeshBasicMaterial({color: 0xff0000, overdraw: 0.75}));
+	scene.add(this.kPointVisual);
+	this.kPointVisual.rotation.z = yAng_Kpoint.angle ; //+ Math.PI/2;
+	this.kPointVisual.position.x = n;
+	this.kPointVisual.position.y = yAng_Kpoint.y;
+	
+	for (var i = 0; i < slopeProfile.length; ++i) {
+		var x = slopeProfile[i][0];
+		var y = slopeProfile[i][1];
+		if (i == 0) visShape.moveTo(x, y);
+		else visShape.lineTo(x, y);
+	}
+	
 	this.friction = 1;
 	switch (HS) {
 		case 80:

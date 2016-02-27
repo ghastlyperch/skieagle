@@ -226,6 +226,7 @@ Jumper.prototype.update = function(dt) {
 			}
 			break;
 		case JumperState.LANDING:
+			this.jumperAngle = Params.Jumper.landingTargetAngle;
 			if (this.stateTime > 1.5) {
 				$("#hint").innerHTML = "";
 

@@ -63,11 +63,11 @@ Jumper.prototype.reset = function() {
 	this.pBody.sleep();
 	var slopeStartingPos = ramp.startingPosition;
 	this.pBody.x = slopeStartingPos[0];
-	
+
 	// Set jumper starting position y-coordinate and angle so that the jumper starts on the slope at right angle
 	var startYTheta = ramp.getYandAngle(this.pBody.x);
 	this.pBody.y = startYTheta.y;
-	this.pBody.theta = Math.atan(startYTheta.angle); 
+	this.pBody.theta = Math.atan(startYTheta.angle);
 	this.pBody.vX = 0; this.pBody.vY = 0;
 	this.pBody.aX = 0; this.pBody.aY = 0;
 	this.pBody.friction = 0.01;
@@ -168,7 +168,7 @@ Jumper.prototype.update = function(dt) {
 			if (this.pBody.x > -80) // TODO: Right amount of x
 				$("#hint").innerHTML = "Hold to charge jump";
 
-			if (this.pBody.x[0] > 1) {
+			if (this.pBody.x > 1) {
 				this.changeState(JumperState.FLYING);
 			}
 			break;
@@ -320,7 +320,7 @@ Jumper.prototype.physics = function() {
 			// Lift and drag coefficients
 			var cD = 0.4;
 			var cL = 0.3;
-			
+
 			var alpha = 20; //(Math.PI/2 - (-this.jumperAngle))*180/Math.PI; //35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
 
 			// Area projections (0.5 approx width of jumper) against the flow

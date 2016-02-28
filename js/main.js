@@ -50,7 +50,8 @@ function init() {
 
 	// Create jumper
 	jumper = new Jumper(world, scene, Params.TakeoffCoeffs[hillParam]);
-	controller = new Controller(jumper);
+	if ($("#menu-container").style.display === "none")
+		controller = new Controller(jumper);
 
 	// Some clouds
 	var cloudGeo = new THREE.PlaneGeometry(20, 20);
@@ -106,7 +107,7 @@ function drawDebug() {
 	for (var s in JumperState)
 		if (JumperState[s] == jumper.state)
 			msg += "State: " + s + "\n";
-	if (controller.motionDebug)
+	if (controller && controller.motionDebug)
 		msg += controller.motionDebug + "\n";
 	if (window.devicePixelRatio && window.devicePixelRatio !== 1)
 		msg += "DevicePixelRatio: " + window.devicePixelRatio + "\n";
@@ -122,7 +123,8 @@ function render() {
 	if (dt > clampDt) dt = clampDt;
 	dt *= timeScale;
 	// Input
-	controller.poll(dt);
+	if (controller)
+		controller.poll(dt);
 	// Physics
 	jumper.pBody.step(dt);
 	jumper.update(dt);

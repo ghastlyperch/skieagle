@@ -22,7 +22,6 @@ function initUI(showMainMenu) {
 			divs[i].style.display = "none";
 	}
 
-
 	function hideMenu() {
 		hideAllMenus();
 		$("#menu-container").style.display = "none";

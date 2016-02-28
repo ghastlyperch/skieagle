@@ -167,48 +167,48 @@ function FISSlope(world, scene, HS) {
 		map: renderer instanceof THREE.WebGLRenderer ? tex : null });
 	this.visual = new THREE.Mesh(new THREE.ShapeGeometry(visShape), material);
 	scene.add(this.visual);
-	
+
 	this.slopeProfile = slopeProfile.reverse();
 	// Draw K-point flag/post/whatever
 	var yAng_Kpoint = this.getYandAngle(n);
 	console.log('K point at ' + n + ',' + yAng_Kpoint.y);
-	
+
 	var kPostVis = new THREE.Shape();
-	
+
 	kPostVis.moveTo(0, 0);
 	kPostVis.lineTo(0, 1);
 	kPostVis.lineTo(0.2, 1);
 	kPostVis.lineTo(0.2, 0);
 	kPostVis.lineTo(0, 0);
-	
-	this.kPointVisual = new THREE.Mesh(new THREE.ShapeGeometry(kPostVis), 
+
+	this.kPointVisual = new THREE.Mesh(new THREE.ShapeGeometry(kPostVis),
 		new THREE.MeshBasicMaterial({color: 0xff0000, overdraw: 0.75}));
 	scene.add(this.kPointVisual);
 	this.kPointVisual.rotation.z = yAng_Kpoint.angle ; //+ Math.PI/2;
 	this.kPointVisual.position.x = n;
 	this.kPointVisual.position.y = yAng_Kpoint.y;
-	
+
 	for (var i = 0; i < slopeProfile.length; ++i) {
 		var x = slopeProfile[i][0];
 		var y = slopeProfile[i][1];
 		if (i == 0) visShape.moveTo(x, y);
 		else visShape.lineTo(x, y);
 	}
-	
-	this.friction = 1;
+
+	this.friction = 0.2;
 	switch (HS) {
 		case 80:
 			this.friction = 0.25;
 			break;
-			
-		case 100:
-			this.friction = 0.2;
-			break;
-			
+
 		case 120:
 			this.friction = 0.15;
 			break;
-			
+
+		case 160:
+			this.friction = 0.05;
+			break;
+
 		case 200:
 			this.friction = 0.01;
 			break;
@@ -239,30 +239,30 @@ FISSlope.prototype.getYandAngle = function(x) {
 
 FISSlope.prototype.getJumpedDistance = function(xCoord) {
 	var acc = 0; // Accumulator for distance
-	
+
 	for (var k = 1; k < this.slopeProfile.length; ++k) {
-		
+
 		// Skip coordinates less than zero
 		if (this.slopeProfile[k][0] < 0)
-			continue; 
-			
+			continue;
+
 		var x = this.slopeProfile[k][0];
 		var prevX = this.slopeProfile[k-1][0];
-		
+
 		var y = this.slopeProfile[k][1];
 		var prevY = this.slopeProfile[k-1][1];
-		 
+
 		var angle = Math.atan((y-prevY)/(x-prevX));
-		
+
 		if (x < xCoord) {
 			acc += (x-prevX)/Math.cos(angle);//Math.sqrt((x-prevX)*(x-prevX)+(y-prevY)*(y-prevY)); //(xCoord-prevX)/Math.cos(angle);
 		} else {
 			acc += (xCoord-prevX)/Math.cos(angle);
 		}
-		
+
 		if ( x > xCoord) break;
 	}
-	
+
 	return acc;
 }
 

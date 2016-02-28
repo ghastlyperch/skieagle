@@ -178,7 +178,8 @@ function FISSlope(world, scene, HS) {
 	kPostVis.moveTo(0, 0);
 	kPostVis.lineTo(0, 1);
 	kPostVis.lineTo(0.2, 1);
-	kPostVis.lineTo(0.2, 0);
+	kPostVis.lineTo(0.4, 0.8);
+	kPostVis.lineTo(0.2, 0.6);
 	kPostVis.lineTo(0, 0);
 
 	this.kPointVisual = new THREE.Mesh(new THREE.ShapeGeometry(kPostVis),

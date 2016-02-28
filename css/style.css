@@ -59,7 +59,7 @@ body {
 	-ms-user-select: none;
 	user-select: none;
 }
-.btn:hover {
+.btn-no-touch:hover {
 	-webkit-transform: scale(1.05);
 	-moz-transform: scale(1.05);
 	-ms-transform: scale(1.05);

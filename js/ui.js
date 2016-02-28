@@ -10,6 +10,12 @@ function initUI(showMainMenu) {
 		}
 	}, true);
 
+	if (!CAPS.touch) {
+		[].forEach.call(document.querySelectorAll(".btn"), function(elem) {
+			elem.classList.add("btn-no-touch");
+		});
+	}
+
 	function hideAllMenus() {
 		var divs = document.querySelectorAll(".menu");
 		for (var i = 0; i < divs.length; ++i)

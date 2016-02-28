@@ -210,7 +210,7 @@ Jumper.prototype.update = function(dt) {
 			}
 			
 			$("#hint").innerHTML = d > 0 ? (d + " m") : "";
-			if (this.stateTime > 1 && this.isOnRamp()) {
+			if (this.stateTime > 0.1 && this.isOnRamp()) {
 				records.add(d);
 				$("#topspeed").innerHTML = Math.round(jumper.topSpeed * 3.6) + " km/h";
 

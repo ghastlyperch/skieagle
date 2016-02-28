@@ -1,17 +1,26 @@
 var Params = {
 
 	Slopes: {
-		"K80": 80,
-		"K120": 120,
-		"K160": 160,
-		"K200": 200
-	},
-
-	TakeoffCoeffs: {
-		"K80": 1,
-		"K120": 1,
-		"K160": 1.2,
-		"K200": 1.45
+		"K80": {
+			HS: 80,
+			friction: 0.25,
+			takeOffCoeff: 1
+		},
+		"K120": {
+			HS: 120,
+			friction: 0.15,
+			takeOffCoeff: 1
+		},
+		"K160": {
+			HS: 160,
+			friction: 0.05,
+			takeOffCoeff: 1.2
+		},
+		"K200": {
+			HS: 200,
+			friction: 0.01,
+			takeOffCoeff: 1.45
+		}
 	},
 
 	Jumper: {

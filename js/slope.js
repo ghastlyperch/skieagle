@@ -1,6 +1,8 @@
 
-function FISSlope(world, scene, HS) {
+function FISSlope(world, scene, params) {
 	var degToRad = 0.0174532925;
+	this.friction = params.friction || 0.2;
+	var HS = params.HS || 100;
 	var w = 0.885*HS+1.5;
 
 	var hn = 0.55 ; // Landing hill height-length ratio (to K point)
@@ -194,25 +196,6 @@ function FISSlope(world, scene, HS) {
 		var y = slopeProfile[i][1];
 		if (i == 0) visShape.moveTo(x, y);
 		else visShape.lineTo(x, y);
-	}
-
-	this.friction = 0.2;
-	switch (HS) {
-		case 80:
-			this.friction = 0.25;
-			break;
-
-		case 120:
-			this.friction = 0.15;
-			break;
-
-		case 160:
-			this.friction = 0.05;
-			break;
-
-		case 200:
-			this.friction = 0.01;
-			break;
 	}
 }
 

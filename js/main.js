@@ -10,13 +10,13 @@ var viewportWidth = 80; // meters
 var aspect;
 
 function init() {
-	var hillSize = 100;
-	var hillParam = window.location.search.substr(1);
+	var hillId = window.location.search.substr(1);
 	var recordPrefix = "0";
-	if (Params.Slopes[hillParam]) {
-		recordPrefix = hillParam;
-		hillSize = Params.Slopes[hillParam];
-		console.log("Hill " + hillParam + " with hill size " + hillSize);
+	var hillParams = Params.Slopes["K80"];
+	if (Params.Slopes[hillId]) {
+		recordPrefix = hillId;
+		hillParams = Params.Slopes[hillId];
+		console.log("Hill " + hillId + " with hill size " + hillParams.HS);
 		initUI(false);
 	} else initUI(true);
 
@@ -46,10 +46,10 @@ function init() {
 	wind = new Wind();
 
 	// Create ramp
-	ramp = new FISSlope(world, scene, hillSize);
+	ramp = new FISSlope(world, scene, hillParams);
 
 	// Create jumper
-	jumper = new Jumper(world, scene, Params.TakeoffCoeffs[hillParam]);
+	jumper = new Jumper(world, scene, hillParams.takeOffCoeff);
 	if ($("#menu-container").style.display === "none")
 		controller = new Controller(jumper);
 

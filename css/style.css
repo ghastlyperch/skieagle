@@ -101,8 +101,9 @@ h1 {
 	text-align: center;
 }
 
-ol, ul, p {
+ol, ul {
 	font-size: 0.6em;
+	text-align: left;
 }
 
 canvas {
@@ -167,7 +168,8 @@ canvas {
 
 #comments {
 	padding-top: 20px;
-	font-size: 0.7em;
+	font-size: 0.75em;
+	text-align: center;
 }
 
 #fullscreen-container {

@@ -198,7 +198,17 @@ Jumper.prototype.update = function(dt) {
 				// position when he hits the ground.
 				this.jumperAngle += Params.Jumper.angVelToLandingPosition * dt;
 			}
-
+			
+			// Prevent clipping of skis with the hill
+			var skiEndX = this.pBody.x - this.skiLength * 0.5;
+			var hillYAngleAtSkiEnd = ramp.getYandAngle(skiEndX);
+			
+			if (this.stateTime > 0.1 && this.pBody.y < hillYAngleAtSkiEnd.y) {
+				var clipAmount = hillYAngleAtSkiEnd.y - this.pBody.y;
+				var angleToRotate = Math.atan(clipAmount/(0.5*this.skiLength));
+				this.pBody.theta = -angleToRotate;
+			}
+			
 			$("#hint").innerHTML = d > 0 ? (d + " m") : "";
 			if (this.stateTime > 1 && this.isOnRamp()) {
 				records.add(d);

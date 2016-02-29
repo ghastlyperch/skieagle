@@ -175,18 +175,23 @@ function FISSlope(world, scene, params) {
 	var yAng_Kpoint = this.getYandAngle(n);
 	console.log('K point at ' + n + ',' + yAng_Kpoint.y);
 
-	var kPostVis = new THREE.Shape();
+	function createFlag(color) {
+		var flagShape = new THREE.Shape();
+		flagShape.moveTo(0, 0);
+		flagShape.lineTo(0, 1);
+		flagShape.lineTo(0.2, 1);
+		flagShape.lineTo(0.4, 0.8);
+		flagShape.lineTo(0.2, 0.6);
+		flagShape.lineTo(0, 0);
+		var mesh = new THREE.Mesh(new THREE.ShapeGeometry(flagShape),
+		new THREE.MeshBasicMaterial({color: color, overdraw: 0.75}));
+		scene.add(mesh);
+		return mesh;
+	}
 
-	kPostVis.moveTo(0, 0);
-	kPostVis.lineTo(0, 1);
-	kPostVis.lineTo(0.2, 1);
-	kPostVis.lineTo(0.4, 0.8);
-	kPostVis.lineTo(0.2, 0.6);
-	kPostVis.lineTo(0, 0);
-
-	this.kPointVisual = new THREE.Mesh(new THREE.ShapeGeometry(kPostVis),
-		new THREE.MeshBasicMaterial({color: 0xff0000, overdraw: 0.75}));
-	scene.add(this.kPointVisual);
+	this.recordVisual = createFlag(0x00ff00);
+	this.recordVisual.visible = false;
+	this.kPointVisual = createFlag(0xff0000);
 	this.kPointVisual.rotation.z = yAng_Kpoint.angle ; //+ Math.PI/2;
 	this.kPointVisual.position.x = n;
 	this.kPointVisual.position.y = yAng_Kpoint.y;
@@ -249,6 +254,15 @@ FISSlope.prototype.getJumpedDistance = function(xCoord) {
 
 	return acc;
 }
+
+FISSlope.prototype.setRecord = function(distance) {
+	var x = distance; // TODO
+	var recordYAng = this.getYandAngle(x);
+	this.recordVisual.rotation.z = recordYAng.angle;
+	this.recordVisual.position.x = x;
+	this.recordVisual.position.y = recordYAng.y;
+	this.recordVisual.visible = !!distance;
+};
 
 FISSlope.prototype.getFriction = function() {
 	return this.friction;

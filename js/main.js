@@ -47,6 +47,7 @@ function init() {
 
 	// Create ramp
 	ramp = new FISSlope(world, scene, hillParams);
+	ramp.setRecord(records.records.allTime.distance);
 
 	// Create jumper
 	jumper = new Jumper(world, scene, hillParams.takeOffCoeff);

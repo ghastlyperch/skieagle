@@ -6,18 +6,18 @@ function FISSlope(world, scene, params) {
 	var w = 0.885*HS+1.5;
 
 	var hn = 0.55 ; // Landing hill height-length ratio (to K point)
-	var beta = 45 * degToRad; // Profile angle of inclination (landing hill)
+	var beta = 33 * degToRad;  // Profile angle of inclination (landing hill)
 	var v0 = 24.25; // Approx in run speed
 	var rho = 1; // Friction angle in deg
-	var deltabeta = 2 * degToRad; // Should depend on alpha
+	var deltabeta = 2.5 * degToRad; // Should depend on alpha
 
 	var gamma = 35 * degToRad; // Inclination of the inrun slope
 	var alpha = 10.5 * degToRad; // Take-off table inclination
 	var t = 0.25*(v0+0.95); //15; // Length of the take-off table
 	var r1 = 0.14*(v0+0.95)*(v0+0.95);//10; // Curve radius for take-off slope transition end point
 
-	var e1 = 92.3 - 1.517*gamma + 0.426*HS // Highest starting point
-	var e2 = 67.3 - 0.944*gamma + 0.331*HS // Lowest starting point
+	var e1 = 92.3 - 1.517*gamma/degToRad + 0.426*HS // Highest starting point
+	var e2 = 67.3 - 0.944*gamma/degToRad + 0.331*HS // Lowest starting point
 
 	var sin_ga = Math.sin(gamma-alpha);
 	var cos_ga = Math.cos(gamma-alpha);
@@ -39,18 +39,19 @@ function FISSlope(world, scene, params) {
 	var h = w*Math.sin(Math.atan(hn))/1.005;
 	var n = w*Math.cos(Math.atan(hn))/1.005;
 
+
 	var vk = 0.68*v0 + 12.44;
 	var rl = vk*vk*w/380;
 	var betal = beta - 1.4/vk; // FIS standard has here also rad2deg conversion
 	var vll = vk - 16/vk - 0.1*rho;
 	var betap = beta + deltabeta;
 	var beta0 = betap/6;
-
+	console.log('beta: ' + beta*180/Math.PI+ ', betal: ' + betal*180/Math.PI + 'betap: ' + betap*180/Math.PI);
 	var r2Lmin = vll*vll/(18-10*Math.cos(betal));
 	var r2L = 0.5*(rl+r2Lmin);
 	var r2 = vk*vk/(20*Math.cos(betal) + vk*vk*betal/degToRad/7000 - 12.5);
 
-	var l1 = deltabeta*rl*Math.PI/180;
+	var l1 = deltabeta*rl;
 	var l2 = 1.4*rl/vk;
 
 	var rL = r2L;
@@ -173,7 +174,13 @@ function FISSlope(world, scene, params) {
 	this.slopeProfile = slopeProfile.reverse();
 	// Draw K-point flag/post/whatever
 	var yAng_Kpoint = this.getYandAngle(n);
+	
+	console.log('HS: ' + HS);
+	console.log('n: ' + n + ', h' + h);
+	console.log('w: ' + w);
+	console.log('w+l2: ' + (w + l2));
 	console.log('K point at ' + n + ',' + yAng_Kpoint.y);
+	console.log('K point distance: ' + this.getJumpedDistance(n));
 
 	var kPostVis = new THREE.Shape();
 
@@ -227,7 +234,7 @@ FISSlope.prototype.getJumpedDistance = function(xCoord) {
 	for (var k = 1; k < this.slopeProfile.length; ++k) {
 
 		// Skip coordinates less than zero
-		if (this.slopeProfile[k][0] < 0)
+		if (this.slopeProfile[k][0] <= 0)
 			continue;
 
 		var x = this.slopeProfile[k][0];

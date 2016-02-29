@@ -23,8 +23,14 @@ function Controller(obj) {
 		if (e.keyCode == 32 || e.keyCode == 38) // Space / Up
 			obj.action(true);
 
-		if (e.keyCode == 68) // D
-			ramp.visual.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+		if (DEBUG) {
+			if (e.keyCode == 68) // D
+				ramp.visual.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+			if (e.keyCode == 87) { // W
+				wind.directionChangeTime = 1e10;
+				wind.magnitude = 0;
+			}
+		}
 
 		e.preventDefault();
 	}
@@ -105,9 +111,9 @@ function Controller(obj) {
 		}
 		*/
 		timeScale = pressed[83] ? 4 : 1; // Debug fast-forward
-			
+
 		if (steer != 0) obj.steer(THREE.Math.clamp(steer, -1, 1) * dt);
-		
+
 	};
 
 	var inputElem = $("#canvas");

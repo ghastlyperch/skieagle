@@ -143,6 +143,7 @@ canvas {
 
 #results {
 	display: none;
+	pointer-events: none; /* Click through to canvas */
 	position: absolute;
 	margin: 0;
 	top: 10%;

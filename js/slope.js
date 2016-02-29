@@ -141,6 +141,7 @@ function FISSlope(world, scene, params) {
 	this.maxX = uX + lOr;
 	this.minY = bY;
 	this.maxY = this.startingPosition[1];
+	this.chargePoint = this.startingPosition[0] * 0.6;
 
 	// Visual representation
 	var visShape = new THREE.Shape();

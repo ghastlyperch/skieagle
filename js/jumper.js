@@ -96,7 +96,7 @@ Jumper.prototype.action = function(pressed) {
 			$("#results").style.display = "none";
 			break;
 		case JumperState.SLIDING:
-			if (pressed && this.isOnRamp() && this.pBody.x > -80) { // TODO: Right amount of x
+			if (pressed && this.isOnRamp() && this.pBody.x > ramp.chargePoint) {
 				this.changeState(JumperState.JUMPING);
 				$("#power-container").style.display = "block";
 			}
@@ -165,7 +165,7 @@ Jumper.prototype.update = function(dt) {
 			break;
 		case JumperState.SLIDING:
 
-			if (this.pBody.x > -80) // TODO: Right amount of x
+			if (this.pBody.x > ramp.chargePoint)
 				$("#hint").innerHTML = "Hold to charge jump";
 
 			if (this.pBody.x > 1) {

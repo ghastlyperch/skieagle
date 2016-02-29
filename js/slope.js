@@ -178,11 +178,11 @@ function FISSlope(world, scene, params) {
 	function createFlag(color) {
 		var flagShape = new THREE.Shape();
 		flagShape.moveTo(0, 0);
-		flagShape.lineTo(0, 1);
-		flagShape.lineTo(0.2, 1);
-		flagShape.lineTo(0.4, 0.8);
-		flagShape.lineTo(0.2, 0.6);
-		flagShape.lineTo(0, 0);
+		flagShape.lineTo(0, 1.5);
+		flagShape.lineTo(0.3, 1.5);
+		flagShape.lineTo(0.8, 1.25);
+		flagShape.lineTo(0.3, 1.0);
+		flagShape.lineTo(0.3, 0);
 		var mesh = new THREE.Mesh(new THREE.ShapeGeometry(flagShape),
 		new THREE.MeshBasicMaterial({color: color, overdraw: 0.75}));
 		scene.add(mesh);

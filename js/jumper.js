@@ -225,10 +225,16 @@ Jumper.prototype.update = function(dt) {
 					console.log('Angle at landing: ' + this.angleAtLanding);
 					this.minAngleAfterLanding = this.angleAtLanding;
 					this.maxAngleAfterLanding = this.angleAtLanding;
-
+					
 					if (this.landingPoints == 4) {
 						this.jumperAngle = -Math.PI/2;
+					} else {
+						this.jumperAngle = Params.Jumper.landingTargetAngle
 					}
+				} else {
+					// If jump has not been started at all
+					this.jumperAngle = -Math.PI/2;
+					this.landingPoints = 4;
 				}
 
 				$("#comments").innerHTML = commentStr;
@@ -236,7 +242,7 @@ Jumper.prototype.update = function(dt) {
 			}
 			break;
 		case JumperState.LANDING:
-			this.jumperAngle = Params.Jumper.landingTargetAngle;
+			
 			if (this.stateTime > 1.5) {
 				$("#hint").innerHTML = "";
 

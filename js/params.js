@@ -1,25 +1,44 @@
 var Params = {
 
 	Slopes: {
-		"K80": {
-			HS: 80,
-			friction: 0.25,
+		"HS60": {
+			name: "Schattenbergschanze",
+			city: "Oberstdorf",
+			country: "GER",
+			HS: 60,
+			friction: 0.3,
+			takeOffCoeff: 0.8
+		},
+		"HS100": {
+			name: "Miyanomori",
+			city: "Sapporo",
+			country: "JAP",
+			HS: 100,
+			friction: 0.2,
 			takeOffCoeff: 1
 		},
-		"K120": {
-			HS: 120,
-			friction: 0.15,
-			takeOffCoeff: 1
+		"HS142": {
+			name: "Rukatunturi",
+			city: "Kuusamo",
+			country: "FIN",
+			HS: 142,
+			friction: 0.1,
+			takeOffCoeff: 1.15
 		},
-		"K160": {
-			HS: 160,
-			friction: 0.05,
-			takeOffCoeff: 1.2
-		},
-		"K200": {
-			HS: 200,
+		"HS225": {
+			name: "Vikersundbakken",
+			city: "Vikersund",
+			country: "NOR",
+			HS: 225,
 			friction: 0.01,
-			takeOffCoeff: 1.45
+			takeOffCoeff: 1.5
+		},
+		"eegg": {
+			name: "Super Flight Mode",
+			city: "Easter Egg",
+			HS: 500,
+			friction: 0.0001,
+			takeOffCoeff: 6.0
 		}
 	},
 

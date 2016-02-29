@@ -26,10 +26,10 @@
 		</div>
 		<div id="menu-newgame" class="menu">
 			<h1>Select Hill</h1>
-			<a href="?K80" class="btn">K80</a><br/>
-			<a href="?K120" class="btn">K120</a><br/>
-			<a href="?K160" class="btn">K160</a><br/>
-			<a href="?K200" class="btn">K200</a><br/>
+			<a href="?" class="btn" id="select-hill-1">?</a><br/>
+			<a href="?" class="btn" id="select-hill-2">?</a><br/>
+			<a href="?" class="btn" id="select-hill-3">?</a><br/>
+			<a href="?" class="btn" id="select-hill-4">?</a><br/>
 			<a href="#main" class="btn">Back</a>
 		</div>
 		<div id="menu-instructions" class="menu">
@@ -44,10 +44,10 @@
 		</div>
 		<div id="menu-records" class="menu">
 			<h1>Records</h1>
-			<a href="#records-K80" class="btn">K80</a><br/>
-			<a href="#records-K120" class="btn">K120</a><br/>
-			<a href="#records-K160" class="btn">K160</a><br/>
-			<a href="#records-K200" class="btn">K200</a><br/>
+			<a href="#" class="btn" id="records-hill-1">?</a><br/>
+			<a href="#" class="btn" id="records-hill-2">?</a><br/>
+			<a href="#" class="btn" id="records-hill-3">?</a><br/>
+			<a href="#" class="btn" id="records-hill-4">?</a><br/>
 			<a href="#records" class="btn" id="reset-records">Reset Records</a><br/>
 			<a href="#main" class="btn">Back</a>
 		</div>
@@ -80,7 +80,13 @@
 
 	<script>
 		if (!String.prototype.contains)
-			String.prototype.contains = function() { return String.prototype.indexOf.apply(this, arguments) !== -1; };
+			String.prototype.contains = function() {
+				return String.prototype.indexOf.apply(this, arguments) !== -1;
+			};
+		if (!String.prototype.startsWith)
+			String.prototype.startsWith = function(searchString, position) {
+				return this.substr(position || 0, searchString.length) === searchString;
+			};
 		function $(selector) { return document.querySelector(selector); }
 		if (!window.requestAnimationFrame) alert("Error: requestAnimationFrame unsupported");
 		var CAPS = {

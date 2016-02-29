@@ -12,7 +12,7 @@ var aspect;
 function init() {
 	var hillId = window.location.search.substr(1);
 	var recordPrefix = "0";
-	var hillParams = Params.Slopes["K80"];
+	var hillParams = {};
 	if (Params.Slopes[hillId]) {
 		recordPrefix = hillId;
 		hillParams = Params.Slopes[hillId];

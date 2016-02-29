@@ -1,5 +1,21 @@
 
 function initUI(showMainMenu) {
+	var hills = [];
+	for (var hill in Params.Slopes) {
+		if (Params.Slopes.hasOwnProperty(hill)) {
+			Params.Slopes[hill].id = hill;
+			if (hill.startsWith("HS"))
+				hills.push(Params.Slopes[hill]);
+		}
+	}
+	hills.sort(function(a, b) { return a - b; });
+	for (var i = 0; i < 4; i++) {
+		$("#select-hill-" + (i+1)).innerHTML = hills[i].name + "<br/>" + hills[i].city + " HS" + hills[i].HS;
+		$("#select-hill-" + (i+1)).href = "?" + hills[i].id;
+		$("#records-hill-" + (i+1)).innerHTML = hills[i].name;
+		$("#records-hill-" + (i+1)).href = "#records-" + hills[i].id;
+	}
+
 	$("#fullscreen-icon").addEventListener("click", toggleFullscreen, true);
 
 	$("#reset-records").addEventListener("click", function(e) {
@@ -37,7 +53,7 @@ function initUI(showMainMenu) {
 			console.log(hill);
 			var hill = hash.substr(9);
 			var rec = new Records(hill);
-			$("#hillname").innerHTML = hill;
+			$("#hillname").innerHTML = Params.Slopes[hill].name;
 			$("#dailyrecord").innerHTML = rec.records.daily.distance + " m";
 			$("#alltimerecord").innerHTML = rec.records.allTime.distance + " m";
 			$("#menu-hillrecords").style.display = "block";

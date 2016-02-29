@@ -30,6 +30,11 @@ function Controller(obj) {
 				wind.directionChangeTime = 1e10;
 				wind.magnitude = 0;
 			}
+			if (e.keyCode == 70) { // F
+				jumper.action(true);
+				jumper.charge = 100;
+				jumper.action(false);
+			}
 		}
 
 		e.preventDefault();

@@ -46,7 +46,7 @@ function FISSlope(world, scene, params) {
 	var vll = vk - 16/vk - 0.1*rho;
 	var betap = beta + deltabeta;
 	var beta0 = betap/6;
-	console.log('beta: ' + beta*180/Math.PI+ ', betal: ' + betal*180/Math.PI + 'betap: ' + betap*180/Math.PI);
+
 	var r2Lmin = vll*vll/(18-10*Math.cos(betal));
 	var r2L = 0.5*(rl+r2Lmin);
 	var r2 = vk*vk/(20*Math.cos(betal) + vk*vk*betal/degToRad/7000 - 12.5);
@@ -174,13 +174,16 @@ function FISSlope(world, scene, params) {
 	this.slopeProfile = slopeProfile.reverse();
 	// Draw K-point flag/post/whatever
 	var yAng_Kpoint = this.getYandAngle(n);
-	
-	console.log('HS: ' + HS);
-	console.log('n: ' + n + ', h' + h);
-	console.log('w: ' + w);
-	console.log('w+l2: ' + (w + l2));
-	console.log('K point at ' + n + ',' + yAng_Kpoint.y);
-	console.log('K point distance: ' + this.getJumpedDistance(n));
+
+	if (DEBUG) {
+		console.log('HS: ' + HS);
+		console.log('n: ' + n + ', h' + h);
+		console.log('w: ' + w);
+		console.log('w+l2: ' + (w + l2));
+		console.log('K point at ' + n + ',' + yAng_Kpoint.y);
+		console.log('K point distance: ' + this.getJumpedDistance(n));
+		console.log('beta: ' + beta*180/Math.PI+ ', betal: ' + betal*180/Math.PI + ', betap: ' + betap*180/Math.PI);
+	}
 
 	function createFlag(color) {
 		var flagShape = new THREE.Shape();

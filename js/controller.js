@@ -110,7 +110,9 @@ function Controller(obj) {
 			}
 		}
 		*/
-		timeScale = pressed[83] ? 4 : 1; // Debug fast-forward
+		if (DEBUG) {
+			timeScale = pressed[83] ? 4 : 1; // S, debug fast-forward
+		}
 
 		if (steer != 0) obj.steer(THREE.Math.clamp(steer, -1, 1) * dt);
 

@@ -12,7 +12,7 @@ var aspect;
 function init() {
 	var hillId = window.location.search.substr(1);
 	var recordPrefix = "0";
-	var hillParams = Params.Slopes["K80"];
+	var hillParams = {};
 	if (Params.Slopes[hillId]) {
 		recordPrefix = hillId;
 		hillParams = Params.Slopes[hillId];
@@ -47,6 +47,7 @@ function init() {
 
 	// Create ramp
 	ramp = new FISSlope(world, scene, hillParams);
+	ramp.setRecord(records.records.allTime.distance);
 
 	// Create jumper
 	jumper = new Jumper(world, scene, hillParams.takeOffCoeff);

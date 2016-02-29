@@ -198,17 +198,17 @@ Jumper.prototype.update = function(dt) {
 				// position when he hits the ground.
 				this.jumperAngle += Params.Jumper.angVelToLandingPosition * dt;
 			}
-			
+
 			// Prevent clipping of skis with the hill
 			var skiEndX = this.pBody.x - this.skiLength * 0.5;
 			var hillYAngleAtSkiEnd = ramp.getYandAngle(skiEndX);
-			
+
 			if (this.stateTime > 0.1 && this.pBody.y < hillYAngleAtSkiEnd.y) {
 				var clipAmount = hillYAngleAtSkiEnd.y - this.pBody.y;
 				var angleToRotate = Math.atan(clipAmount/(0.5*this.skiLength));
 				this.pBody.theta = -angleToRotate;
 			}
-			
+
 			$("#hint").innerHTML = d > 0 ? (d + " m") : "";
 			if (this.stateTime > 0.1 && this.isOnRamp()) {
 				records.add(d);
@@ -225,7 +225,7 @@ Jumper.prototype.update = function(dt) {
 					console.log('Angle at landing: ' + this.angleAtLanding);
 					this.minAngleAfterLanding = this.angleAtLanding;
 					this.maxAngleAfterLanding = this.angleAtLanding;
-					
+
 					if (this.landingPoints == 4) {
 						this.jumperAngle = -Math.PI/2;
 					} else {
@@ -242,7 +242,7 @@ Jumper.prototype.update = function(dt) {
 			}
 			break;
 		case JumperState.LANDING:
-			
+
 			if (this.stateTime > 1.5) {
 				$("#hint").innerHTML = "";
 
@@ -278,7 +278,7 @@ Jumper.prototype.update = function(dt) {
 				} else if (this.landingPoints > 10) {
 					commentStr = 'Some more practice needed...';
 				} else {
-					commentStr = 'Maybe you should try something else than skijumping';
+					commentStr = 'Maybe you should try something else than skijumping.';
 				}
 
 				$("#comments").innerHTML = commentStr;

@@ -98,8 +98,8 @@ function drawDebug() {
 	if (!(renderer instanceof THREE.WebGLRenderer))
 		msg += "Fallback renderer\n";
 	msg += "Position: " + (jumper.pBody.x|0) + ", " + (jumper.pBody.y|0) + "\n";
-	msg += "Jumper y interp: " + ramp.getYandAngle(jumper.pBody.x).y + "\n";
-	msg += "Jumper angle interp: " + Math.atan(ramp.getYandAngle(jumper.pBody.x).angle)*180/Math.PI + "\n";
+	msg += "Jumper y interp: " + ramp.getYandAngle(jumper.pBody.x).y.toFixed(2) + "\n";
+	msg += "Jumper angle interp: " + (Math.atan(ramp.getYandAngle(jumper.pBody.x).angle)*180/Math.PI).toFixed(2) + "\n";
 	msg += "pBody onRamp(): " + jumper.pBody.onRamp() + "\n";
 	msg += "Speed: " + Math.round(jumper.speed) + " m/s = " + Math.round(jumper.speed * 3.6) + " km/h\n";
 	msg += "Angles: " + (jumper.pBody.theta * 57.2957795).toFixed(1) + "&deg;, " + (jumper.jumperAngle * 57.2957795).toFixed(1) + "&deg;\n";

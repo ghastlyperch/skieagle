@@ -6,7 +6,7 @@ var Params = {
 			city: "Oberstdorf",
 			country: "GER",
 			HS: 60,
-			friction: 0.1,
+			friction: 0.15,
 			takeOffCoeff: 1.1
 		},
 		"HS100": {
@@ -22,16 +22,16 @@ var Params = {
 			city: "Kuusamo",
 			country: "FIN",
 			HS: 142,
-			friction: 0.05,
-			takeOffCoeff: 1.4
+			friction: 0.02,
+			takeOffCoeff: 1.5
 		},
 		"HS225": {
 			name: "Vikersundbakken",
 			city: "Vikersund",
 			country: "NOR",
 			HS: 225,
-			friction: 0.01,
-			takeOffCoeff: 2.0
+			friction: 0.0075,
+			takeOffCoeff: 2.1
 		},
 		"eegg": {
 			name: "Super Flight Mode",

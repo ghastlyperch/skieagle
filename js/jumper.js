@@ -334,8 +334,8 @@ Jumper.prototype.physics = function() {
 
 		case PhysicsMode.SIMPLE_LIFTDRAG:
 			// Lift and drag coefficients
-			var cD = 0.4;
-			var cL = 0.3;
+			var cD = 0.25;
+			var cL = 0.5;
 
 			var alpha = 20; //(Math.PI/2 - (-this.jumperAngle))*180/Math.PI; //35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
 

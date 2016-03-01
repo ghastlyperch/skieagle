@@ -303,7 +303,7 @@ Jumper.prototype.isOnRamp = function() {
 Jumper.prototype.physics = function() {
 	// Jumper airspeed
 	// TODO: putting velocities to zero here seems to give quite nice results - tuning needed !??
-	var vX = this.pBody.vX;
+	var vX = this.pBody.vX + wind.magnitude;
 	var vY = this.pBody.vY;
 
 	// Square of velocity

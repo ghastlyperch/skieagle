@@ -266,8 +266,37 @@ FISSlope.prototype.getJumpedDistance = function(xCoord) {
 	return acc;
 }
 
+FISSlope.prototype.getXFromDistance = function(distance) {
+	var acc = 0; // Accumulator for distance
+
+	for (var k = 1; k < this.slopeProfile.length; ++k) {
+
+		// Skip coordinates less than zero
+		if (this.slopeProfile[k][0] <= 0)
+			continue;
+
+		var x = this.slopeProfile[k][0];
+		var prevX = this.slopeProfile[k-1][0];
+
+		var y = this.slopeProfile[k][1];
+		var prevY = this.slopeProfile[k-1][1];
+
+		var angle = Math.atan((y-prevY)/(x-prevX));
+		var segmentLength = (x-prevX)/Math.cos(angle);//Math.sqrt((x-prevX)*(x-prevX)+(y-prevY)*(y-prevY)); //(xCoord-prevX)/Math.cos(angle);
+
+		if (acc + segmentLength >= distance) {
+			var f = 1.0 - ((acc + segmentLength - distance) / segmentLength);
+			return prevX + f * (x-prevX);
+		} else {
+			acc += segmentLength;
+		}
+	}
+
+	return 0;
+}
+
 FISSlope.prototype.setRecord = function(distance) {
-	var x = distance; // TODO
+	var x = this.getXFromDistance(distance);
 	var recordYAng = this.getYandAngle(x);
 	this.recordVisual.rotation.z = recordYAng.angle;
 	this.recordVisual.position.x = x;

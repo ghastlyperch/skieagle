@@ -66,10 +66,12 @@ function init() {
 			transparent: true, overdraw: 0.25
 		})
 	];
+	var cloudStart = Math.min(20, ramp.startingPosition[1]);
+	var cloudEnd = ramp.startingPosition[1] + 20;
 	for (var i = 0; i < 25; ++i) {
 		var cloudMesh = new THREE.Mesh(cloudGeo, cloudMats[i % cloudMats.length]);
 		cloudMesh.position.x = -200 + Math.random() * 350
-		cloudMesh.position.y = 60 + Math.random() * 50
+		cloudMesh.position.y = cloudStart + (cloudEnd - cloudStart) * Math.random();
 		cloudMesh.position.z = -Math.random() * 50;
 		scene.add(cloudMesh);
 		clouds.push(cloudMesh);

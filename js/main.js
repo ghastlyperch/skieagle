@@ -50,7 +50,7 @@ function init() {
 	ramp.setRecord(records.records.allTime.distance);
 
 	// Create jumper
-	jumper = new Jumper(world, scene, hillParams.takeOffCoeff);
+	jumper = new Jumper(world, scene, hillParams.takeOffCoeff, hillParams.liftCoeff);
 	if ($("#menu-container").style.display === "none")
 		controller = new Controller(jumper);
 

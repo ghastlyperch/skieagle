@@ -13,7 +13,7 @@ var PhysicsMode = {
 	SIMPLE_LIFTDRAG: 1
 };
 
-function Jumper(world, scene, takeoff_coeff) {
+function Jumper(world, scene, takeoff_coeff, lift_coeff) {
 	// Physics solver mode
 	this.physicsMode = PhysicsMode.SIMPLE_LIFTDRAG;
 
@@ -27,6 +27,7 @@ function Jumper(world, scene, takeoff_coeff) {
 	this.jumperTargetAngle = 0;
 	this.landingStart = 0;
 	this.takeOffCoeff = takeoff_coeff;
+	this.liftCoeff = lift_coeff;
 	this.pBody = new PhysicsObject(Params.Jumper.mass,0,0,ramp);
 
 	// Visual representation
@@ -335,7 +336,7 @@ Jumper.prototype.physics = function() {
 		case PhysicsMode.SIMPLE_LIFTDRAG:
 			// Lift and drag coefficients
 			var cD = 0.25;
-			var cL = 0.5;
+			var cL = this.liftCoeff;
 
 			var alpha = 20; //(Math.PI/2 - (-this.jumperAngle))*180/Math.PI; //35.5; // Angle of attack, this should be calculated based on jumper orientation and airspeed
 

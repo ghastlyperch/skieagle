@@ -186,7 +186,7 @@ Jumper.prototype.update = function(dt) {
 			this.physics();
 			$("#power-container").style.display = "none";
 			// Round to nearest 0.5m like in real ski jumping
-			var d = Number(Math.round((ramp.getJumpedDistance(this.pBody.x)*2))/2).toFixed(1);
+			var d = Math.round((ramp.getJumpedDistance(this.pBody.x)*2))/2;
 			// Jumper angle control, angles are both negative
 			if (this.landingStart == 0 && this.jumperAngle > this.jumperTargetAngle)
 			{
@@ -210,9 +210,10 @@ Jumper.prototype.update = function(dt) {
 				this.pBody.theta = -angleToRotate;
 			}
 
-			$("#hint").innerHTML = d > 0 ? (d + " m") : "";
+			$("#hint").innerHTML = d > 0 ? (d.toFixed(1) + " m") : "";
 			if (this.stateTime > 0.1 && this.isOnRamp()) {
 				records.add(d);
+				ramp.setRecord(records.records.allTime.distance);
 				$("#topspeed").innerHTML = Math.round(jumper.topSpeed * 3.6) + " km/h";
 
 				// Time from initiating landing until hitting the slope

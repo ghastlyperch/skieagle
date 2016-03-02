@@ -280,7 +280,7 @@ Jumper.prototype.update = function(dt) {
 				} else if (this.landingPoints > 10) {
 					commentStr = 'Some more practice needed...';
 				} else {
-					commentStr = 'Maybe you should try something else than skijumping.';
+					commentStr = 'Maybe you should try something else than ski jumping.';
 				}
 
 				$("#comments").innerHTML = commentStr;

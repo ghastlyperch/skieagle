@@ -17,8 +17,8 @@ function init() {
 		recordPrefix = hillId;
 		hillParams = Params.Slopes[hillId];
 		console.log("Hill " + hillId + " with hill size " + hillParams.HS);
-		initUI(false);
-	} else initUI(true);
+		initUI(hillParams);
+	} else initUI(null);
 
 	records = new Records(recordPrefix);
 	//camera = new THREE.OrthographicCamera(window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000);

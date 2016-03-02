@@ -1,5 +1,5 @@
 
-function initUI(showMainMenu) {
+function initUI(currentHill) {
 	var hills = [];
 	for (var hill in Params.Slopes) {
 		if (Params.Slopes.hasOwnProperty(hill)) {
@@ -66,7 +66,12 @@ function initUI(showMainMenu) {
 
 	window.addEventListener("hashchange", handleHash, true);
 
-	if (!showMainMenu || DEBUG) {
+	if (currentHill) {
+		$("#hill-info").innerHTML = currentHill.name + " HS" + currentHill.HS + "<br/>" +
+			currentHill.city + " " + currentHill.country;
+	} else $("#hill-info").innerHTML = "";
+
+	if (currentHill || DEBUG) {
 		hideMenu();
 	} else {
 		if (window.location.hash.length < 2)

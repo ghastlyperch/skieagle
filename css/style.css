@@ -123,6 +123,16 @@ canvas {
 	font-weight: bold;
 }
 
+#hill-info {
+	position: fixed;
+	left: 25px;
+	bottom: 20px;
+	font-size: 0.5em;
+	color: #444;
+	padding: 0;
+	margin: 0;
+}
+
 #power-container {
 	display: none;
 	position: absolute;
@@ -202,7 +212,7 @@ canvas {
 
 #stats {
 	position: absolute;
-	left: 0px;
+	right: 0px;
 	bottom: 0px;
 }
 
